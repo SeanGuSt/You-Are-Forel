@@ -1,0 +1,22 @@
+{
+    "makua fire" : {
+        "name" : "Fireball",
+        "overuse_cost": 1,
+        "target_type" : "target",
+        "effect_type" : "damage",
+        "damage_type" : "fire",
+        "power" : 4,
+        "range" : 3,
+        "virtue" : "fire"
+    },
+    "palau vital" : {
+        "name" : "Healing",
+        "overuse_cost" : 2,
+        "target_type" : "target",
+        "effect_type" : "heal",
+        "damage_type" : "water",
+        "power" : 5,
+        "range" : 2,
+        "virtue" : "water"
+    }
+}

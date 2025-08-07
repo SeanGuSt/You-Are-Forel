@@ -1,0 +1,45 @@
+{
+    "imedes_laboratory" : {
+    "__hi__" : [
+
+      {
+        "text" : [
+          "Hm? What? What is it this time? I swear, if another shade-humping apprentice set themselves on fire *again*, I going to--",
+          "Oh, young Forel. Hmph. What brings you to my laboratory?"
+        ],
+        "conditions" : []
+      }
+    ],
+    "again" : [
+      {
+        "text" : [
+          "Yes, yes. Some of the fresh apprentices have been praying for *self-immolation*. Ostensibly by practicing throwing fireballs. Nonsense, I say. What fool would possibly mistake 'makua' for--",
+          "Ahhh, no, no, no, little one. You won't catch me *slipping*, not today!"
+        ],
+        "conditions" : ["!have_quest=kesvelt_fake_books"],
+        "events" : ["give_quest=kesvelt_fake_books"]
+      }
+    ],
+    "self-immolation" : [
+      {
+        "text" : [
+          "Burning yourself alive. A nasty way to die. Normally, I would quill this as incompetence.",
+          "You'd probably be amazed at the number of people who get hurt or killed while training just because they don't read two sentences ahead.",
+          "But something smells wrong here. *Pauper*s like you may be 'unrefined', but you at least know better than to disregard what a grown-up says. Can't say the same for spoiled brats like the *king*."
+        ],
+        "conditions" : ["have_quest=kesvelt_fake_books"]
+      }
+    ],
+    "pauper" : [
+      {
+        "text" : [
+          "I never mentioned? Only the poor disciples have been burning themselves alive.",
+          "...Say, children your age find burnt corpses fascinating, don't they?",
+          "You can see for yourself, if you wish. They'll be in the morgue. You would expect the corpses to be done by now, but... well you'll see."
+        ],
+        "conditions" : ["mid_quest=kesvelt_fake_books"],
+        "event" : ["give_quest_hint=kesvelt_fake_books__visit_morgue"]
+      }
+    ]
+  }
+}

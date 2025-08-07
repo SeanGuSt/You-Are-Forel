@@ -1,0 +1,97 @@
+{
+  "bob": {
+      "hello": [
+      {
+          "text": ["Why, hey there, kid.", "How ya doin'?"],
+          "conditions": ["talked=true"]
+      },
+      {
+          "text": ["Hello, stranger!"],
+          "conditions": [],
+          "events" : {"talked" : true}
+      }
+      ],
+      "job": [
+      {
+          "text": ["I'm a testin' NPC, yesiree!"],
+          "conditions": []
+      }
+      ],
+      "gem": [
+      {
+          "text": ["What-- where did you find that!?"],
+          "conditions": ["found_family_gem"]
+      },
+      {
+          "text": ["I don't know what you're talking about."],
+          "conditions": []
+      }
+      ],
+      "where": [
+      {
+          "text": ["Yes! Where! Where did you find it!?"],
+          "conditions": ["found_family_gem", "last_dialog=gem"]
+      },
+      {
+          "text": ["Where what?"],
+          "conditions": []
+      }
+      ],
+      "kesvelt": [
+      {
+          "text": ["Kesvelt? You mean Shandra stole it!?", "No... no I don't care. Just... please, return it."],
+          "conditions": ["found_family_gem", "last_dialog=where|gem"]
+      },
+      {
+          "text": "Kesvelt is a city.",
+          "conditions": []
+      }
+      ],
+      "return": [
+      {
+          "text": ["You brought it back? Thank you... here, take this."],
+          "conditions": ["found_family_gem", "last_dialog=kesvelt", "!returned_gem"],
+          "set_flags": ["returned_gem"],
+          "events": ["give_gold=50", "remove_item=family_gem"]
+      },
+      {
+          "text": ["You already returned it, remember?"],
+          "conditions": ["returned_gem"]
+      },
+      {
+          "text": ["Return what?"],
+          "conditions": []
+      }
+      ]
+  },
+"jack_knight": {
+  "first_talk": [
+    {
+      "text": ["Eh? ¿Quién eres?"],
+      "english": ["Eh? Who're you?"],
+      "conditions": []
+    }
+  ],
+  "familiar_talk": [
+    {
+      "text": ["Oh, tú otra vez.", "Aún vivo, veo."],
+      "english": ["Oh, you again.", "Still alive, I see."],
+      "conditions": []
+    }
+  ],
+  "job": [
+    {
+      "text": ["Mantengo este edificio vacío a salvo de alborotadores como tú.", "Tiene un montón de nada, y es mi trabajo asegurarme de que nada de eso se vaya a ningún lado."],
+      "english": ["I keep this here empty building safe from troublemakers like you.", "It's got a whole lotta nothin', and its my job to make sure none of it goes anywhere."],
+      "conditions": []
+    }
+  ],
+  "nothing": [
+    {
+      "text": ["Nada, nothing, zilk, huevo."],
+      "english": ["Nothing, nada, zilch, goose egg."],
+      "conditions": ["last_dialog=job"]
+    }
+  ]
+}
+}

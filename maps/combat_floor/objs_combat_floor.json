@@ -1,0 +1,44 @@
+{
+    "floor_node0" :
+  {
+    "object_type" : "node",
+    "x" : 1,
+    "y" : 1,
+    "args" : {}
+  },
+  "floor_node1" :
+  {
+    "object_type" : "node",
+    "x" : 5,
+    "y" : 5,
+    "args" : {}
+  },
+  "floor_node2" :
+  {
+    "object_type" : "node",
+    "x" : 9,
+    "y" : 8,
+    "args" : {}
+  },
+  "monster_node0" : 
+  {
+    "object_type" : "node",
+    "x" : 3,
+    "y" : 4,
+    "args" : {}
+  },
+  "monster_node1" : 
+  {
+    "object_type" : "node",
+    "x" : 5,
+    "y" : 6,
+    "args" : {}
+  },
+  "monster_node2" : 
+  {
+    "object_type" : "node",
+    "x" : 8,
+    "y" : 4,
+    "args" : {}
+  }
+}

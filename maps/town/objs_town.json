@@ -1,0 +1,88 @@
+{
+  "bob": {
+    "object_type": "npc",
+    "x": 12,
+    "y": 18,
+    "move_interval": 7,
+    "args": {
+      "name": "Bob",
+      "dialog_key": "bob",
+      "allies_in_combat": [
+        "mook",
+        "mook",
+        "mook"
+      ]
+    }
+  },
+  "bob_node_0": {
+    "object_type": "node",
+    "x": 12,
+    "y": 18
+  },
+  "bob_node_1": {
+    "object_type": "node",
+    "x": 2,
+    "y": 2
+  },
+  "bob_node_2": {
+    "object_type": "node",
+    "x": 1,
+    "y": 8
+  },
+  "bob_node_3": {
+    "object_type": "node",
+    "x": 3,
+    "y": 7
+  },
+  "guard": {
+    "object_type": "npc",
+    "x": 16,
+    "y": 15,
+    "move_interval": 1,
+    "args": {
+      "name": "Guard",
+      "dialog_key": "jack_knight"
+    }
+  },
+  "guard_patrol_1_0": {
+    "object_type": "node",
+    "x": 15,
+    "y": 15
+  },
+  "guard_patrol_1_1": {
+    "object_type": "node",
+    "x": 12,
+    "y": 12
+  },
+  "guard_patrol_1_2": {
+    "object_type": "node",
+    "x": 15,
+    "y": 9
+  },
+  "guard_patrol_1_3": {
+    "object_type": "node",
+    "x": 18,
+    "y": 12
+  },
+  "town_2_overworld": {
+    "object_type": "teleporter",
+    "x": 10,
+    "y": 19,
+    "args": {
+      "target_map": "overworld",
+      "position": {
+        "from_any": "overworld_2_town"
+      }
+    }
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 10,
+    "y": 19
+  },
+  "town_south_node": {
+    "object_type": "node",
+    "x": 10,
+    "y": 18
+  }
+}

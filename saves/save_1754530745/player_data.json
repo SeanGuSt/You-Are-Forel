@@ -1,0 +1,102 @@
+{
+  "party": {
+    "members": {
+      "Forel": {
+        "hp": 10,
+        "mp": 50,
+        "x": 0,
+        "y": 0,
+        "position": [
+          13,
+          29
+        ],
+        "old_position": [
+          13,
+          29
+        ],
+        "experience": 0,
+        "args": {
+          "equipped": {
+            "weapon_melee": null,
+            "weapon_ranged": null,
+            "armor": "armor_pjs",
+            "shield": null,
+            "accessory": null
+          },
+          "spritesheet": [
+            "Forel",
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "inventory": {
+      "item_bread": 5,
+      "item_key": 1,
+      "acc_harem_robe": 1
+    },
+    "current_map": "overworld",
+    "gold": 100
+  },
+  "options": {
+    "music_volume": 0.7,
+    "sound_volume": 0.8,
+    "fullscreen": false,
+    "show_grid": false,
+    "auto_save": true
+  },
+  "events": {
+    "flags": [],
+    "talked_to_npcs": []
+  },
+  "quests": {
+    "earn_favor": {},
+    "get_eratons_blessing": {
+      "started": true,
+      "failed": false,
+      "completed": false
+    },
+    "assure_eraton": {
+      "steps": {
+        "train_melee": {
+          "started": true,
+          "failed": false,
+          "completed": false
+        },
+        "train_range": {
+          "started": true,
+          "failed": false,
+          "completed": false
+        },
+        "train_magic": {}
+      }
+    },
+    "kesvelt_fake_books": {
+      "steps": {
+        "visit_morgue": {}
+      },
+      "hints": {
+        "poor_only": {}
+      }
+    }
+  },
+  "current_map": "Kesvelt_Royal_Hallway",
+  "time": [
+    1574,
+    1,
+    1,
+    7,
+    6,
+    0
+  ],
+  "old_time": [
+    1574,
+    1,
+    1,
+    0,
+    0,
+    0
+  ],
+  "version": "0.0"
+}

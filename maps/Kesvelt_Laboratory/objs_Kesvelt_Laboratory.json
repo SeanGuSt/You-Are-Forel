@@ -1,0 +1,51 @@
+{
+  "elevator_wizard": {
+    "object_type": "elevatorhelper",
+    "x": 27,
+    "y": 9,
+    "args": {
+      "name": "Dmitri",
+      "dialog_key": "dmitri_elevator"
+    }
+  },
+  "dmitri_elevators": {
+    "object_type": "elevatorteleporter",
+    "x": 27,
+    "y": 10,
+    "args": {}
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 19,
+    "y": 18,
+    "args": {}
+  },
+  "imedes_laboratory": {
+    "object_type": "npc",
+    "x": 11,
+    "y": 17,
+    "move_interval": 6,
+    "args": {
+      "name": "Archmage Imedes",
+      "dialog_key": "imedes_laboratory"
+    }
+  },
+  "imedes_patrol_1_0": {
+    "object_type": "node",
+    "x": 15,
+    "y": 17,
+    "args": {}
+  },
+  "imedes_patrol_1_1": {
+    "object_type": "node",
+    "x": 19,
+    "y": 17,
+    "args": {}
+  },
+  "imedes_patrol_1_2": {
+    "object_type": "node",
+    "x": 17,
+    "y": 21,
+    "args": {}
+  }
+}

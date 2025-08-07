@@ -1,0 +1,29 @@
+Controls:
+Main Map Controls:
+Arrow Keys- Movement
+Q - Quest Book
+I - Inventory Menu
+E - Equipment Menu
+S + Arrow Keys - Search*
+D + Arrow Keys - Dialog*
+C - Cast Magic (Prayer)
+Backspace - Cancel Prayer if input is empty
+O - Options Menu
+Space - Wait
+Z - Stats Screen
+A + Arrow Keys - Attack (Combat Mode only)
+*Alternatively, you can walk into the object and one of these two will occur.
+
+Inventory Menu Controls:
+Arrow Keys - Navigate Menu
+E - Equipment Menu
+Esc - Return to Map
+
+Equipment Menu Controls:
+Arrow Keys - Navigate Menu
+I - Inventory Menu
+Enter - Select Equipment for that slot
+Backspace - Back to slot selection
+U - Unequip from that slot
+Esc - Return to Map
+

@@ -1,0 +1,339 @@
+{
+  "book_spawn_node_0": {
+    "object_type": "node",
+    "x": 26,
+    "y": 30
+  },
+  "book_spawn_node_1": {
+    "object_type": "node",
+    "x": 30,
+    "y": 30
+  },
+  "bubba_renald": {
+    "object_type": "npc",
+    "x": 28,
+    "y": 29
+  },
+  "burn_jin_shi_event": {
+    "object_type": "node",
+    "x": 16,
+    "y": 27,
+    "args": {
+      "event_start": "burning_student"
+    }
+  },
+  "corner_guard": {
+    "object_type": "npcsoldier",
+    "x": 20,
+    "y": 12
+  },
+  "corner_guard_1": {
+    "object_type": "npcsoldier",
+    "x": 18,
+    "y": 12
+  },
+  "corner_guard_2": {
+    "object_type": "npcsoldier",
+    "x": 17,
+    "y": 26
+  },
+  "corner_guard_3": {
+    "object_type": "npcsoldier",
+    "x": 15,
+    "y": 26
+  },
+  "crossbower_0": {
+    "object_type": "npccrossbower",
+    "x": 6,
+    "y": 9
+  },
+  "crossbower_1": {
+    "object_type": "npccrossbower",
+    "x": 6,
+    "y": 11
+  },
+  "crossbower_2": {
+    "object_type": "npccrossbower",
+    "x": 6,
+    "y": 13
+  },
+  "cutscene_guard_a": {
+    "object_type": "npcguard",
+    "x": 7,
+    "y": 18
+  },
+  "cutscene_guard_b": {
+    "object_type": "npcguard",
+    "x": 7,
+    "y": 20
+  },
+  "dmitri_elevators": {
+    "object_type": "elevatorteleporter",
+    "x": 27,
+    "y": 10
+  },
+  "elevator_wizard": {
+    "object_type": "elevatorhelper",
+    "x": 27,
+    "y": 9,
+    "args": {
+      "name": "Dmitri",
+      "dialog_key": "dmitri_elevator"
+    }
+  },
+  "event_melee_training": {
+    "object_type": "node",
+    "x": 14,
+    "y": 4,
+    "args": {
+      "event_start": "melee_training"
+    }
+  },
+  "event_no_early_leave_node": {
+    "object_type": "node",
+    "x": 19,
+    "y": 12,
+    "args": {
+      "event_start": "generic_block_enterance_0"
+    }
+  },
+  "event_no_early_leave_node_1": {
+    "object_type": "node",
+    "x": 16,
+    "y": 26,
+    "args": {
+      "event_start": "generic_block_enterance_1"
+    }
+  },
+  "event_tester_node": {
+    "object_type": "node",
+    "x": 6,
+    "y": 19,
+    "args": {
+      "event_start": "first_meet_eraton"
+    }
+  },
+  "guard_jogger": {
+    "object_type": "npcsoldier",
+    "x": 1,
+    "y": 5
+  },
+  "guard_sergeant": {
+    "object_type": "npc",
+    "x": 10,
+    "y": 1
+  },
+  "jogger_patrol_0_1": {
+    "object_type": "node",
+    "x": 1,
+    "y": 14
+  },
+  "jogger_patrol_0_10": {
+    "object_type": "node",
+    "x": 1,
+    "y": 1
+  },
+  "jogger_patrol_0_2": {
+    "object_type": "node",
+    "x": 4,
+    "y": 14
+  },
+  "jogger_patrol_0_3": {
+    "object_type": "node",
+    "x": 4,
+    "y": 7
+  },
+  "jogger_patrol_0_4": {
+    "object_type": "node",
+    "x": 13,
+    "y": 7
+  },
+  "jogger_patrol_0_5": {
+    "object_type": "node",
+    "x": 13,
+    "y": 1
+  },
+  "jogger_patrol_0_6": {
+    "object_type": "node",
+    "x": 11,
+    "y": 1
+  },
+  "jogger_patrol_0_7": {
+    "object_type": "node",
+    "x": 11,
+    "y": 2
+  },
+  "jogger_patrol_0_8": {
+    "object_type": "node",
+    "x": 9,
+    "y": 2
+  },
+  "jogger_patrol_0_9": {
+    "object_type": "node",
+    "x": 9,
+    "y": 1
+  },
+  "leave_node_0": {
+    "object_type": "node",
+    "x": 16,
+    "y": 36
+  },
+  "leave_node_1": {
+    "object_type": "node",
+    "x": 15,
+    "y": 36
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 15,
+    "y": 6
+  },
+  "pillar0": {
+    "object_type": "pillar",
+    "x": 6,
+    "y": 17
+  },
+  "pillar1": {
+    "object_type": "pillar",
+    "x": 6,
+    "y": 21
+  },
+  "pillar2": {
+    "object_type": "pillar",
+    "x": 10,
+    "y": 17
+  },
+  "pillar3": {
+    "object_type": "pillar",
+    "x": 10,
+    "y": 21
+  },
+  "pillar4": {
+    "object_type": "pillar",
+    "x": 14,
+    "y": 17
+  },
+  "pillar5": {
+    "object_type": "pillar",
+    "x": 14,
+    "y": 21
+  },
+  "pillar6": {
+    "object_type": "pillar",
+    "x": 18,
+    "y": 17
+  },
+  "pillar7": {
+    "object_type": "pillar",
+    "x": 18,
+    "y": 21
+  },
+  "shooting_range_0": {
+    "object_type": "node",
+    "x": 6,
+    "y": 9
+  },
+  "shooting_range_1": {
+    "object_type": "node",
+    "x": 6,
+    "y": 11
+  },
+  "shooting_range_2": {
+    "object_type": "node",
+    "x": 6,
+    "y": 13
+  },
+  "student_0": {
+    "object_type": "npcstudent",
+    "x": 26,
+    "y": 31,
+    "move_interval": 0.5,
+    "args": {
+      "name": "Disciple",
+      "dialog_key": "student_0"
+    }
+  },
+  "student_1": {
+    "object_type": "npcstudent",
+    "x": 27,
+    "y": 31,
+    "move_interval": 1,
+    "args": {
+      "name": "Disciple",
+      "dialog_key": "student_1"
+    }
+  },
+  "student_2": {
+    "object_type": "npcstudent",
+    "x": 28,
+    "y": 31
+  },
+  "student_3": {
+    "object_type": "npcstudent",
+    "x": 29,
+    "y": 31,
+    "args": {
+      "name": "Mei-Hua",
+      "dialog_key": "student_3"
+    }
+  },
+  "student_shi": {
+    "object_type": "npcstudent",
+    "x": 30,
+    "y": 31
+  },
+  "student_shi_space": {
+    "object_type": "node",
+    "x": 30,
+    "y": 31
+  },
+  "target0": {
+    "object_type": "archerytarget",
+    "x": 12,
+    "y": 9
+  },
+  "target1": {
+    "object_type": "archerytarget",
+    "x": 10,
+    "y": 11
+  },
+  "target2": {
+    "object_type": "archerytarget",
+    "x": 8,
+    "y": 13
+  },
+  "throne_eraton": {
+    "object_type": "npc",
+    "x": 4,
+    "y": 19,
+    "args": {
+      "name": "Eraton Sydan",
+      "dialog_key": "eraton_throne",
+      "spritesheet": [
+        "Eraton",
+        0,
+        0
+      ]
+    }
+  },
+  "training_guard_0": {
+    "object_type": "npcsoldier",
+    "x": 8,
+    "y": 4
+  },
+  "training_guard_1": {
+    "object_type": "npcsoldier",
+    "x": 7,
+    "y": 4
+  },
+  "training_guard_2": {
+    "object_type": "npcsoldier",
+    "x": 12,
+    "y": 6
+  },
+  "training_guard_3": {
+    "object_type": "npcsoldier",
+    "x": 11,
+    "y": 6
+  }
+}

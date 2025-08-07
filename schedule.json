@@ -1,0 +1,35 @@
+{
+  "bob": {
+    "02:00": { "action": "go_to", "target": "bob_node_0" },
+    "05:00": { "action": "go_to", "target": "bob_node_1" },
+    "11:00": { "action" : "go_to", "target": "bob_node_2"},
+    "15:45": {"action" : "go_to", "target": "bob_node_3"}
+  },
+  "guard" : {
+      "07:20": {"action":"patrol", "patrol_node_template" : "guard_patrol_1", "start_node" : "0", "max_node" : 4}
+  },
+  "imedes_laboratory" : {
+      "06:20": {"action":"patrol", "patrol_node_template" : "imedes_patrol_1", "start_node" : "0", "max_node" : 3}
+  },
+  "crossbower_0" : {
+    "07:20": {
+      "action": "fire_arrow",
+      "direction": "E", 
+      "repeat_interval": 8
+    }
+  },
+  "crossbower_1" : {
+    "07:20": {
+      "action": "fire_arrow",
+      "direction": "E", 
+      "repeat_interval": 12
+    }
+  },
+  "crossbower_2" : {
+    "07:20": {
+      "action": "fire_arrow",
+      "direction": "E", 
+      "repeat_interval": 12
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "harem_stairs_a_to_royal_bedroom": {
+    "object_type": "teleporter",
+    "x": 2,
+    "y": 2,
+    "args": {
+      "target_map": "Kesvelt_Royal_Hallway",
+      "position": {
+        "from_any": "royal_bedroom_to_harem_stairs_a"
+      }
+    }
+  },
+  "harem_stairs_a_to_harem_stairs_b": {
+    "object_type": "teleporter",
+    "x": 4,
+    "y": 2,
+    "args": {
+      "target_map": "Kesvelt_Harem_Stairwell",
+      "position": {
+        "from_any": "harem_stairs_b_to_harem_stairs_a"
+      }
+    }
+  },
+  "harem_stairs_b_to_harem_stairs_a": {
+    "object_type": "teleporter",
+    "x": 7,
+    "y": 2,
+    "args": {
+      "target_map": "Kesvelt_Harem_Stairwell",
+      "position": {
+        "from_any": "harem_stairs_a_to_harem_stairs_b"
+      }
+    }
+  },
+  "harem_stairs_b_to_harem_stairs_c": {
+    "object_type": "teleporter",
+    "x": 7,
+    "y": 4,
+    "args": {
+      "target_map": "Kesvelt_Harem_Stairwell",
+      "position": {
+        "from_any": "harem_stairs_c_to_harem_stairs_b"
+      }
+    }
+  },
+  "harem_stairs_c_to_harem_stairs_b": {
+    "object_type": "teleporter",
+    "x": 7,
+    "y": 7,
+    "args": {
+      "target_map": "Kesvelt_Harem_Stairwell",
+      "position": {
+        "from_any": "harem_stairs_b_to_harem_stairs_c"
+      }
+    }
+  },
+  "harem_stairs_c_to_harem_stairs_d": {
+    "object_type": "teleporter",
+    "x": 5,
+    "y": 7,
+    "args": {
+      "target_map": "Kesvelt_Harem_Stairwell",
+      "position": {
+        "from_any": "harem_stairs_d_to_harem_stairs_c"
+      }
+    }
+  },
+  "harem_stairs_d_to_harem_stairs_c": {
+    "object_type": "teleporter",
+    "x": 2,
+    "y": 7,
+    "args": {
+      "target_map": "Kesvelt_Harem_Stairwell",
+      "position": {
+        "from_any": "harem_stairs_c_to_harem_stairs_d"
+      }
+    }
+  },
+  "harem_stairs_d_to_harem_lounge": {
+    "object_type": "teleporter",
+    "x": 0,
+    "y": 3,
+    "args": {
+      "target_map": "Kesvelt_Harem_Lounge",
+      "position": {
+        "from_any": "harem_lounge_to_harem_stairs_d"
+      }
+    }
+  }
+}

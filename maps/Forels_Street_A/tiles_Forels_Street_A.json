@@ -1,0 +1,11 @@
+{
+  "#": "wall",
+  "_": "floor",
+  ".": "grass",
+  "/": "walkwaycobblestone",
+  "W": "wallwood",
+  "w": "floorwood",
+  "~": "water",
+  "S": "wallbrick",
+  "s": "floorsoil"
+}

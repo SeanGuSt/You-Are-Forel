@@ -1,0 +1,37 @@
+{
+    "student_3" : {
+        "__hi__" : [
+            {
+                "text" : [
+                    "Didi? Didi! Xingxing didi, xinglai!!",
+                    "walk=student_2__E2",
+                    "Aiyanna__Mei-Hua, I don't think--",
+                    "walk=student_2__N1",
+                    "Shut up! Didi, Xinglai, xinglai, XINGLAI!",
+                    "Bubba Renald__Mei-Hua. ...I'm sorry.",
+                    "Jin-Shi...",
+                    "walk=student_2__S1",
+                    "Bubba Renald__...I'll fetch a monk to handle the body.",
+                    "walk=bubba_renald__S2",
+                    "Bubba Renald__Kind faithful. If it pleases you, I'd ask you not to bother her right now. As you can see, something traumatic has happened here. I'm certain you can find entertainment elsewhere.",
+                    "walk=bubba_renald__S3",
+                    "(She doesn't seem to notice you.)",
+                    ""
+                ],
+                "conditions" : ["!talked="],
+                "events" : [
+                    "force_end=", "talked=true"
+                ]
+            },
+            {
+                "text" : [
+                    "(She doesn't seem to notice you.)",
+                    ""
+                ],
+                "conditions" : ["talked="],
+                "events" : ["force_end="]
+
+            }
+        ]
+    }
+}

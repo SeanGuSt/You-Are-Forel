@@ -1,0 +1,76 @@
+{
+    "item_health_potion": {
+        "name": "Health Potion",
+        "description": "Restores 50 HP",
+        "value": 25,
+        "effects": ["on_use__heal__hp__50"],
+        "max_stack": 10,
+        "item_type": "consumable",
+        "uid": 0
+    },
+    "item_mana_potion": {
+        "name": "Mana Potion",
+        "description": "Restores 30 MP",
+        "value": 30,
+        "effects": ["on_use__heal__mp__30"],
+        "max_stack": 10,
+        "item_type": "consumable",
+        "uid": 1
+    },
+    "item_bread" : {
+        "name" : "Bread",
+        "description" : "Restores health",
+        "value" : 10,
+        "item_type": "consumable",
+        "uid": 3
+    },
+    "item_torch" : {
+        "name" : "Torch",
+        "description" : "Provides light",
+        "value" : 5,
+        "item_type": "consumable",
+        "uid": 4
+    },
+    "item_key" : {
+        "name" : "Key",
+        "description" : "Opens doors",
+        "value" : 20,
+        "item_type": "consumable",
+        "uid": 5
+    },
+    "weapon_staff": {
+        "name": "Staff",
+        "description": "A basic staff made from longwood found in the king's forest. Normally just used for spear training, but better than your fists in a pinch.",
+        "value": 150,
+        "power": 1,
+        "item_type": "weapon_melee",
+        "uid": 1001
+    },
+    "armor_pjs" : {
+        "name" : "Forel's Pajamas",
+        "description" : "A set of pajamas the queen dowager sewed for you. They're warm and comfy, although you're getting a bit big for them. You hope you can get a pair without cutesy bear heads everywhere.",
+        "value" : 0,
+        "guard" : 0,
+        "item_type" : "armor",
+        "effects" : ["passive__change_sprite__+__1"],
+        "uid" : 2001
+    },
+    "armor_leather" : {
+        "name" : "Leather Armor",
+        "description" : "A set of pajamas the queen dowager sewed for you. They're warm and comfy, although you're getting a bit big for them. You hope you can get a pair without cutesy bear heads everywhere.",
+        "value" : 0,
+        "guard" : 1,
+        "item_type" : "armor",
+        "effects" : ["passive__change_sprite__+__2"],
+        "uid" : 2002
+    },
+    "acc_harem_robe" : {
+        "name" : "Ronpa tue Phitemos",
+        "description" : "The Robe of the Loved's Home. Given to you when you confessed your true feelings to your king. Your most prized possession.",
+        "value" : 10000,
+        "is_discardable" : false,
+        "effects" : ["passive__change_sprite__+__3"],
+        "item_type" : "accessory",
+        "uid" : 5001
+    }
+}

@@ -1,0 +1,117 @@
+{
+    "eraton_throne" : {
+        "__hi__" : [
+            {
+                "text" : ["Hm? Is something the matter, love? Do you need a reminder on how to *dress* yourself?"],
+                "conditions" : ["!leader_wear=acc_harem_robe|acc_harem_robe_adult", "!have_quest=earn_favor"],
+                "events" : ["talked=false"]
+            },
+            {
+                "text" : [
+                    "Ahhh, much better. Far more handsome, and far less likely to get attacked by my guards.",
+                    "Although, that is something we need to discuss. This... this plan of yours. Traveling Sewinso, growing stronger and gaining the favor of the Eight. Alone?",
+                    "You don't need to do that just because a few nobles have more spare time for gossip than they do brain cells. You can just *stay* here. You have food and luxury even some of them could only dream of.",
+                    "You have friends in the Phitemos. Ginny, Maddy, Chin-Yau, Getro. They'd all miss you. I'd miss you.",
+                    "And if something bad happened... I don't have to tell you this won't be like a carriage ride to the opera. The creatures outside Kesvelt's walls are dangerous. Even wizards struggle to defeat spirits or headless.",
+                    "Please don't *leave*. This isn't a journey you have to take."
+                ],
+                "conditions" : ["leader_wear=acc_harem_robe|acc_harem_robe_adult", "!have_quest=earn_favor"],
+                "events" : ["talked=true"]
+            }
+
+        ],
+        "leave" : [
+            {
+                "text" : [
+                    "...",
+                    "... ...",
+                    "... ... Heh, still as stubborn as ever, are we?",
+                    "Alright, I won't get in your way. But I can't abide you doing this alone. I've learned the hard way that even a king isn't immortal. Losing you...",
+                    "...No, I'm sorry. I'm not trying to guilt you. I promised to give my blessing and I meant it. But for my peace of mind, please, make certain you're ready for the dangers ahead."
+                ],
+                "conditions" : ["!have_quest=earn_favor", "leader_wear=acc_harem_robe|acc_harem_robe_adult"],
+                "events" : ["give_quest=earn_favor", "complete_quest=get_eratons_blessing"]
+            }
+        ],
+        "stay" : [
+            {
+                "text" : ["...Thank you"],
+                "conditions" : ["!have_quest=earn_favor", "leader_wear=acc_harem_robe|acc_harem_robe_adult"],
+                "events" : ["cutscene=joke_ending_0"]
+            }
+        ],
+        "yes" : [
+            {
+                "text" : [
+                    "You can open your Equipment bag by pressing 'E', then head to the Accessory section and press Enter to open your accessory pocket, then Enter again to equip Ronpa tue Phitemos.",
+                    "You'll know you've done it right when its name shows up next to the word 'Accessory'.",
+                    "Come see me again when you're dressed, OK?",
+                    ""
+                ],
+                "conditions" : ["!leader_wear=acc_harem_robe|acc_harem_robe_adult", "!talked=", "last_dialog=__hi__"],
+                "events" : ["force_end="]
+            },
+            {
+                "text" : ["Yes you'll *stay*? Or yes you still plan to *leave*?"],
+                "conditions" : ["!have_quest=earn_favor", "last_dialog=__hi__|no|yes"]
+            },
+            {
+                "text" : [
+                    "Thank you, my treasure.",
+                    "To start, make sure you remember the basics of fighting. Melee, ranged, miracles, the works.",
+                    "Press 'Q' to open your journal. There, you can can see all the things you have to do, as well as everything you know about them.",
+                    "You've lived here for years now, which means you already know where to find the guards' training grounds, as well as Archmage Imedes's lab.",
+                    "So, you'll be able to find that information under Quest Hints."
+                ],
+                "conditions" : ["have_quest=earn_favor", "last_dialog=leave"],
+                "events" : ["give_quest=assure_eraton", "give_quest_hint=assure_eraton__training_grounds", "give_quest_hint=assure_eraton__lab"]
+
+            },
+            {
+                "text" : ["Yes? Yes to what?"]
+            }
+        ],
+        "no" : [
+            {
+                "text" : [
+                    "I'll leave you to it, then.",
+                    ""
+                ],
+                "conditions" : ["!talked="],
+                "events" : ["force_end="]
+            },
+            {
+                "text" : [
+                    "No you won't *leave*, or... no you won't *stay*?"
+                ],
+                "conditions" : ["!have_quest=earn_favor", "last_dialog=__hi__|no|yes"]
+            },
+            {
+                "text" : [
+                    "...OK. Just, remember. You'll always have a place here. If you ever decide you want to *stay* after all, just come and tell me. I'll be happy to take you back in.",
+                    ""
+                ],
+                "conditions" : ["last_dialog=leave", "have_quest=earn_favor"],
+                "events" : ["force_end="]
+            },
+            {
+                "text" : [
+                    "No? No to what?"
+                ]
+            }
+        ],
+        "aliases" : {
+            "remain" : "stay",
+            "go" : "leave"
+        },
+        "contextual_aliases" : {
+            "__hi__" : {
+                "dress" : "yes"
+            },
+            "leave" : {
+                "bye" : "no"
+            }
+        }
+        
+    }
+}

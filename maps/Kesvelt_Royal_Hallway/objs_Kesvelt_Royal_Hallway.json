@@ -1,0 +1,115 @@
+{
+  "eraton_bed0": {
+    "object_type": "bedroyal",
+    "x": 9,
+    "y": 28,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        1
+      ]
+    }
+  },
+  "eraton_bed1": {
+    "object_type": "bedroyal",
+    "x": 9,
+    "y": 29,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        2
+      ]
+    }
+  },
+  "eraton_bed2": {
+    "object_type": "bedroyal",
+    "x": 10,
+    "y": 29,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        4
+      ]
+    }
+  },
+  "eraton_bed3": {
+    "object_type": "bedroyal",
+    "x": 10,
+    "y": 28,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        3
+      ]
+    }
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 9,
+    "y": 27,
+    "args": {}
+  },
+  "hidden_door_to_harem": {
+    "object_type": "doorbasic",
+    "x": 9,
+    "y": 25,
+    "args": {}
+  },
+  "slide_wall_to_harem": {
+    "object_type": "doorbasic",
+    "x": 20,
+    "y": 21,
+    "args": {}
+  },
+  "door_to_eraton_bed": {
+    "object_type": "doorbasic",
+    "x": 15,
+    "y": 29,
+    "args": {}
+  },
+  "adjacent_maps": {
+    "object_type": "node",
+    "x": 9,
+    "y": 31,
+    "args": {
+      "to_east": {
+        "target_map": "elevator",
+        "new_direction": "west"
+      },
+      "to_north": {
+        "target_map": "harem",
+        "new_direction": "south"
+      }
+    }
+  },
+  "royal_bedroom_to_harem_stairs_a": {
+    "object_type": "teleporter",
+    "x": 9,
+    "y": 17,
+    "args": {
+      "target_map": "Kesvelt_Harem_Stairwell",
+      "position": {
+        "from_any": "harem_stairs_a_to_royal_bedroom"
+      }
+    }
+  },
+  "elevator_wizard": {
+    "object_type": "elevatorhelper",
+    "x": 27,
+    "y": 9,
+    "args": {
+      "name": "Dmitri",
+      "dialog_key": "dmitri_elevator"
+    }
+  },
+  "dmitri_elevators": {
+    "object_type": "elevatorteleporter",
+    "x": 27,
+    "y": 10,
+    "args": {}
+  }
+}

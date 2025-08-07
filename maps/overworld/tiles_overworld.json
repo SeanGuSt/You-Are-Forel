@@ -1,0 +1,11 @@
+{
+    ".":"grass",
+    "~": "water",
+    "^": "mountain",
+    "T": "forest",
+    "C": "town",
+    "D": "dungeon",
+    "_": "floor",
+    "#": "wall",
+    "+": "door"
+}

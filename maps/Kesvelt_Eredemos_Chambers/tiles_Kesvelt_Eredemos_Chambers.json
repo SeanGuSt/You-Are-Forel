@@ -1,0 +1,8 @@
+{
+  "#": "wall",
+  "_": "floor",
+  ".": "grass",
+  "B": "wallbrick",
+  "~": "sky",
+  "M": "mountain"
+}

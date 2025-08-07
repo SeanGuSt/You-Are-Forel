@@ -1,0 +1,54 @@
+{
+    "earn_favor" : {
+        "name" : "Earn Favor",
+        "description" : "Travel about Sewinso and earn the favor of the Eight.",
+        "steps" : {
+
+        },
+        "hints" : {
+
+        }
+
+    },
+    "get_eratons_blessing" : {
+        "name" : "Receive Eraton's Blessing",
+        "description" : "Even if you are your king's favorite, you are still a faithful of the Phitemos. Before you can go anywhere outside the city walls, you require his blessing. Receiving this blessing will be easy. The hard part will be looking your beloved king in the eyes and asking for it."
+    },
+    "assure_eraton" : {
+        "name" : "Go Over The Essentials",
+        "description" : "You already have permission to leave, but doing these before you go will keep your king's mind at ease.",
+        "steps" : {
+            "train_melee" : {
+                "name" : "Melee Management",
+                "description" : "Your king asked you to show competence in the art of melee weaponry.",
+                "started" : true,
+                "description_vague" : "do thing"
+            },
+            "train_range" : {
+                "name" : "Crossbow Conundrum",
+                "description" : "Your king asked you to show competence in the art of ranged weaponry.",
+                "started" : true
+            },
+            "train_magic" : {
+                "name" : "Miracle Study",
+                "description" : "Your king has asked you to show competence in the art of miracles. No matter how you go about your journey, miracles will inevitably be of great import, so grasping the fundaments is as well."
+            }
+        }
+    },
+    "kesvelt_fake_books" : {
+        "name" : "Mystery of the Burning Disciples",
+        "description" : "According to Archmage Imedes, several disciples of Prometus have burned themselves alive while casting miracles, recently. He doesn't buy the monks' excuses that it's just carelessness that leads to these tragedies, but he's too busy with his research to look into it himself. You aren't an investigator, but maybe if you solve this mystery, Imedes will find time for you as a show of thanks.",
+        "steps" : {
+            "visit_morgue" : {
+                "name" : "Visit the Morgue",
+                "description" : "Archmage Imedes recommended you visit the morgue to see if you can find any clues. Well, he didn't actually say anything about clues, he just wanted you to leave."
+            }
+        },
+        "hints" : {
+            "poor_only" : {
+                "name" : "Only Low-Class Casualties",
+                "description" : "So far, none of the nobles posturing as disciples have fallen victim to this seeming epidemic of self-immolation."
+            }
+        }
+    }
+}

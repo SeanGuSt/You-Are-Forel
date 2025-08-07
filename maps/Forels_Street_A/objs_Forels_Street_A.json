@@ -1,0 +1,32 @@
+{
+  "jfskjlhdf": {
+    "object_type": "node",
+    "x": 7,
+    "y": 10,
+    "args": {}
+  },
+  "fdjlsh": {
+    "object_type": "node",
+    "x": 15,
+    "y": 6,
+    "args": {}
+  },
+  "dj": {
+    "object_type": "node",
+    "x": 15,
+    "y": 4,
+    "args": {}
+  },
+  "fjd4": {
+    "object_type": "node",
+    "x": 15,
+    "y": 3,
+    "args": {}
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 2,
+    "y": 15,
+    "args": {}
+  }
+}

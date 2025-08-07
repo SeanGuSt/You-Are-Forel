@@ -1,0 +1,14 @@
+{
+  "#": "wall",
+  "_": "floor",
+  ".": "grass",
+  "-": "floorcarpetblue",
+  "B": "wallbrick",
+  "~": "sky",
+  "M": "mountain",
+  "|": "rail",
+  "z": "stairs",
+  "/": "floorstone",
+  "r": "floorcarpetred",
+  "l": "floorsoil"
+}
