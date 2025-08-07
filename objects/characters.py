@@ -3,12 +3,12 @@ from typing import List, Dict, Tuple, Any, Optional, TYPE_CHECKING
 from items.itemz import Item, ItemEffect, ItemDatabase, Equipment
 from constants import *
 import copy
-from virtue import VirtueManager, VirtueType
+from magic.virtue import VirtueManager, VirtueType
 
 from objects.object_templates import Node, CombatStatsMixin
 if TYPE_CHECKING:
     from objects.map_objects import Map
-    from magic import Spell
+    from magic.magic import Spell
     from ultimalike import GameEngine
 
 # Modified Character Class

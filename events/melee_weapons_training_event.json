@@ -9,9 +9,9 @@
             "text=Sergeant Caballera__The king wants proof you can actually hold a weapon, huh? So my wife wasn't just flapping her gums after all.",
             "text=Sergeant Caballera__Rencid! Eieun!",
             "walk=training_guard_3__N3&&training_guard_2__N2W1",
-            "text=Rencid__Y-yes, Sarge?",
+            "text=Rencid__Yes, Sarge?",
             "text=Sergeant Caballera__It's your lucky day, ladies. You get to knock some sense into this pampered little street rat.",
-            "text=Rencid__Y-you heard that, Sergeant?",
+            "text=Eieun__Y-you heard that, Sergeant?",
             "text=Sergeant Caballera__The barracks walls aren't as thick as your skulls, and my ears still work just fine.",
             "text=Eieun__B-but... are we even allowed to fight him? He's, uh...",
             "leader_wear=armor_pjs++text=Eieun__He's not even dressed, for one.",
@@ -31,6 +31,12 @@
             "text=Sergeant Caballera__Equip that the same way you put on your robe, lapdog. All that time in the Phitemos hasn't made you forget how to dress yourself, has it?",
             "text=Sergeant Cabellera__Once you've got a good grip, talk to one of these two buffoons.",
             "walk=guard_sergeant__alternateNW3"
+        ]
+    },
+    "melee_training_fight": {
+        "trigger" : "on_step",
+        "script" : [
+            "force_combat=Training_Fight_Melee"
         ]
     }
 }

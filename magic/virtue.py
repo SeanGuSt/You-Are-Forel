@@ -5,7 +5,7 @@ from typing import Dict, List, Optional, Any, TYPE_CHECKING
 import pygame
 if TYPE_CHECKING:
     from objects.characters import Character
-    from magic import Spell
+    from magic.magic import Spell
     from ultimalike import GameEngine
 
 @dataclass

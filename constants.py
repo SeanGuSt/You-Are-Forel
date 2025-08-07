@@ -27,6 +27,8 @@ TALK_DIR = "dialog"
 QUEST_DIR = "quests"
 EVENT_DIR = "events"
 IMAGE_DIR = "sprites"
+SKEJ_DIR = "schedules"
+MAGIC_DIR = "magic"
 
 
 GAME_TITLE = "You are Forel"

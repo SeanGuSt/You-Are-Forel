@@ -5,6 +5,7 @@ from constants import *
 from objects.object_templates import Node, CombatStatsMixin, Monster, MapObject, Teleporter, Spawner, Chest, Missile, NPC, NODE_REGISTRY, register_node_type
 if TYPE_CHECKING:
     from objects.characters import Character
+    from ultimalike import GameEngine
 @register_node_type("bedbasic")
 class BedBasic(MapObject):
     is_passable = True
@@ -51,10 +52,12 @@ class ArrowMissile(Missile):
         return {"spritesheet" : ["Static Objects", 1, 0]}
     
 @register_node_type("arrowspawner")
+@dataclass
 class ArrowSpawner(Spawner):
     pass
 
 @register_node_type("npccrossbower")
+@dataclass
 class NPCCrossbower(ArrowSpawner):
     def execute_repeating_action(self, action):
         if self.state == ObjectState.STAND:
@@ -75,6 +78,11 @@ class NPCCrossbower(ArrowSpawner):
                                 case Direction.WEST:
                                     arrow.image = pygame.transform.rotate(arrow.image, 180)
                         arrow.move_one_step()
+    @staticmethod
+    def from_dict(data: dict, engine: 'GameEngine') -> 'NPCCrossbower':
+        data["move_interval"] = 1.0
+        new_obj = super(NPCCrossbower, NPCCrossbower).from_dict(data, engine)
+        return new_obj
     @staticmethod
     def default_args():
         return {"spritesheet" : ["Generic People", 0, 2]}

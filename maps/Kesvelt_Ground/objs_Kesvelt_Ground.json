@@ -186,7 +186,7 @@
   "new_game_spawner": {
     "object_type": "node",
     "x": 15,
-    "y": 6
+    "y": 4
   },
   "pillar0": {
     "object_type": "pillar",
@@ -329,7 +329,11 @@
   "training_guard_2": {
     "object_type": "npcsoldier",
     "x": 12,
-    "y": 6
+    "y": 6,
+    "args": {
+      "name": "Eieun",
+      "dialog_key": "training_guard_2"
+    }
   },
   "training_guard_3": {
     "object_type": "npcsoldier",

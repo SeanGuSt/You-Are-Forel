@@ -5,7 +5,7 @@ import pygame
 from Map_Editor.me_constants import EditState, SIDEBAR_SPACE_HEIGHT, SIDEBAR_SPACE_WIDTH
 from Map_Editor.inputs.other_inputs import undo, redo
 if TYPE_CHECKING:
-    from Map_Editor.map_editor_fixup import MapEditor
+    from Map_Editor.map_editor import MapEditor
 def new_tile_input(self: 'MapEditor'):
     self.change_state(EditState.INPUT)
     self.input0 = ""
@@ -29,7 +29,7 @@ def recursive_dicts(big_dict, split_input: list[str], input1: str):
         except:
             big_dict[split_input[0]] = input1
 
-def h_inputs(self: 'MapEditor', event):
+def non_text_mode_inputs(self: 'MapEditor', event):
     mods = pygame.key.get_mods()
     match event.key:
         case pygame.K_TAB:

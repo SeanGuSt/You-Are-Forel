@@ -4,7 +4,7 @@ from random import randint
 from typing import List, Dict, Any, Optional, Type, TYPE_CHECKING
 from constants import *
 from items.itemz import Item
-from schedule import ScheduleEvent, datetime
+from schedules.schedule import ScheduleEvent, datetime
 if TYPE_CHECKING:
     from objects.characters import Character
     from ultimalike import GameEngine
@@ -142,6 +142,19 @@ class MapObject(Node):
     current_action_start_turn = 0
     moves_completed_this_action = 0
 
+    def to_dict(self):
+        my_dict = super().to_dict()
+        my_dict["move_interval"] = self.move_interval
+        my_dict["state"] = self.state.value
+        return my_dict
+
+    @staticmethod
+    def from_dict(data: dict, engine: 'GameEngine') -> 'MapObject':
+        new_obj = super(MapObject, MapObject).from_dict(data, engine)
+        new_obj.move_interval = data.get("move_interval", 0.0)
+        new_obj.state = ObjectState(data.get("state", ObjectState.STAND.value))
+        return new_obj
+
     def update_from_schedule(self):
         """
         Update NPC state based on current schedule. Call this when loading a map
@@ -188,7 +201,7 @@ class MapObject(Node):
         
         self.moves_completed_this_action = target_moves
 
-    def move_one_step_immediate(self):
+    def move_one_step_immediate(self, done_walking: bool = True):
         """
         Move one step immediately without time checks.
         Used for catching up to scheduled position.
@@ -254,6 +267,7 @@ class MapObject(Node):
         """Execute go_to action."""
         self.current_target = self.map.get_object_by_name(target)
         if self.current_target:
+            print(f"My target, {self.current_target.name}, does exist. I will walk at them at an interval of {self.move_interval}")
             self.state = ObjectState.WALK
             return self.current_target
         return None
@@ -284,6 +298,7 @@ class ItemHolder(MapObject):
     node_id = 7
 
 @register_node_type("npc")
+@dataclass
 class NPC(MapObject):
     can_be_attacked = True
     color = BLACK
@@ -384,7 +399,6 @@ class Missile(MapObject):
                     self.hits_player = True
                 self.destroy_after_use = True
                 self.moves_completed_this_action = expected_moves - 1
-                print(f"Yup, I, {self.name} hit something at {self.engine.schedule_manager.current_game_time}")
             self.position = new_pos
             self.moves_completed_this_action += 1
     def destroy(self):

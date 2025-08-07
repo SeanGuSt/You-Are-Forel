@@ -1,0 +1,2 @@
+The scheduler and the save manager don't play well together yet.
+Sometimes an npc moving more than one tile at a time will stutter

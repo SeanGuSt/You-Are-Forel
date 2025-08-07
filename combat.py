@@ -71,12 +71,12 @@ class CombatManager:
         damage = max(1, attacker.get_total_power() - target.get_total_guard())
         target.hp -= damage
         target.is_hostile = True
-        messages = [f"{attacker.name} hits {target.name} for {damage} damage!"]
+        self.append_to_combat_log(f"{attacker.name} hits {target.name} for {damage} damage!")
         if target.hp <= 0:
             self.engine.current_map.remove_object(target)
-            messages.append(f"{target.name} was defeated!")
+            self.append_to_combat_log(f"{target.name} was defeated!")
         
-        return messages
+        return []
     
     def append_to_combat_log(self, text):
         if not self.combat_log[0]:

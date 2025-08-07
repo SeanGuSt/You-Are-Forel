@@ -99,9 +99,9 @@
       12
     ],
     "skin_color": [
-      255,
-      220,
-      177
+      141,
+      85,
+      36
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -126,9 +126,9 @@
       12
     ],
     "skin_color": [
-      141,
-      85,
-      36
+      198,
+      134,
+      66
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -153,9 +153,9 @@
       26
     ],
     "skin_color": [
-      255,
-      220,
-      177
+      241,
+      194,
+      125
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -207,11 +207,11 @@
       9
     ],
     "skin_color": [
-      198,
-      134,
-      66
+      241,
+      194,
+      125
     ],
-    "move_interval": 1.0,
+    "move_interval": 0.0,
     "state": "stand"
   },
   "crossbower_1": {
@@ -234,11 +234,11 @@
       11
     ],
     "skin_color": [
-      241,
-      194,
-      125
+      198,
+      134,
+      66
     ],
-    "move_interval": 1.0,
+    "move_interval": 0.0,
     "state": "stand"
   },
   "crossbower_2": {
@@ -261,11 +261,11 @@
       13
     ],
     "skin_color": [
-      255,
-      220,
-      177
+      141,
+      85,
+      36
     ],
-    "move_interval": 1.0,
+    "move_interval": 0.0,
     "state": "stand"
   },
   "cutscene_guard_a": {
@@ -288,9 +288,9 @@
       18
     ],
     "skin_color": [
-      224,
-      172,
-      105
+      241,
+      194,
+      125
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -315,9 +315,9 @@
       20
     ],
     "skin_color": [
-      198,
-      134,
-      66
+      141,
+      85,
+      36
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -469,9 +469,9 @@
       5
     ],
     "skin_color": [
-      141,
-      85,
-      36
+      198,
+      134,
+      66
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -728,15 +728,15 @@
   "new_game_spawner": {
     "object_type": "node",
     "x": 15,
-    "y": 4,
+    "y": 6,
     "args": {},
     "position": [
       15,
-      4
+      6
     ],
     "old_position": [
       15,
-      4
+      6
     ],
     "skin_color": [
       0,
@@ -1039,9 +1039,9 @@
       31
     ],
     "skin_color": [
-      198,
-      134,
-      66
+      241,
+      194,
+      125
     ],
     "move_interval": 0.5,
     "state": "stand"
@@ -1068,9 +1068,9 @@
       31
     ],
     "skin_color": [
-      241,
-      194,
-      125
+      224,
+      172,
+      105
     ],
     "move_interval": 1,
     "state": "stand"
@@ -1095,9 +1095,9 @@
       31
     ],
     "skin_color": [
-      241,
-      194,
-      125
+      255,
+      220,
+      177
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -1124,9 +1124,9 @@
       31
     ],
     "skin_color": [
-      141,
-      85,
-      36
+      241,
+      194,
+      125
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -1151,9 +1151,9 @@
       31
     ],
     "skin_color": [
-      141,
-      85,
-      36
+      198,
+      134,
+      66
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -1307,9 +1307,9 @@
       4
     ],
     "skin_color": [
-      224,
-      172,
-      105
+      141,
+      85,
+      36
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -1334,9 +1334,9 @@
       4
     ],
     "skin_color": [
-      198,
-      134,
-      66
+      224,
+      172,
+      105
     ],
     "move_interval": 0.0,
     "state": "stand"
@@ -1350,9 +1350,7 @@
         "Generic People",
         0,
         4
-      ],
-      "name": "Eieun",
-      "dialog_key": "training_guard_2"
+      ]
     },
     "position": [
       12,
@@ -1390,11 +1388,38 @@
       6
     ],
     "skin_color": [
-      224,
-      172,
-      105
+      255,
+      220,
+      177
     ],
     "move_interval": 0.0,
     "state": "stand"
+  },
+  "crossbower_0_arrowmissile_0": {
+    "object_type": "arrowmissile",
+    "x": 10,
+    "y": 9,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        1,
+        0
+      ]
+    },
+    "position": [
+      10,
+      9
+    ],
+    "old_position": [
+      10,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.25,
+    "state": "keep_moving"
   }
 }

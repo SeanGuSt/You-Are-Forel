@@ -2,12 +2,21 @@ import pygame
 from typing import TYPE_CHECKING
 from Map_Editor.me_constants import *
 if TYPE_CHECKING:
-    from Map_Editor.map_editor_fixup import MapEditor
+    from Map_Editor.map_editor import MapEditor
 
 class Renderer:
     def __init__(self, engine: 'MapEditor', FONT):
         self.engine = engine
         self.FONT = FONT
+    def draw_tooltips(self, tx, ty, camera_x, camera_y, objects_data):
+        offset = 0
+        for name, obj in objects_data.items():
+            if obj["x"] == tx and obj["y"] == ty:
+                obj_type = obj.get("object_type", "unknown")
+                screen_x = obj["x"] * VIEW_WIDTH
+                screen_y = obj["y"] * VIEW_HEIGHT + offset
+                offset += self.draw_tooltip(name, obj_type, screen_x, screen_y)
+        return offset
     def draw_tooltip(self, name, obj_type, screen_x, screen_y):
         screen = self.engine.screen
         text = f"{name} ({obj_type})"
@@ -16,6 +25,7 @@ class Renderer:
         bg.fill((0, 0, 0))
         screen.blit(bg, (screen_x + 10, screen_y - 10))
         screen.blit(surf, (screen_x + 13, screen_y - 8))
+        return surf.get_height() + 4
     def draw_sidebar(self):
         # UI Helpers
         screen = self.engine.screen
@@ -32,20 +42,20 @@ class Renderer:
             screen.blit(tile_text, (SCREEN_WIDTH - SIDEBAR_SPACE_WIDTH + 20, 70))
         else:
             obj = self.engine.object_types[self.engine.object_index]
-            obj_text = self.FONT.render(f"Object: {obj}", True, (255, 255, 255))
+            obj_text = self.FONT.render(f"Node: {obj}", True, (255, 255, 255))
             screen.blit(obj_text, (SCREEN_WIDTH - SIDEBAR_SPACE_WIDTH + 20, 70))
         controls = [
             "[TAB] Toggle Mode",
-            "[<]/[>] Cycle Tile/Object",
+            "[<-]/[->] Cycle Tile/Node",
             "[z] Add Tile",
-            "[WASD] Inser Row/Column at Cursor",
+            "[wasd] Insert Row/Column at Cursor",
             "[r] Remove Row at Cursor",
             "[c] Remove Column at Cursor",
-            "[Shift+WASD] Scroll Map",
+            "[Shift+wasd] Scroll Map",
             "[Click] Place",
             "[Shift+Click] Paint Area with Tile",
-            "[Ctrl+Click] Cycle to Tile/Object",
-            "[Right Click] Delete Object",
+            "[Ctrl+Click] Cycle to Tile/Node",
+            "[Right Click] Delete Nodes at Tile",
             "[Ctrl+z] Undo",
             "[Ctrl+y] Redo",
             "[Ctrl+a] Toggle Full Map",
@@ -78,6 +88,10 @@ class Renderer:
             else:
                 cursor_at = 110 + label3.get_width() + label4.get_width()
                 pygame.draw.line(screen, (0, 255, 0), (cursor_at, 170), (cursor_at, 188), 2)
+
+    def draw_ghost_object(self, ghost_object, camera_x, camera_y):
+        gx, gy = ghost_object["x"] - camera_x, ghost_object["y"] - camera_y
+        pygame.draw.circle(self.engine.screen, (0, 255, 0), (gx * TILE_WIDTH + TILE_WIDTH // 2, gy * TILE_HEIGHT + TILE_HEIGHT // 2), 6)
 
     def render_map(self):
         screen = self.engine.screen

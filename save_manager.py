@@ -18,12 +18,11 @@ class SaveManager:
         os.makedirs(SAVES_DIR, exist_ok=True)
         os.makedirs(MAPS_DIR, exist_ok=True)
         if foldername:
-            os.makedirs(f"{SAVES_DIR}/{foldername}")
+            os.makedirs(f"{SAVES_DIR}/{foldername}", exist_ok=True)
     
     def save_game(self, foldername: str):
         """Save game state to file"""
         self.ensure_directories(foldername)
-        print(self.engine.schedule_manager.current_game_time)
         save_data = {
             "party": self.engine.party.to_dict(),
             "options": self.engine.options.to_dict(),
@@ -32,6 +31,7 @@ class SaveManager:
             "current_map" : self.engine.current_map.name,
             "time" : list(self.engine.schedule_manager.current_game_time.timetuple()[:6]),
             "old_time" : list(self.engine.schedule_manager.last_game_time.timetuple()[:6]),
+            "turn_history": self.engine.schedule_manager.turn_history,
             "version": "0.0"
         }
         
@@ -61,6 +61,7 @@ class SaveManager:
         self.engine.options = GameOptions.from_dict(save_data.get("options", {}))
         self.engine.event_manager = EventManager.from_dict(save_data["events"], self.engine)
         self.engine.quest_log.load_quests_from_save(save_data["quests"])
+        self.engine.schedule_manager.turn_history = save_data.get("turn_history", [])
         self.engine.schedule_manager.current_game_time = datetime.datetime(*save_data["time"])
         self.engine.schedule_manager.last_game_time = datetime.datetime(*save_data["old_time"])
         for file in os.listdir(folderpath):
@@ -69,7 +70,6 @@ class SaveManager:
                 with open(filepath, 'r') as f:
                     updated_object_data = json.load(f)
                 map_name = file.split("objs_")[1].split("_updated.json")[0]
-                print(map_name)
                 self.engine.load_map(map_name, updated_object_data)
         self.engine.current_map = self.engine.maps[save_data["current_map"]]
         self.engine.change_state(GameState.TOWN)

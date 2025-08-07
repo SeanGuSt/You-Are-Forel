@@ -54,9 +54,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "burn_jin_shi_event": {
     "object_type": "node",
@@ -99,12 +97,10 @@
       12
     ],
     "skin_color": [
-      255,
-      220,
-      177
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      241,
+      194,
+      125
+    ]
   },
   "corner_guard_1": {
     "object_type": "npcsoldier",
@@ -129,9 +125,7 @@
       141,
       85,
       36
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "corner_guard_2": {
     "object_type": "npcsoldier",
@@ -156,9 +150,7 @@
       255,
       220,
       177
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "corner_guard_3": {
     "object_type": "npcsoldier",
@@ -183,9 +175,7 @@
       198,
       134,
       66
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "crossbower_0": {
     "object_type": "npccrossbower",
@@ -207,12 +197,10 @@
       9
     ],
     "skin_color": [
-      198,
-      134,
-      66
-    ],
-    "move_interval": 1.0,
-    "state": "stand"
+      141,
+      85,
+      36
+    ]
   },
   "crossbower_1": {
     "object_type": "npccrossbower",
@@ -237,9 +225,7 @@
       241,
       194,
       125
-    ],
-    "move_interval": 1.0,
-    "state": "stand"
+    ]
   },
   "crossbower_2": {
     "object_type": "npccrossbower",
@@ -261,12 +247,10 @@
       13
     ],
     "skin_color": [
-      255,
-      220,
-      177
-    ],
-    "move_interval": 1.0,
-    "state": "stand"
+      224,
+      172,
+      105
+    ]
   },
   "cutscene_guard_a": {
     "object_type": "npcguard",
@@ -288,12 +272,10 @@
       18
     ],
     "skin_color": [
-      224,
-      172,
-      105
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      141,
+      85,
+      36
+    ]
   },
   "cutscene_guard_b": {
     "object_type": "npcguard",
@@ -318,9 +300,7 @@
       198,
       134,
       66
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "dmitri_elevators": {
     "object_type": "elevatorteleporter",
@@ -361,9 +341,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "event_melee_training": {
     "object_type": "node",
@@ -428,27 +406,6 @@
       0
     ]
   },
-  "event_tester_node": {
-    "object_type": "node",
-    "x": 6,
-    "y": 19,
-    "args": {
-      "event_start": "first_meet_eraton"
-    },
-    "position": [
-      6,
-      19
-    ],
-    "old_position": [
-      6,
-      19
-    ],
-    "skin_color": [
-      0,
-      0,
-      0
-    ]
-  },
   "guard_jogger": {
     "object_type": "npcsoldier",
     "x": 1,
@@ -469,12 +426,10 @@
       5
     ],
     "skin_color": [
-      141,
-      85,
-      36
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      224,
+      172,
+      105
+    ]
   },
   "guard_sergeant": {
     "object_type": "npc",
@@ -493,9 +448,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "jogger_patrol_0_1": {
     "object_type": "node",
@@ -728,15 +681,15 @@
   "new_game_spawner": {
     "object_type": "node",
     "x": 15,
-    "y": 4,
+    "y": 6,
     "args": {},
     "position": [
       15,
-      4
+      6
     ],
     "old_position": [
       15,
-      4
+      6
     ],
     "skin_color": [
       0,
@@ -767,9 +720,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "pillar1": {
     "object_type": "pillar",
@@ -794,9 +745,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "pillar2": {
     "object_type": "pillar",
@@ -821,9 +770,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "pillar3": {
     "object_type": "pillar",
@@ -848,9 +795,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "pillar4": {
     "object_type": "pillar",
@@ -875,9 +820,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "pillar5": {
     "object_type": "pillar",
@@ -902,9 +845,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "pillar6": {
     "object_type": "pillar",
@@ -929,9 +870,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "pillar7": {
     "object_type": "pillar",
@@ -956,9 +895,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "shooting_range_0": {
     "object_type": "node",
@@ -1039,12 +976,10 @@
       31
     ],
     "skin_color": [
-      198,
-      134,
-      66
-    ],
-    "move_interval": 0.5,
-    "state": "stand"
+      241,
+      194,
+      125
+    ]
   },
   "student_1": {
     "object_type": "npcstudent",
@@ -1071,9 +1006,7 @@
       241,
       194,
       125
-    ],
-    "move_interval": 1,
-    "state": "stand"
+    ]
   },
   "student_2": {
     "object_type": "npcstudent",
@@ -1095,12 +1028,10 @@
       31
     ],
     "skin_color": [
-      241,
-      194,
-      125
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      224,
+      172,
+      105
+    ]
   },
   "student_3": {
     "object_type": "npcstudent",
@@ -1124,12 +1055,10 @@
       31
     ],
     "skin_color": [
-      141,
-      85,
-      36
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      241,
+      194,
+      125
+    ]
   },
   "student_shi": {
     "object_type": "npcstudent",
@@ -1151,12 +1080,10 @@
       31
     ],
     "skin_color": [
-      141,
-      85,
-      36
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      198,
+      134,
+      66
+    ]
   },
   "student_shi_space": {
     "object_type": "node",
@@ -1200,9 +1127,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "target1": {
     "object_type": "archerytarget",
@@ -1227,9 +1152,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "target2": {
     "object_type": "archerytarget",
@@ -1254,9 +1177,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "throne_eraton": {
     "object_type": "npc",
@@ -1283,9 +1204,7 @@
       0,
       0,
       0
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+    ]
   },
   "training_guard_0": {
     "object_type": "npcsoldier",
@@ -1307,12 +1226,10 @@
       4
     ],
     "skin_color": [
-      224,
-      172,
-      105
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      198,
+      134,
+      66
+    ]
   },
   "training_guard_1": {
     "object_type": "npcsoldier",
@@ -1334,12 +1251,10 @@
       4
     ],
     "skin_color": [
-      198,
-      134,
-      66
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      224,
+      172,
+      105
+    ]
   },
   "training_guard_2": {
     "object_type": "npcsoldier",
@@ -1350,9 +1265,7 @@
         "Generic People",
         0,
         4
-      ],
-      "name": "Eieun",
-      "dialog_key": "training_guard_2"
+      ]
     },
     "position": [
       12,
@@ -1363,12 +1276,10 @@
       6
     ],
     "skin_color": [
-      241,
-      194,
-      125
-    ],
-    "move_interval": 0.0,
-    "state": "stand"
+      141,
+      85,
+      36
+    ]
   },
   "training_guard_3": {
     "object_type": "npcsoldier",
@@ -1393,8 +1304,33 @@
       224,
       172,
       105
+    ]
+  },
+  "crossbower_0_arrowmissile_0": {
+    "object_type": "arrowmissile",
+    "x": 10,
+    "y": 9,
+    "state" : "keep_moving",
+    "move_interval" : 0.25,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        1,
+        0
+      ]
+    },
+    "position": [
+      10,
+      9
     ],
-    "move_interval": 0.0,
-    "state": "stand"
+    "old_position": [
+      10,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
   }
 }

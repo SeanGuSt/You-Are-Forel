@@ -16,6 +16,10 @@
       "action": "fire_arrow",
       "direction": "E", 
       "repeat_interval": 8
+    },
+    "08:30" : {
+      "action": "go_to",
+      "target": "crossbower_2"
     }
   },
   "crossbower_1" : {

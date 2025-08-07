@@ -216,10 +216,12 @@ class EventManager:
     def _check_condition(self, condition: str):
         if not condition:
             return True
-        condition, line = condition.split("=")
         true_if = not condition[0] == "!"
         if not true_if:
             condition = condition[1:]
+        if "=" not in condition:#Then this is a flag
+            return (condition in self.flags) == true_if
+        condition, line = condition.split("=")
         match condition:
             case "last_dialog":
                 return (self.engine.dialog_manager.last_input in line.split("|")) == true_if
@@ -275,6 +277,9 @@ class EventManager:
                         pass
             case "force_end":
                 self.force_end = True
+            case "delayed_event_start":
+                if line in self.events:
+                    self.delayed_events["event_start"] = line
             case "delayed_teleport":
                 self.delayed_teleport(int(line))
             case "give_quest":

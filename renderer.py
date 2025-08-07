@@ -3,7 +3,7 @@ from typing import List, TYPE_CHECKING
 from constants import *
 from objects.characters import Party, Character
 from dialog.dialog import DialogManager
-from cutscenes import CutsceneManager
+from events.cutscenes import CutsceneManager
 from objects.map_objects import Map, Node, NPC, Monster, ItemHolder, Teleporter, MapObject
 from options import GameOptions
 from combat import CombatManager

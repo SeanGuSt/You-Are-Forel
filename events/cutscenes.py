@@ -1,5 +1,5 @@
 import os, json
-from constants import GameState
+from constants import GameState, EVENT_DIR
 class CutsceneManager:
     def __init__(self, engine):
         self.cutscenes: dict = {}
@@ -16,6 +16,7 @@ class CutsceneManager:
     def load_scenes(self):
         """Load cutscene data from cutscene.json"""
         cutscene_file = "cutscene.json"
+        cutscene_file = os.path.join(EVENT_DIR, cutscene_file)
         if os.path.exists(cutscene_file):
             try:
                 with open(cutscene_file, 'r') as f:

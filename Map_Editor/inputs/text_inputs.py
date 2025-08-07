@@ -3,7 +3,7 @@ import ast
 import pygame
 from Map_Editor.me_constants import EditState
 if TYPE_CHECKING:
-    from Map_Editor.map_editor_fixup import MapEditor
+    from Map_Editor.map_editor import MapEditor
 def input_new_tile_inputs(self: 'MapEditor', event):
     match event.key:
         case pygame.K_RETURN:
@@ -78,15 +78,16 @@ def input_new_objects_inputs(self: 'MapEditor', event):
             self.input0 = ""
             self.input1 = ""
             self.pending_object = None
+            self.revert_state()
         case pygame.K_BACKSPACE:
             if self.input_field == 1 and self.input1:
                 self.input1 = self.input1[:-1]
-            elif self.input0:
+            elif self.input_field == 0 and self.input0:
                 self.input0 = self.input0[:-1]
         case pygame.K_TAB:
             self.input_field = 1 - self.input_field  # Toggle between 0 and 1
         case _:
-            if self.input_field == 0 and len(self.input0) < 20:
+            if self.input_field == 0 and len(self.input0) < 40:
                 self.input0 += event.unicode
-            elif self.input_field == 1 and len(self.input1) < 80:
+            elif self.input_field == 1 and len(self.input1) < 160:
                 self.input1 += self.event.unicode

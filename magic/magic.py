@@ -1,7 +1,7 @@
 from typing import Optional, List, Any, Dict, Type, TYPE_CHECKING
 from dataclasses import dataclass, field
-from constants import GameState, TargetType, EffectType, VirtueType, DamageType
-from virtue import Virtue
+from constants import GameState, TargetType, EffectType, VirtueType, DamageType, MAGIC_DIR
+from magic.virtue import Virtue
 from objects.map_objects import MapObject, Monster
 import os, json
 # New spell system
@@ -88,6 +88,7 @@ class SpellBook:
     
     def load_spells(self):
         spell_path = "magic.json"
+        spell_path = os.path.join(MAGIC_DIR, spell_path)
         if not os.path.exists(spell_path):
             return
         with open(spell_path, 'r', encoding='utf-8') as f:

@@ -12,6 +12,7 @@ O - Options Menu
 Space - Wait
 Z - Stats Screen
 A + Arrow Keys - Attack (Combat Mode only)
+F1 - Save Game
 *Alternatively, you can walk into the object and one of these two will occur.
 
 Inventory Menu Controls:

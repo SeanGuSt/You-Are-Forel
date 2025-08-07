@@ -7,12 +7,12 @@
         "x": 0,
         "y": 0,
         "position": [
-          16,
-          27
+          15,
+          4
         ],
         "old_position": [
-          16,
-          27
+          0,
+          0
         ],
         "experience": 0,
         "args": {
@@ -21,7 +21,7 @@
             "weapon_ranged": null,
             "armor": "armor_pjs",
             "shield": null,
-            "accessory": "acc_harem_robe"
+            "accessory": null
           },
           "spritesheet": [
             "Forel",
@@ -33,9 +33,10 @@
     },
     "inventory": {
       "item_bread": 5,
-      "item_key": 1
+      "item_key": 1,
+      "acc_harem_robe": 1
     },
-    "current_map": "Kesvelt_Ground",
+    "current_map": "overworld",
     "gold": 100
   },
   "options": {
@@ -47,27 +48,16 @@
   },
   "events": {
     "flags": [],
-    "talked_to_npcs": [
-      "",
-      "eraton_throne",
-      "dmitri_elevator"
-    ]
+    "talked_to_npcs": []
   },
   "quests": {
-    "earn_favor": {
-      "started": true,
-      "failed": false,
-      "completed": false
-    },
+    "earn_favor": {},
     "get_eratons_blessing": {
       "started": true,
       "failed": false,
       "completed": false
     },
     "assure_eraton": {
-      "started": true,
-      "failed": false,
-      "completed": false,
       "steps": {
         "train_melee": {
           "started": true,
@@ -92,5 +82,24 @@
     }
   },
   "current_map": "Kesvelt_Ground",
+  "time": [
+    1574,
+    1,
+    1,
+    7,
+    0,
+    0
+  ],
+  "old_time": [
+    1574,
+    1,
+    1,
+    0,
+    0,
+    0
+  ],
+  "turn_history": [
+    420
+  ],
   "version": "0.0"
 }

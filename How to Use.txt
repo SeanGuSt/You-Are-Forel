@@ -1,0 +1,34 @@
+Making a new Map:
+1. Open Map_Editor/map_editor.py
+2. Name your map by changing the variable map_name (don't include the words "map", "objs", or "tiles" in the map's name)
+   For this example, map_name = "my_map"
+3. Run python -m Map_Editor.map_editor
+4. A simple map will be created that shows a square room, with a single circle. That circle is your "new_game_spawner" node.
+
+Adding Tiles to use:
+Tiles are the ground and environment, things the player can walk on (or block their ability to walk) that cannot be interacted with.
+1. Open Tiles/tiles.py and Tiles/tile_templates.py
+2. Tiles MUST be subclassed from the Tile class, or a subclass of it.
+3. Find a tile you want your map to be able to have. For example, perhaps the Water tile.
+4. Go back to the map editor. Press z
+5. Input an ascii character to represent the Tile in the first row, and its lowercase name in the second. For example, Water could be "~" and "water". The exact character used doesn't matter, however a character can only represent 1 tile subclass per map.
+6. Use the left/right arrow keys to cycle to the Tile you want
+7. Click where on the map you want it to go
+
+Adding Nodes to use:
+Nodes (Also called objects sometimes), are the things in the world. They are the player, they are the npcs and enemies, they are even the invisible, out of the way pieces that allow events to occur.
+1. Press Tab to enter Node Mode
+2. Use the left/right arrow keys to cycle to the Node subclass you want
+3. Click where on the map you want it to go
+4. Give it a name, then press enter
+4.5 (Advanced) Give it unique args
+5. press enter again
+6. Congrats, you've now created a node on the map!
+
+Playing your new map:
+1. open ultimalike.py
+2. edit the variable init_map, so for us init_map = "my_map"
+3. Run ultimalike.py
+4. Walk around in the small world you've created!
+
+For things like creating new rows/columns, moving objects around, or painting tiles, check the controls list on the right side of the map editor.

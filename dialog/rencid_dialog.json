@@ -1,0 +1,34 @@
+{
+    "training_guard_2" : {
+        "__hi__" : [
+            {
+                "text" : [
+                    "Um, kind faithful, you understand that in order to practice with a weapon, you need to be... holding it, right?",
+                    "Rencid__I told you he was street trash. He can't even figure out how to hold a basic practice staff. No way he's a disciple for any reason that riding the king's--",
+                    "Sergeant Caballera__Now I hope even you aren't stupid enough to've forgotten my ears STILL work, Rencid.",
+                    "Rencid__Of course not, sir!",
+                    "Sergeant Caballera__Come on, Lapdog, I've got better things to do than watch you play fight!",
+                    ""
+                ],
+                "conditions" : ["!leader_wear=weapon_staff", "!finished_melee_fight"],
+                "events" : ["force_end="]
+            },
+            {
+                "text" : [
+                    "...Do we really have to do this?"
+                ],
+                "conditions" : ["leader_wear=weapon_staff", "!finished_melee_fight"]
+            }
+        ],
+        "yes" : [
+            {
+                "text" : [
+                    "...Alright then. Here we go.",
+                    ""
+                ],
+                "conditions" : ["leader_wear=weapon_staff", "!finished_melee_fight", "last_dialog=__hi__"],
+                "events" : ["delayed_event_start=melee_training_fight"]
+            }
+        ]
+    }
+}

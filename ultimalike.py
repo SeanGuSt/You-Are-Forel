@@ -5,12 +5,12 @@ from typing import Dict
 from constants import *
 from sprites.sprites import SpriteDatabase
 from combat import CombatManager
-from cutscenes import CutsceneManager
+from events.cutscenes import CutsceneManager
 from dialog.dialog import DialogManager
 from events.events import EventManager
 from sound.sound import SoundDatabase
-from magic import Spell, SpellBook
-from schedule import ScheduleManager
+from magic.magic import Spell, SpellBook
+from schedules.schedule import ScheduleManager
 from renderer import Renderer
 from objects.characters import Party, Character
 from tiles.tiles import Tile
@@ -37,7 +37,7 @@ from inputs.events_inputs import events_inputs
 pygame.init()
 pygame.mixer.init()
 pygame.key.set_repeat(DEFAULT_INPUT_REPEAT_DELAY, DEFAULT_INPUT_REPEAT_INTERVAL)
-init_map = "Kesvelt_Royal_Hallway"
+init_map = "Kesvelt_Ground"
 init_time = 420#in minutes
 init_quest = "get_eratons_blessing"
 init_cutscene = "opening"
@@ -468,7 +468,7 @@ class GameEngine:
             elif self.selected_save - 1 < len(save_files):
                 # Overwrite existing save
                 filename = save_files[self.selected_save - 1]
-                SaveManager.save_game(filename)
+                self.save_manager.save_game(filename)
                 print(f"Game saved as {filename}!")
                 self.revert_state()
         else:
@@ -545,6 +545,10 @@ class GameEngine:
     
     #@time_function("This frame")
     def while_running(self):
+        if not self.event_manager.timer_limits["player_move"] and self.current_map:
+            for obj in self.current_map.get_objects_subset(Missile):
+                if obj.destroy_after_use:
+                    obj.destroy()
         if self.event_manager.timer_limits["player_move"]:
             if self.event_manager.timers["player_move"] >= self.event_manager.timer_limits["player_move"]:
                 self.event_manager.timer_limits["player_move"]= 0
@@ -557,13 +561,17 @@ class GameEngine:
             else:
                 self.event_manager.timers["player_move"] += 1
         elif self.event_manager.delayed_events:
-            if self.event_manager.timers["teleporter_delay"] >= self.event_manager.delayed_events["delay"]:
-                self.handle_teleporter(self.event_manager.delayed_events["teleporter"], True)
-                self.event_manager.timers["teleporter_delay"] = 0
-                self.event_manager.delayed_events = {}
-                self.dialog_manager.current_line_index += 1
-            else:
-                self.event_manager.timers["teleporter_delay"] += 1
+            if "event_start" in self.event_manager.delayed_events and self.dialog_manager.awaiting_input:
+                self.event_manager.start_event(self.event_manager.delayed_events["event_start"], self.event_manager.event_master, True)
+                self.event_manager.delayed_events.pop("event_start")
+            elif "teleporter" in self.event_manager.delayed_events:
+                if self.event_manager.timers["teleporter_delay"] >= self.event_manager.delayed_events["delay"]:
+                    self.handle_teleporter(self.event_manager.delayed_events["teleporter"], True)
+                    self.event_manager.timers["teleporter_delay"] = 0
+                    self.event_manager.delayed_events = {}
+                    self.dialog_manager.current_line_index += 1
+                elif self.event_manager.delayed_events["delay"] > 0:
+                    self.event_manager.timers["teleporter_delay"] += 1
         input_results_for_updates = self.handle_input()
         self.update(input_results_for_updates)
         if self.event_manager.current_event_queue:
@@ -571,10 +579,6 @@ class GameEngine:
         if self.event_manager.walkers:
             self.event_manager.continue_walk()
         self.render()
-        if not self.event_manager.timer_limits["player_move"] and self.current_map:
-            for obj in self.current_map.get_objects_subset(Missile):
-                if obj.destroy_after_use:
-                    obj.destroy()
         if self.state == GameState.COMBAT and not self.combat_manager.player_turn:
             self.combat_manager.update_enemy_turn()
         self.clock.tick(self.FPS)  # Cap to 60 FPS

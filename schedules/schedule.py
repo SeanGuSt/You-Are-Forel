@@ -1,6 +1,7 @@
 import json
+import os
 from typing import Dict, List, Optional, Tuple, Any
-from constants import Direction
+from constants import Direction, SKEJ_DIR
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 import math
@@ -51,7 +52,8 @@ class ScheduleManager:
         - "DD:HH:MM" for multi-day schedules (e.g., "31:00" = day 2, hour 7)
         """
         try:
-            with open("schedule.json", 'r') as f:
+            skej = os.path.join(SKEJ_DIR, "schedule.json")
+            with open(skej, 'r') as f:
                 data = json.load(f)
         except FileNotFoundError:
             print(f"Warning: {"schedule.json"} not found. Using empty schedules.")

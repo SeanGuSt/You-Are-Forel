@@ -22,7 +22,6 @@ class MapObjectDatabase:
     def create_obj(self, obj_name: str, obj_type: str, new_properties: dict[str, Any]):
 
         cls = self.obj_templates.get(obj_type, None)
-        
         if cls:
             if "object_type" not in new_properties:
                 new_properties["object_type"] = obj_type

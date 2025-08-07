@@ -1,0 +1,38 @@
+Spells
+
+verbs:
+Wear- Maniret
+Restore- Palau
+Create- luo
+Break- tau
+Destroy/Remove- tuho
+End- lo
+Grow- kas
+Lower-alem
+Raise- nos
+Invoke/Call- vokoi
+Move- kua
+Go
+Throw/Give- hei
+
+nouns:
+Fire, Energy, Heat, Liquid, Water
+Water (agua), Blood (sangre), Dehydration, Life (vital)
+Earth, Stone, Fissure
+Wind (tuuli), Speed, Movement
+Lightning, Sound
+Lava, Anger, Dehydration
+Fresh-Water Ice (nilak),  Heat (Uunaqtuq), snowstorm (pirsuq) icicle (kusugaq) hunt (angunasuttuq), cold (nuvaktuq)
+Forest, Flesh, Plants, Life
+
+Wear Fire (Maniret Fire) = Self-Immolation: Set thyself ablaze, foolish mortal, lighting thy way and scorching those with the misfortune to graze thy flesh.
+Raise Heat (Nos Heat/Uuna) = Increase Temperature: 
+Lower Heat (Alem Heat/Uuna) = Decrease Temperature:
+Restore Flesh = Stop Bleeding: For those whose flesh hath been cleaved, thou shalt see them restored, the flow of their lifeforce ceased.
+Remove Body = Invisibility: Become imperceptible to the human eye. But beware, for thy lifeforce shall fuel this deception.
+Move Sound = Move Sound: Change the origin point of sounds.
+Throw (Element) = Cast (Element): 
+Give Blood = Revive from blood-loss based unconsciousness: Shouldst thine allies still from bloodloss, may thy flesh, or the flesh of enemies past, be rent to restore them.
+Recover Life = Heal: 
+Give Life = Revive: 
+Create Steam/Destroy Water = 

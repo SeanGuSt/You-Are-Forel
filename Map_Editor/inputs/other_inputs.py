@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 import copy
 if TYPE_CHECKING:
-    from Map_Editor.map_editor_fixup import MapEditor
+    from Map_Editor.map_editor import MapEditor
 
 def snapshot(self: 'MapEditor'):
     return {

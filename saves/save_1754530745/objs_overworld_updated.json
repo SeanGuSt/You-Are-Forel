@@ -21,7 +21,17 @@
       0,
       0,
       0
-    ]
+    ],
+    "name": "overworld_2_town",
+    "color": [
+      255,
+      0,
+      255
+    ],
+    "image": null,
+    "node_id": 4,
+    "is_passable": true,
+    "destroy_after_use": false
   },
   "empty_chest": {
     "object_type": "chest",
@@ -42,7 +52,19 @@
       0,
       0,
       0
-    ]
+    ],
+    "name": "empty_chest",
+    "color": [
+      64,
+      64,
+      64
+    ],
+    "image": null,
+    "node_id": 2,
+    "is_passable": false,
+    "destroy_after_use": false,
+    "move_interval": 0.0,
+    "state": "stand"
   },
   "new_game_spawner": {
     "object_type": "node",
@@ -61,6 +83,16 @@
       0,
       0,
       0
-    ]
+    ],
+    "name": "new_game_spawner",
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "image": null,
+    "node_id": 0,
+    "is_passable": true,
+    "destroy_after_use": false
   }
 }
