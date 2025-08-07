@@ -17,7 +17,8 @@ def input_new_tile_inputs(self: 'MapEditor', event):
                             print(f"{self.input1} is not a valid tile.")
                             return
                         self.tile_map[self.input0] = self.input1
-                        char_list = list(self.tile_map.keys())
+                        self.char_list = list(self.tile_map.keys())
+                        self.char_list.sort()
                         self.state = EditState.TILE
                         self.input_field = 0
                         self.input1 = ""
@@ -73,6 +74,7 @@ def input_new_objects_inputs(self: 'MapEditor', event):
                 self.input0 = ""
                 self.input1 = ""
                 self.pending_object = None
+                self.revert_state()
         case pygame.K_ESCAPE:
             self.arg_input_args = {}
             self.input0 = ""
@@ -87,7 +89,7 @@ def input_new_objects_inputs(self: 'MapEditor', event):
         case pygame.K_TAB:
             self.input_field = 1 - self.input_field  # Toggle between 0 and 1
         case _:
-            if self.input_field == 0 and len(self.input0) < 40:
+            if self.input_field == 0 and len(self.input0) < 100:
                 self.input0 += event.unicode
             elif self.input_field == 1 and len(self.input1) < 160:
-                self.input1 += self.event.unicode
+                self.input1 += event.unicode

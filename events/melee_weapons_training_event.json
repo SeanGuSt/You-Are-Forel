@@ -36,7 +36,12 @@
     "melee_training_fight": {
         "trigger" : "on_step",
         "script" : [
-            "force_combat=Training_Fight_Melee"
+            "force_combat=Training_Fight_Melee",
+            "text=Sergeant Caballera__Let's get ready to rumble!",
+            "text=Sergeant Caballera__Hello, is this thing on? Testing, testing.",
+            "text=Sergeant Caballera__Oh, sweet, it works!",
+            "reforce_combat=",
+            "text=Sergeant Caballera__OK, now that I know you remember how to walk."
         ]
     }
 }

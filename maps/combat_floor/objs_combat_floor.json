@@ -1,40 +1,40 @@
 {
-    "floor_node0" :
+    "floor_node_0" :
   {
     "object_type" : "node",
     "x" : 1,
     "y" : 1,
     "args" : {}
   },
-  "floor_node1" :
+  "floor_node_1" :
   {
     "object_type" : "node",
     "x" : 5,
     "y" : 5,
     "args" : {}
   },
-  "floor_node2" :
+  "floor_node_2" :
   {
     "object_type" : "node",
     "x" : 9,
     "y" : 8,
     "args" : {}
   },
-  "monster_node0" : 
+  "monster_node_0" : 
   {
     "object_type" : "node",
     "x" : 3,
     "y" : 4,
     "args" : {}
   },
-  "monster_node1" : 
+  "monster_node_1" : 
   {
     "object_type" : "node",
     "x" : 5,
     "y" : 6,
     "args" : {}
   },
-  "monster_node2" : 
+  "monster_node_2" : 
   {
     "object_type" : "node",
     "x" : 8,

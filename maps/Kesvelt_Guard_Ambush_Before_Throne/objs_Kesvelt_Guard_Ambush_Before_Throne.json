@@ -43,25 +43,25 @@
       "round_timer": 5
     }
   },
-  "special0": {
+  "special_0": {
     "object_type": "node",
     "x": 8,
     "y": 7,
     "args": {}
   },
-  "special1": {
+  "special_1": {
     "object_type": "node",
     "x": 9,
     "y": 7,
     "args": {}
   },
-  "special2": {
+  "special_2": {
     "object_type": "node",
     "x": 8,
     "y": 8,
     "args": {}
   },
-  "special3": {
+  "special_3": {
     "object_type": "node",
     "x": 9,
     "y": 8,

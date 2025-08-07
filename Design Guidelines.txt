@@ -1,0 +1,2 @@
+Include up to 8 nodes for the player's party to spawn in on for combat maps, numbered 0-7. If it's a generic map for random encounters, where we can't be certain what the player will encounter, or encounters in towns, name the nodes {lowercase tile name}_node_{number}
+However, if this is a special tile over which we have control, name the spawn nodes special_{number}

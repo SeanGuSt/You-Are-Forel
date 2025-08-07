@@ -15,7 +15,7 @@ from Map_Editor.inputs.text_inputs import input_new_tile_inputs, input_new_objec
 from Map_Editor.inputs.mouse_inputs import place_or_move_object, place_tile, move_ghost, drag_paint_tiles
 
 pygame.init()
-map_name = "Kesvelt_Ground"
+map_name = "Training_Fight_Melee"
 FONT = pygame.font.SysFont(None, 18)
 pygame.key.set_repeat(600, 200)
 
@@ -49,6 +49,7 @@ class MapEditor:
         self.char_list = []
         self.objects_data = {}
         self.object_types = list(self.odb.obj_templates.keys())
+        self.object_types.sort()
         self.tile_index = 0
         self.object_index = 0
         self.selected_object_type = self.object_types[self.object_index]
@@ -106,6 +107,7 @@ class MapEditor:
         with open(self.tiles_path) as f:
             self.tile_map = json.load(f)
         self.char_list = list(self.tile_map.keys())
+        self.char_list.sort()
 
         with open(self.objects_path) as f:
             self.objects_data = json.load(f)

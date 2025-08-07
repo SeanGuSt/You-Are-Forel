@@ -357,7 +357,7 @@ class GameEngine:
             obj.args = obj.args | {
                     'target_map': combat_map_name,
                     "positions" : {
-                        "from_any": f"{obj_tile.name}_node"
+                        "from_any": f"{obj_tile.name}_node_"
                     }
                 }
             mo = self.map_obj_db.create_obj("return_node", "node", {"x" : obj.x, "y" : obj.y, "args" : {}})

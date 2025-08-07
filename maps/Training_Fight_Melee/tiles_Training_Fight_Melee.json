@@ -1,0 +1,8 @@
+{
+  "#": "wall",
+  "_": "floor",
+  ".": "grass",
+  "~": "sky",
+  "|": "rail",
+  "l": "floorsoil"
+}

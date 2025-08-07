@@ -68,6 +68,9 @@ class EventManager:
             conditions_met = all(self._check_condition(condition) for condition in conditions)
             if conditions_met:
                 self.event_master = event_master
+                if not self.event_master and self.engine.state == GameState.DIALOG:
+                    self.event_master = self.engine.dialog_manager.current_speaker
+                print(event_master)
                 if force_start:
                     my_queue["trigger"] = "on_step"
                 match my_queue["trigger"]:
@@ -320,9 +323,16 @@ class EventManager:
             case "force_combat":
                 if line:
                     self.event_master.args["target_map"] = line
-                    self.event_master.args["positions"] = {"from_any" : "special"}
+                    self.event_master.args["positions"] = {"from_any" : "special_"}
                 self.engine.handle_teleporter(self.event_master, True)
                 self.engine.combat_manager.enter_combat_mode()
+                for obj in self.engine.current_map.objects:
+                    if obj.name == "event_at_combat_start":
+                        self.engine.change_state(GameState.EVENT)
+                        break
+            case "reforce_combat":
+                self.engine.combat_manager.enter_combat_mode()
+                print(self.engine.state)
             case "spawn":
                 line_bits = line.split("__")
                 if len(line_bits) >= 2:
