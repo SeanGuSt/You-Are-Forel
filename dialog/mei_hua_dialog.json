@@ -4,23 +4,27 @@
             {
                 "text" : [
                     "Didi? Didi! Xingxing didi, xinglai!!",
-                    "walk=student_2__E2",
+                    "leader_direction=S++walk=student_2__E2",
+                    "leader_direction=N++walk=student_2__S2E2&&bubba_renald__W1E1",
                     "Aiyanna__Mei-Hua, I don't think--",
-                    "walk=student_2__N1",
+                    "leader_direction=S++walk=student_2__N1",
+                    "leader_direction=N++walk=student_2__S1",
                     "Shut up! Didi, Xinglai, xinglai, XINGLAI!",
                     "Bubba Renald__Mei-Hua. ...I'm sorry.",
                     "Jin-Shi...",
-                    "walk=student_2__S1",
+                    "leader_direction=S++walk=student_2__S1",
+                    "leader_direction=N++walk=student_2__N1",
                     "Bubba Renald__...I'll fetch a monk to handle the body.",
-                    "walk=bubba_renald__S2",
-                    "Bubba Renald__Kind faithful. If it pleases you, I'd ask you not to bother her right now. As you can see, something traumatic has happened here. I'm certain you can find entertainment elsewhere.",
-                    "walk=bubba_renald__S3",
+                    "leader_direction=S++walk=bubba_renald__S2",
+                    "Bubba Renald__Kind faithful. If it pleases you, I'd ask you not to bother her right now. As you can see, something traumatic has happened here.",
+                    "Bubba Renald__Perhaps Bubba Dmitri, or Archmage Imedes, could entertain you if you wish to see miracles at work more properly.",
+                    "walk=bubba_renald__S5",
                     "(She doesn't seem to notice you.)",
                     ""
                 ],
-                "conditions" : ["!talked="],
+                "conditions" : ["!talked=", "saw_jin_shi_die"],
                 "events" : [
-                    "force_end=", "talked=true"
+                    "force_end=", "talked=true", "give_quest=kesvelt_jin_shi_dies", "give_quest_step=kesvelt_jin_shi_dies__visit_imedes"
                 ]
             },
             {

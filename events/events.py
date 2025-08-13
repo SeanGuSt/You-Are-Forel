@@ -8,6 +8,58 @@ from dialog.dialog_helpers import format_time_of_day
 import re
 if TYPE_CHECKING:
     from ultimalike import GameEngine
+class TimerManager:
+    def __init__(self):
+        self.timers = {}
+    
+    def start_timer(self, name, duration):
+        """Start a new timer"""
+        self.timers[name] = {
+            'start_time': pygame.time.get_ticks(),
+            'duration': duration,
+            'active': True
+        }
+    
+    def is_active(self, name):
+        """Check if a timer is currently running"""
+        if name not in self.timers:
+            return False
+        return self.timers[name]['active']
+
+    def any_active(self):
+        """Check if any timer is currently running"""
+        return any(timer['active'] for timer in self.timers.values())
+    
+    def get_progress(self, name, cancel_if_done: bool = True):
+        """Get progress as a percentage (0.0 to 1.0)"""
+        if not self.is_active(name):
+            return 1.0
+        
+        timer = self.timers[name]
+        elapsed = pygame.time.get_ticks() - timer['start_time']
+        progress = min(elapsed / timer['duration'], 1.0)
+        
+        if progress >= 1.0 and cancel_if_done:
+            self.cancel_timer(name)
+        
+        return progress
+    
+    def get_remaining_time(self, name, cancel_if_done: bool = True):
+        """Get remaining time in milliseconds"""
+        if not self.is_active(name):
+            return 0
+        
+        timer = self.timers[name]
+        elapsed = pygame.time.get_ticks() - timer['start_time']
+        remaining_time = max(0, timer['duration'] - elapsed)
+        if remaining_time <= 0 and cancel_if_done:
+            self.cancel_timer(name)
+        return remaining_time
+    
+    def cancel_timer(self, name):
+        """Cancel a timer"""
+        if name in self.timers:
+            self.timers[name]['active'] = False
 #These are functions primarily meant to assist in managing quests and movement in in-engine cutscenes
 class EventManager:
     def __init__(self, engine: 'GameEngine', flags: set = set(), talked_to_npcs: set = set()):
@@ -21,22 +73,23 @@ class EventManager:
         self.looking = False
         self.user_input = ""
         self.last_input = ""
+        self.speaker_name = ""
+        self.current_line = ""
         self.flags = flags #Track various dialog flags. Needs to be saved
         self.talked_to_npcs = talked_to_npcs
         self.pending_events = {}
         self.delayed_events = {}
+        self.timer_manager = TimerManager()
         self.timers = {
             "player_move" : 0,
             "event_wait" : 0,
             "teleporter_delay" : 0,
             "event_pause" : 0,
-            "enemy_move" : 0,
             "player_bump" : 0
         }
         self.timer_limits = {
             "player_move" : 0,
             "event_wait" : 0,
-            "enemy_move" : 0,
             "player_bump" : 0
         }
         self.waiting_for_input = False
@@ -70,7 +123,9 @@ class EventManager:
                 self.event_master = event_master
                 if not self.event_master and self.engine.state == GameState.DIALOG:
                     self.event_master = self.engine.dialog_manager.current_speaker
-                print(event_master)
+                flags = my_queue.get("flags", [])
+                for flag in flags:
+                    self.flags.add(flag)
                 if force_start:
                     my_queue["trigger"] = "on_step"
                 match my_queue["trigger"]:
@@ -94,12 +149,8 @@ class EventManager:
     def advance_queue(self):
         if not self.current_event_queue or self.waiting_for_input or self.walkers:
             return
-        if self.timers["event_pause"] < self.event_pause_timer:
-            self.timers["event_pause"] += 1
+        if self.timer_manager.get_remaining_time("event_pause") > 0:
             return
-        else:
-            self.timers["event_pause"] = 0
-            self.event_pause_timer = 0
         self.current_index += 1
         print(f"made it to step {self.current_index}")
         script = self.current_event_queue["script"]
@@ -125,10 +176,10 @@ class EventManager:
         if destroy_trigger_node == "after_trigger" and em:
            self.engine.current_map.remove_object(em)
            del em
-        for tl in self.timer_limits:
-            self.timer_limits[tl] = 0
+        del self.timer_manager.timers["event_wait"]
         self.current_event_queue = {}
         self.event_master = None
+        self.current_line = ""
         self.waiting_for_input = False
 
     
@@ -142,10 +193,8 @@ class EventManager:
         print(teleporter_here)
         teleporter_here.args = self.pending_events["new_args"]
         self.pending_events = {}
-        self.delayed_events = {
-            "teleporter" : teleporter_here,
-            "delay" : delay_time*self.engine.FPS/1000
-        }
+        self.delayed_events = {"teleporter" : teleporter_here}
+        self.timer_manager.start_timer("teleporter_delay", delay_time*self.engine.FPS/1000)
     
     def move_object_to(self, obj: Node, new_pos: tuple[int, int] = (0, 0), new_map: Map = None):
         if new_map:
@@ -180,26 +229,32 @@ class EventManager:
             self.walk_directions.append(direcs)
         
     def continue_walk(self, ignore_walls: bool = True):
-        if self.walkers and self.timers["event_wait"] >= self.timer_limits["event_wait"]:
-            self.timers["event_wait"] = 0
-            if not self.walk_directions:
-                self.walkers = []
-                self.timer_limits["event_wait"] = 0
-                return
-            for i, obj in enumerate(self.walkers):
-                if not self.walk_directions[i]:
-                    self.walkers.remove(obj)
-                    self.walk_directions.remove(self.walk_directions[i])
-                    continue
-                direc = self.engine.get_direction(self.walk_directions[i][0])
-                tpos = obj.add_tuples(obj.position, direc.value)
-                self.walk_directions[i] = self.walk_directions[i][1:]
-                if obj.map.is_passable(tpos) or ignore_walls:
-                    obj.old_position = obj.position
-                    obj.position = tpos
-                    obj.last_move_direction = direc.value
-        else:
-            self.timers["event_wait"] += 1
+        progress = self.timer_manager.get_progress("event_wait", False)
+        if progress < 1.0:
+            return
+        self.timer_manager.start_timer("event_wait", 250)
+        self.engine.current_map.generation += 1
+        if not self.walk_directions:
+            self.walkers = []
+            self.timer_manager.cancel_timer("event_wait")
+            return
+        
+        walk_complete = []
+        for i, obj in enumerate(self.walkers):
+            if not self.walk_directions[i]:
+                walk_complete.append(i)
+                obj.old_position = obj.position
+                continue
+            direc = self.engine.get_direction(self.walk_directions[i][0])
+            tpos = obj.add_tuples(obj.position, direc.value)
+            self.walk_directions[i] = self.walk_directions[i][1:]
+            if obj.map.is_passable(tpos) or ignore_walls:
+                obj.old_position = obj.position
+                obj.position = tpos
+                obj.last_move_direction = direc.value
+        for i in reversed(walk_complete):
+            self.walkers.pop(i)
+            self.walk_directions.pop(i)
 
     def give_quest(self, quest_name: str):
         self.engine.quest_log.start_quest(quest_name)
@@ -236,14 +291,57 @@ class EventManager:
                     return quest.started == true_if
                 else:
                     return False == true_if
+            case "mid_quest":
+                quest = self.engine.quest_log.quests.get(line, None)
+                if quest:
+                    return quest.started == true_if and not (quest.completed == true_if | quest.failed == true_if)
+                else:
+                    return False == true_if
+            case "finished_quest":
+                quest = self.engine.quest_log.quests.get(line, None)
+                if quest:
+                    return quest.completed == true_if | quest.failed == true_if
+                else:
+                    return False == true_if
+            case "have_quest_step":
+                line, quest_step_name = line.split("__")
+                quest = self.engine.quest_log.quests.get(line, None)
+                if quest:
+                    quest_step = quest.steps.get(quest_step_name, None)
+                    if quest_step:
+                        return quest_step.started == true_if
+                    else:
+                        return False == true_if
+            case "finished_quest_step":
+                line, quest_step_name = line.split("__")
+                quest = self.engine.quest_log.quests.get(line, None)
+                if quest:
+                    quest_step = quest.steps.get(quest_step_name, None)
+                    if quest_step:
+                        return quest_step.completed == true_if | quest_step.failed == true_if
+                    else:
+                        return False == true_if
             case "leader_wear":
                 leader = self.engine.party.get_leader()
                 if leader:
+                    if "none" in line:
+                        if leader.equipped[line.split("_")[0]]:
+                            return False == true_if
+                        return True == true_if
+
                     for item in leader.equipped.values():
                         if item:
                             if item.item_id in line.split("|"):
                                 return true_if
                     return not true_if
+            case "leader_direction":
+                leader = self.engine.party.get_leader()
+                if self.engine.state == GameState.DIALOG:
+                    reference = self.engine.dialog_manager.current_speaker
+                else:
+                    reference = self.event_master
+                direction = self.engine.get_direction(line)
+                return (leader.position == reference.add_tuples(reference.position, direction.value)) == true_if
         if condition[0] == "!":
             return condition[1:] not in self.flags
         return condition in self.flags
@@ -253,11 +351,18 @@ class EventManager:
     def _do_event(self, line: str):
         event, line = line.split("=")
         match event:
+            case "set_flag":
+                self.flags.add(line)
             case "add_item":
                 quantity = 1
                 if "__" in line:
                     line, quantity = line.split("__")
                 self.engine.party.add_item_by_name(line, quantity)
+            case "jump":
+                if self.engine.state == GameState.EVENT:
+                    self.current_index += int(line)
+                elif self.engine.state == GameState.DIALOG:
+                    self.engine.dialog_manager.current_line_index += int(line)
             case "add_schedule":
                 npc, destination, time_after_now = line.split("__")
                 self.engine.schedule_manager.add_dynamic_schedule_event(npc, int(time_after_now), {"target" : destination})
@@ -291,6 +396,12 @@ class EventManager:
                 self.give_quest_step(line)
             case "give_quest_hint":
                 self.give_quest_hint(line)
+            case "finish_quest":
+                quest_name, succeed = line.split("--")
+                self.finish_quest(quest_name, succeed == "true")
+            case "finish_quest_step":
+                quest_step, succeed = line.split("--")
+                self.finish_quest_step(quest_step, succeed == "true")
             case "text":
                 speaker, line = line.split("__")
                 if "&&await_yn" in line:
@@ -299,8 +410,7 @@ class EventManager:
                     if "(Y/N)" not in line:
                         line += " (Y/N)"
                 self.speaker_name = speaker
-                if "{time_of_day}" in line:
-                    line = format_time_of_day(line, self.engine.schedule_manager.current_game_time)
+                line = self.engine.dialog_manager.format_text(line)
                 self.current_line = line
                 self.waiting_for_input = True
             case "walk":
@@ -316,10 +426,19 @@ class EventManager:
                         if not npc.last_move_direction:
                             npc.last_move_direction = (0, 0)
                         self.initialize_walk(path)
-                if self.walkers:
-                    self.timers["event_wait"] = 8
-                    self.timer_limits["event_wait"] = 8
-                    self.continue_walk()
+            case "warp":
+                lines = line.split("&&")
+                for line in lines:
+                    npc_name, destination = line.split("__")
+                    if npc_name == "leader":
+                        npc = self.engine.party.get_leader()
+                    else:
+                        npc = self.engine.current_map.get_object_by_name(npc_name)
+                    obj = self.engine.current_map.get_object_by_name(destination)
+                    if npc and obj:
+                        npc.old_position = obj.position
+                        npc.position = obj.position
+            
             case "force_combat":
                 if line:
                     self.event_master.args["target_map"] = line
@@ -336,10 +455,18 @@ class EventManager:
             case "spawn":
                 line_bits = line.split("__")
                 if len(line_bits) >= 2:
-                    obj = self.engine.current_map.get_object_by_name(line_bits[1])
+                    name = ""
+                    if "--" in line_bits[-1]:
+                        line_bits[-1], name = line_bits[-1].split("--")
+                    else:
+                        name = f"{self.event_master.name}_{line_bits[0]}_"
+                    if line_bits[1] == "leader":
+                        obj = self.engine.party.get_leader()
+                    else:
+                        obj = self.engine.current_map.get_object_by_name(line_bits[1])
                     if obj:
                         pos = obj.position
-                        new_obj = self.engine.map_obj_db.create_obj(f"{self.event_master.name}_{line_bits[0]}_0", line_bits[0], {"x" : pos[0], "y" : pos[1]})
+                        new_obj = self.engine.map_obj_db.create_obj(name + "0", line_bits[0], {"x" : pos[0], "y" : pos[1]})
                         self.engine.current_map.objects.append(new_obj)
                         new_obj.map = self.engine.current_map
                         if len(line_bits) >= 4:
@@ -347,7 +474,7 @@ class EventManager:
                             repeat_count = int(line_bits[3])
                             for i in range(repeat_count):
                                 new_pos = obj.add_tuples(new_obj.position, direction.value)
-                                new_obj = self.engine.map_obj_db.create_obj(f"{self.event_master.name}_{line_bits[0]}_{i+1}", line_bits[0], {"x" : new_pos[0], "y" : new_pos[1]})
+                                new_obj = self.engine.map_obj_db.create_obj(f"{name}_{i+1}", line_bits[0], {"x" : new_pos[0], "y" : new_pos[1]})
                                 self.engine.current_map.objects.append(new_obj)
                                 new_obj.map = self.engine.current_map
             case "destroy":
@@ -370,9 +497,11 @@ class EventManager:
                                         self.engine.current_map.objects.remove(old_obj)
                                         del old_obj
             case "wait":
-                self.event_pause_timer = int(line)*self.engine.FPS/1000
+                self.timer_manager.start_timer("event_pause", int(line)*self.engine.FPS/1000)
             case "invisible_leader":
-                self.make_leader_invisible =  line == "true"
+                self.make_leader_invisible =  line == "true" or line == "true_nf"
+                if line == "true_nf":
+                    return
                 leader = self.engine.party.get_leader()
                 if self.make_leader_invisible:
                     fake_leader = self.engine.map_obj_db.create_obj("fake_leader", "mapobject", {"x" : leader.position[0], "y" : leader.position[1]})
@@ -386,7 +515,6 @@ class EventManager:
                             leader.children.remove(child)
                             del child
                             break
-
             case "teleport":
                 map, node = line.split("__")
                 temp_tele = Teleporter.from_dict({"name" : "", "x" : -1, "y" : -1, "args" : {"target_map" : map, "position" : {"from_any" : node}}}, self.engine)

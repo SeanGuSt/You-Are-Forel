@@ -53,24 +53,6 @@
     "y": 27,
     "args": {}
   },
-  "hidden_door_to_harem": {
-    "object_type": "doorbasic",
-    "x": 9,
-    "y": 25,
-    "args": {}
-  },
-  "slide_wall_to_harem": {
-    "object_type": "doorbasic",
-    "x": 20,
-    "y": 21,
-    "args": {}
-  },
-  "door_to_eraton_bed": {
-    "object_type": "doorbasic",
-    "x": 15,
-    "y": 29,
-    "args": {}
-  },
   "adjacent_maps": {
     "object_type": "node",
     "x": 9,

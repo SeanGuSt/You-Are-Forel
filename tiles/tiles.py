@@ -5,6 +5,7 @@ from pygame.image import load as image_load
 @dataclass
 class Tile:
     is_passable = True
+    can_see_thru = True
     name: str = ""
     step_sound = ""
     image_path = None
@@ -19,6 +20,8 @@ class Tile:
                 self.image = image_load(self.image_path)
             except:
                 self.image = None
+    def can_pass_thru(self):
+        return self.is_passable
 
 
     

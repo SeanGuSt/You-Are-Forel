@@ -1,8 +1,11 @@
 from dataclasses import dataclass, asdict, field
 import json
-from typing import List, Dict, Any, Optional, Type
+from typing import List, Dict, Any, Optional, Type, TYPE_CHECKING
 from constants import EffectType, EquipmentSlot, EffectTrigger
 ITEM_REGISTRY: Dict[str, Type['Item']] = {}
+if TYPE_CHECKING:
+    from objects.characters import Character
+    from ultimalike import GameEngine
 
 def register_item_type(name: str):
     def decorator(cls):
@@ -62,13 +65,15 @@ class Item:
     uid: int
     item_id = ""
     quantity: int = 1
-    slot = None
-    value: int = 0
+    slot: EquipmentSlot = None#Equipmentslot
+    value: int = 0#Price
     power: int = 0
     guard: int = 0
+    max_hp: int = 0
     weight: int = 0
     max_stack: int = 7
     is_discardable: bool = True
+    can_be_sold: bool = True
     effect: str = ""
     evalues: list[int] = field(default_factory=lambda: [])
     estats: list[str] = field(default_factory=lambda: [])
@@ -106,28 +111,65 @@ class Item:
 class Consumable(Item):
     pass
 
+@register_item_type("keyitem")
+@dataclass
+class KeyItem(Item):
+    can_be_sold = False
+    is_discardable = False
+
 @register_item_type("equipment")
 @dataclass
 class Equipment(Item):
+    special_attacks = []
+    def circle_sweep(self, master: 'Character', radius: int = 1, include_self: bool = False, hit_allies: bool = True, edge_only: bool = True):
+        """Perform a circle sweep attack around the character."""
+        radius_plus_one = radius + 1
+        for dx in range(radius_plus_one):
+            for dy in range(radius_plus_one):
+                if not include_self and not (dx or dy):
+                    continue
+                if edge_only:
+                    if dx + dy != radius_plus_one:
+                        continue
+                if dx + dy <= radius_plus_one:
+                    # Calculate the position relative to the master character
+                    pos = (master.x + dx, master.y + dy)
+                    self.perform_special_attack(master, pos, hit_allies)
+                    if dx:
+                        pos = (master.x - dx, master.y + dy)
+                        self.perform_special_attack(master, pos, hit_allies)
+                    if dy:
+                        pos = (master.x + dx, master.y - dy)
+                        self.perform_special_attack(master, pos, hit_allies)
+
+                        if dx and dy:#Don't bother with this one if not dy.
+                            pos = (master.x - dx, master.y - dy)
+                            self.perform_special_attack(master, pos, hit_allies)
+
+    def perform_special_attack(self, master: 'Character', pos: tuple[int, int], hit_allies: bool = True):
+        for obj in master.engine.current_map.get_objects_at(pos):
+            if hit_allies or obj.is_hostile:
+                obj.attacked(master, self.power)
+                return
     pass
 
 @register_item_type("weapon_melee")
 @dataclass
 class Weapon_Melee(Equipment):
-    slot = EquipmentSlot.WEAPON
+    slot: EquipmentSlot = EquipmentSlot.WEAPON
 
 @register_item_type("weapon_ranged")
 @dataclass
 class Weapon_Ranged(Equipment):
-    slot = EquipmentSlot.RANGED
+    slot: EquipmentSlot = EquipmentSlot.RANGED
 
 @register_item_type("armor")
 @dataclass
 class Armor(Equipment):
-    slot = EquipmentSlot.ARMOR
+    slot: EquipmentSlot = EquipmentSlot.ARMOR
 
 @register_item_type("accessory")
 @dataclass
 class Accessory(Equipment):
-    slot = EquipmentSlot.ACCESSORY
+    slot: EquipmentSlot = EquipmentSlot.ACCESSORY
         

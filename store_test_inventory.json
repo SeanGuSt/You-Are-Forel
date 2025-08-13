@@ -1,0 +1,16 @@
+{
+    "health_pot": 10,
+    "mana_pot": 15,
+    "str_elixir": 1,
+    "antidote": 20,
+    "iron_sword": 3,
+    "steel_axe": 2,
+    "mystic_staff": 1,
+    "leather_armor": 5,
+    "chain_mail": 2,
+    "plate_armor": 1,
+    "steel_helmet": 4,
+    "battle_helm": 1,
+    "magic_boots": 2,
+    "iron_boots": 3
+}

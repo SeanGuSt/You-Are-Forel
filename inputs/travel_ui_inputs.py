@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 import pygame
 from constants import GameState, DEFAULT_PLAYER_MOVE_FRAMES, DEFAULT_WAIT_PENALTY
-from objects.map_objects import NPC, MapObject
-from save_manager import SaveManager
+from objects.object_templates import NPC, MapObject, Chest
 
 if TYPE_CHECKING:
     from ultimalike import GameEngine
@@ -11,7 +10,6 @@ if TYPE_CHECKING:
 def travel_inputs(self: 'GameEngine', event) -> dict | None:
     match event.key:
         case pygame.K_SPACE:
-            self.event_manager.timer_limits["player_move"] = DEFAULT_PLAYER_MOVE_FRAMES
             self.party.get_leader().old_position = self.party.get_leader().position
             return {"movement_penalty" : DEFAULT_WAIT_PENALTY}
         case pygame.K_UP | pygame.K_DOWN | pygame.K_LEFT | pygame.K_RIGHT:
@@ -53,7 +51,10 @@ def travel_inputs(self: 'GameEngine', event) -> dict | None:
                             else:
                                 if self.try_talk_to_object(obj):
                                     break
-                        elif obj.__is__(MapObject):
+                        if obj.__is__(Chest):
+                            if obj.interact():
+                                break
+                        if obj.__is__(MapObject):
                             if self.try_look_at_object(obj):
                                 break
                                 

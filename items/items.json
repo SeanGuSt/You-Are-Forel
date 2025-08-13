@@ -72,5 +72,124 @@
         "effects" : ["passive__change_sprite__+__3"],
         "item_type" : "accessory",
         "uid" : 5001
+    },
+    "health_pot": {
+        "name": "Health Potion",
+        "description": "A crimson elixir that restores 50 HP when consumed. Brewed from healing herbs found in the northern valleys.",
+        "value": 25,
+        "item_type": "consumable",
+        "uid": 1
+    },
+    "mana_pot": {
+        "name": "Mana Potion",
+        "description": "A shimmering blue liquid that restores 30 MP. Contains concentrated magical essence.",
+        "value": 20,
+        "item_type": "consumable",
+        "uid": 2
+    },
+    "str_elixir": {
+        "name": "Strength Elixir",
+        "description": "A rare golden potion that permanently increases strength by 1. Made from the essence of mountain giants.",
+        "value": 500,
+        "item_type": "consumable",
+        "uid": 7
+    },
+    "antidote": {
+        "name": "Antidote",
+        "description": "A clear remedy that neutralizes most common poisons. Essential for any adventurer.",
+        "value": 15,
+        "item_type": "consumable",
+        "uid": 8
+    },
+    "iron_sword": {
+        "name": "Iron Sword",
+        "description": "A sturdy iron blade forged by skilled smiths. Well-balanced and reliable in combat.",
+        "value": 150,
+        "power": 25,
+        "item_type": "weapon_melee",
+        "uid": 3
+    },
+    "steel_axe": {
+        "name": "Steel Axe",
+        "description": "A heavy two-handed axe made from reinforced steel. Devastating in the hands of a strong warrior.",
+        "value": 200,
+        "power": 35,
+        "weight": 8,
+        "item_type": "weapon_melee",
+        "uid": 9
+    },
+    "mystic_staff": {
+        "name": "Mystic Staff",
+        "description": "An ancient staff carved from silverwood and topped with a glowing crystal. Channels magical energy with ease.",
+        "value": 300,
+        "power": 20,
+        "item_type": "weapon_melee",
+        "uid": 10
+    },
+    "leather_armor": {
+        "name": "Leather Armor",
+        "description": "Basic protection crafted from tanned hide. Flexible and lightweight, perfect for starting adventurers.",
+        "value": 100,
+        "guard": 15,
+        "item_type": "armor",
+        "uid": 4
+    },
+    "chain_mail": {
+        "name": "Chain Mail",
+        "description": "Flexible metal protection made from interlocking iron rings. Offers excellent defense while maintaining mobility.",
+        "value": 250,
+        "guard": 25,
+        "weight": 12,
+        "item_type": "armor",
+        "uid": 11
+    },
+    "plate_armor": {
+        "name": "Plate Armor",
+        "description": "Maximum protection forged from the finest steel plates. Heavy but nearly impenetrable to most attacks.",
+        "value": 500,
+        "guard": 40,
+        "weight": 20,
+        "item_type": "armor",
+        "uid": 12
+    },
+    "steel_helmet": {
+        "name": "Steel Helmet",
+        "description": "A solid steel helm that protects the head from crushing blows. Features a reinforced crown and cheek guards.",
+        "value": 75,
+        "guard": 10,
+        "item_type": "accessory",
+        "uid": 5
+    },
+    "battle_helm": {
+        "name": "Battle Helm",
+        "description": "An intimidating piece of headgear worn by veteran warriors. The skull motif strikes fear into enemies.",
+        "value": 150,
+        "guard": 18,
+        "weight": 5,
+        "item_type": "accessory",
+        "uid": 13
+    },
+    "magic_boots": {
+        "name": "Magic Boots",
+        "description": "Enchanted footwear that increases movement speed and provides minor protection. Woven with wind magic.",
+        "value": 200,
+        "guard": 5,
+        "item_type": "accessory",
+        "uid": 6
+    },
+    "iron_boots": {
+        "name": "Iron Boots",
+        "description": "Heavy iron-plated boots that provide excellent protection for the feet and shins. Built to last through any terrain.",
+        "value": 120,
+        "guard": 12,
+        "weight": 6,
+        "item_type": "accessory",
+        "uid": 14
+    },
+    "key_reminder_note" : {
+        "name" : "Note from Eraton",
+        "description" : "A folded up piece of paper in Eraton's calligraphic penmanship.",
+        "item_type" : "keyitem",
+        "uid" : 15
     }
 }

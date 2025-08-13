@@ -3,6 +3,7 @@
         "destroy_trigger_object" : "after_trigger",
         "trigger" : "on_step",
         "conditions" : ["!leader_wear=acc_harem_robe|acc_harem_robe_adult"],
+        "flags" : ["attacked_by_eratons_guards"],
         "destroy_even_if_conditions_fail" : true,
         "script" : [
             "text=???__HALT!!",
@@ -19,14 +20,19 @@
             "text=???__F-f-faithful!?",
             "text=???__Your Majesty, please forgive us! I-- we thought he was an assassin!",
             "leader_wear=armor_pjs++text=Eraton Sydan__An assassin? Wearing pajamas?",
+            "leader_wear=armor_none++text=Eraton Sydan__An assassin? Wearing-- Forel. Why are you out here in your jonnies? I'm not saying I dislike seeing this. I'm saying everyone else does.",
+            "leader_wear=armor_none++text=Eraton Sydan__But regardless!",
             "text=Eraton Sydan__Even if he were out for my life, we are Sewians, not barbarians. You do not rush someone for simply walking. Now back to your posts! I shall defer judgement to your immediate superior.",
             "text=???__Yes, Your Majesty!",
             "walk=cutscene_guard_a__E2&&cutscene_guard_b__S1",
             "text=Eraton Sydan__As for you, my treasure. Quite bold of you to approach without your robe. I know you've lived here for a while, but you're also... well, you're not as social as Ginny, let's say.",
             "text=Eraton Sydan__Don't get me wrong, I love having you all to myself. But with how little you get out, we can't expect everyone to know you on sight, now can we? That's what your robe is for.",
             "text=Eraton Sydan__Aw, you just forgot you weren't wearing it yet? That's fine, love.",
+            "leader_wear=armor_none++jump=3",
             "text=Eraton Sydan__You can open your Equipment bag by pressing 'E', then head to the Accessory section and press Enter to open your accessory pocket, then Enter again to equip Ronpa tue Phitemos.",
             "text=Eraton Sydan__You'll know you've done it right when its name shows up next to the word 'Accessory'.",
+            "jump=1",
+            "text=Eraton Sydan__Thankfully, I remember you were wearing your bear jammies when I left bed this morning. So their conspicuous absence means you already know how to use the Equipment bag.",
             "text=Eraton Sydan__Come see me again when you're dressed, OK?",
             "walk=throne_eraton__W1"
 

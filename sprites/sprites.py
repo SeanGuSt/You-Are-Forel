@@ -63,11 +63,11 @@ class SpriteDatabase:
             node.image = sheet.subsurface(pygame.Rect(
                 sprite_col * TILE_WIDTH, 
                 sprite_row * TILE_HEIGHT, 
-                TILE_WIDTH, 
-                TILE_HEIGHT
+                TILE_WIDTH*node.width_in_tiles, 
+                TILE_HEIGHT*node.height_in_tiles
             ))
         else:
-            node.image = sheet.subsurface(pygame.Rect(sprite_col*TILE_WIDTH, sprite_row*TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT))
+            node.image = sheet.subsurface(pygame.Rect(sprite_col*TILE_WIDTH, sprite_row*TILE_HEIGHT, TILE_WIDTH*node.width_in_tiles, TILE_HEIGHT*node.height_in_tiles))
 
 def replace_color_threshold(surface, old_color, new_color, threshold=0):
         # Create a mask for the color to replace

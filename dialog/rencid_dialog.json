@@ -10,14 +10,22 @@
                     "Sergeant Caballera__Come on, Lapdog, I've got better things to do than watch you play fight!",
                     ""
                 ],
-                "conditions" : ["!leader_wear=weapon_staff", "!finished_melee_fight"],
+                "conditions" : ["!leader_wear=weapon_staff", "!finished_quest_step=assure_eraton__train_melee"],
                 "events" : ["force_end="]
             },
             {
                 "text" : [
                     "...Do we really have to do this?"
                 ],
-                "conditions" : ["leader_wear=weapon_staff", "!finished_melee_fight"]
+                "conditions" : ["leader_wear=weapon_staff", "!finished_quest_step=assure_eraton__train_melee"]
+            },
+            {
+                "text" : [
+                    "A good day to you, kind faithful.",
+                    ""
+                ],
+                "conditions" : ["finished_quest_step=assure_eraton__train_melee"],
+                "events" : ["force_end="]
             }
         ],
         "yes" : [
@@ -26,9 +34,67 @@
                     "...Alright then. Here we go.",
                     ""
                 ],
-                "conditions" : ["leader_wear=weapon_staff", "!finished_melee_fight", "last_dialog=__hi__"],
+                "conditions" : ["leader_wear=weapon_staff", "!finished_melee_fight", "last_dialog=__hi__", "!finished_quest_step=assure_eraton__train_melee"],
                 "events" : ["delayed_event_start=melee_training_fight"]
             }
+        ],
+        "no" : [
+            {
+                "text" : [
+                    "Oh, thank goodness.",
+                    ""
+                ],
+                "conditions" : ["leader_wear=weapon_staff", "!finished_melee_fight", "last_dialog=__hi__", "!finished_quest_step=assure_eraton__train_melee"],
+                "events" : ["force_end="]
+            }
         ]
+    },
+    "training_guard_3" : {
+        "__hi__" : [
+            {
+                "text" : [
+                    "Well? You gonna get prepped or not?",
+                    ""
+                ],
+                "conditions" : ["!leader_wear=weapon_staff", "!finished_quest_step=assure_eraton__train_melee"],
+                "events" : ["force_end="]
+            },
+            {
+                "text" : [
+                    "You sure you wanna do this, 'kind faithful'?"
+                ],
+                "conditions" : ["leader_wear=weapon_staff", "!finished_quest_step=assure_eraton__train_melee"]
+            },
+            {
+                "text" : [
+                    "...Hmph.",
+                    ""
+                ],
+                "conditions" : ["finished_quest_step=assure_eraton__train_melee"],
+                "events" : ["force_end="]
+            }
+        ],
+        "yes" : [
+            {
+                "text" : [
+                    "SIGH",
+                    "...Alright then. Here we go.",
+                    ""
+                ],
+                "conditions" : ["leader_wear=weapon_staff", "last_dialog=__hi__", "!finished_quest_step=assure_eraton__train_melee"],
+                "events" : ["delayed_event_start=melee_training_fight"]
+            }
+        ],
+        "no" : [
+            {
+                "text" : [
+                    "Naturally.",
+                    ""
+                ],
+                "conditions" : ["leader_wear=weapon_staff", "last_dialog=__hi__", "!finished_quest_step=assure_eraton__train_melee"],
+                "events" : ["force_end="]
+            }
+        ]
+
     }
 }

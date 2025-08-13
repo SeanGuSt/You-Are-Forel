@@ -185,8 +185,8 @@
   },
   "new_game_spawner": {
     "object_type": "node",
-    "x": 15,
-    "y": 4
+    "x": 8,
+    "y": 19
   },
   "pillar0": {
     "object_type": "pillar",
@@ -339,5 +339,23 @@
     "object_type": "npcsoldier",
     "x": 11,
     "y": 6
+  },
+  "event_waiting_node": {
+    "object_type": "node",
+    "x": 31,
+    "y": 0,
+    "args": {}
+  },
+  "throne_node": {
+    "object_type": "node",
+    "x": 4,
+    "y": 19,
+    "args": {}
+  },
+  "test_hug": {
+    "object_type": "animatedforeleratonhug",
+    "x": 8,
+    "y": 17,
+    "args": {}
   }
 }

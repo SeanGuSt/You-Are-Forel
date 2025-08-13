@@ -6,5 +6,6 @@
   "B": "wallbrick",
   "~": "sky",
   "M": "mountain",
-  "|": "rail"
+  "|": "rail",
+  "X": "fakeharemwallbrick"
 }

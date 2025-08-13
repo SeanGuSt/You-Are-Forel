@@ -2,14 +2,14 @@ from enum import Enum
 from functools import wraps
 import time
 # Constants
-SCREEN_WIDTH = 900
-SCREEN_HEIGHT = 700
+SCREEN_WIDTH = 1188
+SCREEN_HEIGHT = 764
 TILE_SIZE = 32
 TILE_WIDTH = TILE_SIZE
 TILE_HEIGHT = TILE_SIZE
-MAP_WIDTH = 18
+MAP_WIDTH = 26
 MAP_VIEW_WIDTH = TILE_WIDTH * MAP_WIDTH
-MAP_HEIGHT = 16
+MAP_HEIGHT = 18
 MAP_VIEW_HEIGHT = TILE_HEIGHT * MAP_HEIGHT
 DEFAULT_INPUT_REPEAT_DELAY = 300
 DEFAULT_INPUT_REPEAT_INTERVAL = 300
@@ -76,6 +76,7 @@ DARK_BLUE = (0, 0, 139)
 RUST = (183, 65, 14)
 AMBER = (255, 191, 0)
 CRIMSON = (220, 20, 60)
+LIGHT_GRAY = (200, 200, 200)
 IVORY = (255, 255, 240)
 CHARCOAL = (54, 69, 79)
 MOSS = (138, 154, 91)
@@ -109,6 +110,7 @@ class ObjectState(Enum):
     SLEEP = "sleep"#Disables the ability to talk to the object
     PATROL = "patrol"
     PURSUE = "pursue"
+    KNOCKBACK = "knockback"
     ATTACK_MELEE = "attack_melee"
     ATTACK_RANGE = "attack_range"
     KEEP_MOVING = "keep_moving"
@@ -167,6 +169,8 @@ class Direction(Enum):
     WEST = (-1, 0)
     NORTHWEST = (-1, -1)
     WAIT = (0, 0)
+
+DIRECTIONS = tuple(Direction)
 
 class ObjectType(Enum):
     ITEM = "item"

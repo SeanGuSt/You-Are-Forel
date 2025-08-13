@@ -2,6 +2,7 @@
     "burning_student" : {
         "destroy_trigger_object" : "after_trigger",
         "trigger" : "on_step",
+        "flags" : ["saw_jin_shi_die"],
         "script" : [
             "text=???__Good {time_of_day}, class!",
             "invisible_leader=true", 

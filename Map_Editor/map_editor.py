@@ -15,7 +15,7 @@ from Map_Editor.inputs.text_inputs import input_new_tile_inputs, input_new_objec
 from Map_Editor.inputs.mouse_inputs import place_or_move_object, place_tile, move_ghost, drag_paint_tiles
 
 pygame.init()
-map_name = "Training_Fight_Melee"
+map_name = "Kesvelt_Phitemos_Chambers"
 FONT = pygame.font.SysFont(None, 18)
 pygame.key.set_repeat(600, 200)
 

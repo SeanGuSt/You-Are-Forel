@@ -3,6 +3,7 @@
         "trigger" : "after_step",
         "conditions" : ["!have_quest=earn_favor"],
         "script" : [
+            "wait=1",
             "walk=corner_guard__W1&&leader__S1",
             "text=???__I apologize, kind faithful, but your status has its restrictions. Without the Sydan's blessings, you may not leave the castle. But surely that won't be difficult, will it? The king has been... generous to his faithful. Even moreso than his father to his.",
             "walk=corner_guard__E1"

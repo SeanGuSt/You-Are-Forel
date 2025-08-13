@@ -25,6 +25,7 @@ class Character(CombatStatsMixin, Node):
     experience: int = 0
     gold: int = 100
     last_move_direction: tuple[int, int] = (0, 0)
+    special: bool = False
     is_passable: bool = False
     prepped_spell: 'Spell' = None
     
@@ -292,8 +293,7 @@ class Character(CombatStatsMixin, Node):
         self.is_bumping = True
         
         # Set up the bump timer (shorter than normal movement)
-        self.engine.event_manager.timer_limits["player_bump"] = 10  # Half of normal move time
-        self.engine.event_manager.timers["player_bump"] = 0
+        self.engine.event_manager.timer_manager.start_timer("player_bump", 170)
         
 
 # Modified Party Class
@@ -327,14 +327,14 @@ class Party:
             tile_sound_name = game_map.get_tile_lower(new_pos).step_sound
             tile_sound = tile_sound_name + "_" + str(self.engine.step_tracker)
             self.engine.sprite_db.get_sprite(leader, new_col = self.engine.step_tracker + 1)
-            """if tile_sound in self.engine.sound_manager.sound:
-                self.engine.sound_manager.sound[tile_sound].play()"""
+            if tile_sound in self.engine.sound_manager.sound:
+                self.engine.sound_manager.sound[tile_sound].play()
             leader.old_position = leader.position
             leader.position = new_pos
             movement_penalty = DEFAULT_MOVEMENT_PENALTY
             if game_map.name == "overworld":
                 movement_penalty = DEFAULT_OVERWORLD_MOVEMENT_PENALTY
-            self.engine.event_manager.timer_limits["player_move"] = DEFAULT_PLAYER_MOVE_FRAMES
+            self.engine.event_manager.timer_manager.start_timer("player_move", 275)
             return True, movement_penalty
         return False, 0
     

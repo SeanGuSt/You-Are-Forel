@@ -1,5 +1,6 @@
 from tiles.tiles import Tile
 from constants import *
+from objects.characters import Character
 
 class Grass(Tile):
     color = (34, 139, 34)
@@ -33,6 +34,7 @@ class FloorWood(Floor):
 class Mountain(Tile):
     color = DARK_GRAY
     is_passable = False
+    can_see_thru = False
 
 class Sky(Tile):
     color = SKY_BLUE
@@ -53,12 +55,17 @@ class WalkwayCobblestone(Walkway):
 class Wall(Tile):
     color = GRAY
     is_passable = False
+    can_see_thru = False
 
 class Rail(Wall):
     color = BROWN
+    can_see_thru = True
 
 class WallBrick(Wall):
     color = BRICK
+
+class FakeHaremWallBrick(WallBrick):
+    is_passable = True
 
 class WallBrickTorch(WallBrick):
     pass

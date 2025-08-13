@@ -78,10 +78,10 @@
   },
   "harem_stairs_d_to_harem_lounge": {
     "object_type": "teleporter",
-    "x": 0,
-    "y": 3,
+    "x": 2,
+    "y": 5,
     "args": {
-      "target_map": "Kesvelt_Harem_Lounge",
+      "target_map": "Kesvelt_Phitemos_Chambers",
       "position": {
         "from_any": "harem_lounge_to_harem_stairs_d"
       }

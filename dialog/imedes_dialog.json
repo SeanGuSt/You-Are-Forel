@@ -4,7 +4,7 @@
 
       {
         "text" : [
-          "Hm? What? What is it this time? I swear, if another shade-humping apprentice set themselves on fire *again*, I going to--",
+          "Hm? What? What is it this time? I swear, if another shade-humping disciple set themselves on fire *again*, I going to--",
           "Oh, young Forel. Hmph. What brings you to my laboratory?"
         ],
         "conditions" : []
@@ -13,32 +13,56 @@
     "again" : [
       {
         "text" : [
-          "Yes, yes. Some of the fresh apprentices have been praying for *self-immolation*. Ostensibly by practicing throwing fireballs. Nonsense, I say. What fool would possibly mistake 'makua' for--",
-          "Ahhh, no, no, no, little one. You won't catch me *slipping*, not today!"
+          "Yes, yes. Some of the fresh disciples have been praying for *self-immolation*. Ostensibly by practicing raising their body heat. Nonsense, I say. What fool would possibly mistake 'nos heat' for 'maniret fire'?",
+          "Not you, I should hope, young Forel."
         ],
-        "conditions" : ["!have_quest=kesvelt_fake_books"],
+        "conditions" : ["!have_quest=kesvelt_fake_books", "!have_quest=kesvelt_jin_shi_dies"],
+        "events" : ["give_quest=kesvelt_fake_books"]
+      },
+      {
+        "text" : [
+          "...",
+          "... SIGH, so it really has. Let me guess, another *pauper* from outside the city?"
+        ],
+        "conditions" : ["!have_quest=kesvelt_fake_books", "have_quest=kesvelt_jin_shi_dies"],
         "events" : ["give_quest=kesvelt_fake_books"]
       }
     ],
     "self-immolation" : [
       {
         "text" : [
-          "Burning yourself alive. A nasty way to die. Normally, I would quill this as incompetence.",
-          "You'd probably be amazed at the number of people who get hurt or killed while training just because they don't read two sentences ahead.",
-          "But something smells wrong here. *Pauper*s like you may be 'unrefined', but you at least know better than to disregard what a grown-up says. Can't say the same for spoiled brats like the *king*."
+          "Burning yourself alive. A nasty way to die. Normally, I would quill this as incompetence. You'd probably be amazed at the number of people who get hurt or killed while training just because they don't read two sentences ahead.",
+          "But something smells wrong here. I can't simply abandon my research to chase ghosts on an empty hunch, but...",
+          "*Pauper*s like you may be 'unrefined', but you at least know better than to disregard what a grown-up says. Can't say the same for spoiled *brat*s like the king."
         ],
-        "conditions" : ["have_quest=kesvelt_fake_books"]
+        "conditions" : ["mid_quest=kesvelt_fake_books"],
+        "events" : ["set_flag=imedes_insults_eraton"]
+
       }
     ],
     "pauper" : [
       {
         "text" : [
-          "I never mentioned? Only the poor disciples have been burning themselves alive.",
+          "I didn't mention? Only the poor disciples have been burning themselves alive.",
           "...Say, children your age find burnt corpses fascinating, don't they?",
-          "You can see for yourself, if you wish. They'll be in the morgue. You would expect the corpses to be done by now, but... well you'll see."
+          "You can see for yourself, if you wish. They'll be in the morgue. You would expect the corpses to be done by now, but... well you'll see.",
+          "leader_wear=armor_pjs++...And for the love of all that's bright and beautiful, would you PLEASE not wear bear pajamas around corpses? Go to the Phitemos and change into some proper clothes.",
+          "leader_wear=armor_pjs++In case you've spent so many nights in the king's sheets you've forgotten how to access your own bed, look to the north wall of his chambers. There's a false wall there only one wearing the Ronpa tue Phitemos can pass through.",
+          "If you find anything of note, tell me. If not, this isn't the first time I've been wrong, and really all the better for it.",
+          "If those disciples really were so foolish, better they die now, before they get someone else killed."
         ],
         "conditions" : ["mid_quest=kesvelt_fake_books"],
         "event" : ["give_quest_hint=kesvelt_fake_books__visit_morgue"]
+      }
+    ],
+    "brat" : [
+      {
+        "text" : [
+          "Oh, what? That's hardly the worst thing I've said to the king's face, let alone behind his back.",
+          "Are you really going to start acting like the lapdog people say you are? Barking ineffectually anytime someone steps too close to your master?"
+        ],
+        "conditions" : ["imedes_insults_eraton"],
+        "events" : ["set_flag=imedes_doubles_down"]
       }
     ]
   }

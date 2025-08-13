@@ -7,10 +7,6 @@ if TYPE_CHECKING:
     
 def dialog_inputs(self: 'GameEngine', event):
     match event.key:
-        case pygame.K_ESCAPE:
-            # Exit dialog
-            self.dialog_manager.end_dialog()
-            self.revert_state()
         case pygame.K_RETURN:
             if self.spell_input_mode:
                 self.spell_input_mode = False

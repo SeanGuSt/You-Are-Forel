@@ -31,17 +31,18 @@ class MapObjectDatabase:
         return None
 
 class Map:
-    def __init__(self, width: int, height: int, name: str = ""):
+    def __init__(self, width: int, height: int, engine: 'GameEngine', name: str = ""):
         self.width = width
         self.height = height
         self.name = name
+        self.generation = 0
+        self.engine = engine
         self.tiles = [[None for _ in range(width)] for _ in range(height)]
         self.tiles_default = [[None for _ in range(width)] for _ in range(height)]
         self.tiles_high = [[None for _ in range(width)] for _ in range(height)]
         self.objects: List[Node] = []
         self.adjacent_maps: Dict[str, str] = {}
         self.enemy_positions = {}
-        self.party_positions = {}
         
     def get_tile_lower(self, pos: tuple[int, int]) -> Optional[Tile]:
         x, y = pos
@@ -78,9 +79,17 @@ class Map:
         if not tile:
             return False
         terrain_check = tile.is_passable
-        object_check = self.can_pass_objects_at(pos)
-        can_pass = terrain_check and object_check
-        return can_pass
+        if not terrain_check:
+            return False
+        return self.can_pass_objects_at(pos)
+    
+    def can_see_thru(self, pos: tuple[int, int]) -> bool:
+        tile = self.get_tile_lower(pos)
+        if not tile:
+            return False
+        if not tile.can_see_thru:
+            return False
+        return self.can_see_thru_objects_at(pos)
     
     def get_objects_at(self, pos: tuple[int, int], subtype: Node = Node) -> List[Node]:
         return [obj for obj in self.objects if obj.position == pos  and obj.__is__(subtype)]
@@ -97,7 +106,17 @@ class Map:
     
     def can_pass_objects_at(self, pos: tuple[int, int]) -> bool:
         objs = self.get_objects_at(pos)
-        return all([obj.is_passable for obj in objs])
+        for obj in objs:
+            if not obj.is_passable:
+                return False
+        return True
+    
+    def can_see_thru_objects_at(self, pos: tuple[int, int]) -> bool:
+        objs = self.get_objects_at(pos)
+        for obj in objs:
+            if not obj.can_see_thru:
+                return False
+        return True
     
     def add_object(self, map_object: Node):
         self.objects.append(map_object)
@@ -107,7 +126,7 @@ class Map:
             self.objects.remove(map_object)
     
     @classmethod
-    def load_from_files(cls, map_name: str, map_obj_db: MapObjectDatabase, tile_db: TileDatabase, objects_data: dict = None):
+    def load_from_files(cls, map_name: str, map_obj_db: MapObjectDatabase, tile_db: TileDatabase, engine: 'GameEngine', objects_data: dict = None):
         """Load map from ASCII file and JSON mapping file"""
         map_folder = os.path.join(MAPS_DIR, map_name)
         map_file = os.path.join(map_folder, f"map_{map_name}.txt")
@@ -133,7 +152,7 @@ class Map:
         
         height = len(lines)
         width = max(len(line) for line in lines) if lines else 0
-        game_map = cls(width, height, map_name)
+        game_map = cls(width, height, engine, map_name)
         # Parse tiles using the mapping
         for y, line in enumerate(lines):
             for x, char in enumerate(line):

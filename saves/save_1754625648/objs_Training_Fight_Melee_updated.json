@@ -1,0 +1,263 @@
+{
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 10,
+    "y": 10,
+    "args": {},
+    "position": [
+      10,
+      10
+    ],
+    "old_position": [
+      10,
+      10
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "training_guard_0": {
+    "object_type": "monsterguardrookie",
+    "x": 6,
+    "y": 7,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      6,
+      7
+    ],
+    "old_position": [
+      6,
+      7
+    ],
+    "skin_color": [
+      198,
+      134,
+      66
+    ]
+  },
+  "guard_2": {
+    "object_type": "monsterguardrookie",
+    "x": 6,
+    "y": 9,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      6,
+      9
+    ],
+    "old_position": [
+      6,
+      9
+    ],
+    "skin_color": [
+      224,
+      172,
+      105
+    ]
+  },
+  "guard_sergeant": {
+    "object_type": "monstereventtrigger",
+    "x": 12,
+    "y": 2,
+    "args": {},
+    "position": [
+      12,
+      2
+    ],
+    "old_position": [
+      12,
+      2
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_0": {
+    "object_type": "node",
+    "x": 10,
+    "y": 8,
+    "args": {},
+    "position": [
+      10,
+      8
+    ],
+    "old_position": [
+      10,
+      8
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_1": {
+    "object_type": "node",
+    "x": 10,
+    "y": 7,
+    "args": {},
+    "position": [
+      10,
+      7
+    ],
+    "old_position": [
+      10,
+      7
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_2": {
+    "object_type": "node",
+    "x": 10,
+    "y": 9,
+    "args": {},
+    "position": [
+      10,
+      9
+    ],
+    "old_position": [
+      10,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_3": {
+    "object_type": "node",
+    "x": 11,
+    "y": 7,
+    "args": {},
+    "position": [
+      11,
+      7
+    ],
+    "old_position": [
+      11,
+      7
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_4": {
+    "object_type": "node",
+    "x": 11,
+    "y": 8,
+    "args": {},
+    "position": [
+      11,
+      8
+    ],
+    "old_position": [
+      11,
+      8
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_5": {
+    "object_type": "node",
+    "x": 11,
+    "y": 9,
+    "args": {},
+    "position": [
+      11,
+      9
+    ],
+    "old_position": [
+      11,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_6": {
+    "object_type": "node",
+    "x": 12,
+    "y": 7,
+    "args": {},
+    "position": [
+      12,
+      7
+    ],
+    "old_position": [
+      12,
+      7
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_7": {
+    "object_type": "node",
+    "x": 12,
+    "y": 9,
+    "args": {},
+    "position": [
+      12,
+      9
+    ],
+    "old_position": [
+      12,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "event_at_combat_start": {
+    "object_type": "monstereventtrigger",
+    "x": 0,
+    "y": 2,
+    "args": {
+      "round_timer": 2
+    },
+    "position": [
+      0,
+      2
+    ],
+    "old_position": [
+      0,
+      2
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  }
+}

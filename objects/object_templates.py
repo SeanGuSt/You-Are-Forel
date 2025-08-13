@@ -1,7 +1,7 @@
 import os
 from dataclasses import dataclass, asdict, fields, MISSING, field
 from random import randint
-from typing import List, Dict, Any, Optional, Type, TYPE_CHECKING
+from typing import List, Dict, Any, Optional, Type, TYPE_CHECKING, Literal
 from constants import *
 from items.itemz import Item
 from schedules.schedule import ScheduleEvent, datetime
@@ -23,12 +23,16 @@ class Node:
     x: int
     y: int
     args: dict[str, Any] = field(default_factory=lambda: {})
+    width_in_tiles = 1
+    height_in_tiles = 1
     can_bump: bool = True
     is_bumping: bool = True
     bump_direction: Direction = None
     old_position: tuple[int, int]= (0, 0)
     position: tuple[int, int]= (0, 0)
     skin_color: tuple[int, int, int] = (0, 0, 0)
+    state: ObjectState = ObjectState.STAND
+    after_state: ObjectState = None
     parent: 'Node' = None
     children: list['Node'] = field(default_factory=lambda: [])
     pronoun: str = "it"
@@ -43,6 +47,7 @@ class Node:
     node_id = 0
     map: 'Map' = None
     is_passable = True
+    can_see_thru = True
     destroy_after_use: bool = False
     def __is__(self, cls):
         return isinstance(self, cls)
@@ -71,18 +76,26 @@ class Node:
         new_node.old_position = (new_node.x, new_node.y)
         new_node.position = (new_node.x, new_node.y)
         return new_node
+    def interact(self) -> bool:
+        return False
     @staticmethod
-    def default_args():
+    def default_args() -> dict:
         return {}
     
     @staticmethod
-    def get_sign(num):
+    def get_sign(num: tuple | int | float) -> tuple | Literal[-1] | Literal[1] | Literal[0]:
+        """
+        Determines if a number (or tuple of numbers) is positive, negative, or neither.
+        """
         if type(num) == tuple:
             return tuple(Node.get_sign(n) for n in num)
         else:
             return -1 if num < 0 else (1 if num > 0 else 0)
     @staticmethod
-    def add_tuples(tuple1: tuple, tuple2: tuple | int | float):
+    def add_tuples(tuple1: tuple, tuple2: tuple | int | float) -> tuple:
+        """
+        Adds two tuples together, or adds the number tuple2 to each element of tuple1
+        """
         if type(tuple2) in [int, float]:
             b = tuple2
             return tuple(a + b for a in tuple1)
@@ -91,7 +104,10 @@ class Node:
         return tuple(a + b for a, b in zip(tuple1, tuple2))
     
     @staticmethod
-    def subtract_tuples(tuple1: tuple, tuple2: tuple | int | float):
+    def subtract_tuples(tuple1: tuple, tuple2: tuple | int | float) -> tuple:
+        """
+        Subtracts two tuples, or subtracts the number tuple2 from each element of tuple1
+        """
         if type(tuple2) in [int, float]:
             b = tuple2
             return tuple(a - b for a in tuple1)
@@ -100,7 +116,7 @@ class Node:
         return tuple(a - b for a, b in zip(tuple1, tuple2))
     
     @staticmethod
-    def multiply_tuples(tuple1: tuple, tuple2: tuple | int | float):
+    def multiply_tuples(tuple1: tuple, tuple2: tuple | int | float) -> tuple:
         if type(tuple2) in [int, float]:
             b = tuple2
             return tuple(a * b for a in tuple1)
@@ -136,8 +152,7 @@ class MapObject(Node):
     last_move_direction: tuple[int, int] = None
     allies_in_combat: List[str] = None
     ally_positions: str = None  # Added to dataclass fields
-    state: ObjectState = ObjectState.STAND
-    after_state: ObjectState = None
+    
     # Track movement progress for the current action
     current_action_start_turn = 0
     moves_completed_this_action = 0
@@ -212,7 +227,8 @@ class MapObject(Node):
             # Calculate direction (you'll need to implement these helper methods)
             self.last_move_direction = Direction(self.get_sign(self.subtract_tuples(my_target, me)))
             self.old_position = me
-            self.position = self.add_tuples(me, self.last_move_direction.value)
+            if self.map.is_passable(self.add_tuples(me, self.last_move_direction.value)):
+                self.position = self.add_tuples(me, self.last_move_direction.value)
             
             # Check if we reached our target
             if self.position == my_target:
@@ -261,6 +277,7 @@ class MapObject(Node):
         self.moves_completed_this_action = 0
 
     def execute_repeating_action(self, action: ScheduleEvent):
+        #This function is a placeholder, to be re-defined based on the subclass of the object performing the repeating action
         pass
     
     def go_to(self, target: str):
@@ -291,6 +308,11 @@ class MapObject(Node):
 class Chest(MapObject):
     color = DARK_GRAY
     node_id = 2
+    def interact(self):
+        items = self.args.get("items", {})
+        for item_name, quantity in items.items():
+            self.engine.party.add_item_by_name(item_name, quantity)
+        self.args["items"] = {}
 
 @register_node_type("itemholder")
 class ItemHolder(MapObject):
@@ -342,6 +364,9 @@ class CombatStatsMixin:
     def get_total_guard(self):
         return int(self.guard_mult*(self.get_dexterity() + self.guard + self.guard_delta))
     
+    def get_max_hp(self):
+        return max(self.max_hp + self.max_hp_delta, self.min_max_hp)
+    
     def get_strength(self):
         return max(self.strength + self.strength_delta, self.min_strength)
     
@@ -369,11 +394,34 @@ class CombatStatsMixin:
 class Monster(CombatStatsMixin, Node):
     image = None
     color = LIGHT_BLUE
+    can_be_pushed = True
+    flying = False  # If True, this monster cannot be knocked back
+    can_be_attacked = True
     node_id = 6
     is_passable: bool = False
     is_hostile: bool = True
     move_tiles_per_turn: int = 1
     current_target: 'Character' = None
+    def push(self, direction: Direction, count: int = 1):
+        """
+        Push this object back in the specified direction.
+        Used for knockback effects.
+        Return the duration of the knockback effect.
+        """
+        duration = 0
+        if self.can_be_pushed and not self.flying:
+            self.old_position = self.position
+            for i in range(count):
+                new_position = self.add_tuples(self.position, direction.value)
+                if not self.map.is_passable(new_position):
+                    break  # Stop if we hit a wall or another unit
+                self.position = new_position
+                duration += 150
+            if duration:
+                self.state = ObjectState.KNOCKBACK
+                self.engine.event_manager.timer_manager.start_timer(f"{self.name}_knockback", duration)
+                self.engine.event_manager.walkers.append(self)
+
 
 @register_node_type("missile")
 @dataclass

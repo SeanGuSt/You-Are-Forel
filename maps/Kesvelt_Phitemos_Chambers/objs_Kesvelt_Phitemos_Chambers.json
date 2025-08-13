@@ -1,1 +1,23 @@
-{}
+{
+  "forels_dresser": {
+    "object_type": "chest",
+    "x": 10,
+    "y": 6,
+    "args": {
+      "items": {
+        "armor_leather": 1
+      }
+    }
+  },
+  "harem_lounge_to_harem_stairs_d": {
+    "object_type": "teleporter",
+    "x": 2,
+    "y": 5,
+    "args": {
+      "target_map": "Kesvelt_Harem_Stairwell",
+      "position": {
+        "from_any": "harem_stairs_d_to_harem_lounge"
+      }
+    }
+  }
+}

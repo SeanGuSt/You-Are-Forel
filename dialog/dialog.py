@@ -65,8 +65,8 @@ class DialogManager:
             self.process_user_input()
         else:
             self.current_lines = ["Hello."]
-        print(self.current_lines)
-        self.current_line_index = 0
+        self.current_line_index = -1
+        self.advance_dialog()
         self.user_input = ""
         self.awaiting_input = True if len(self.current_lines) == 1 else False
         self.cursor_blink = 0
@@ -87,13 +87,19 @@ class DialogManager:
             return True
         return False
     def advance_dialog(self):
-        """Advance to the next line of dialog"""
+        """Advance to the next line of dialog or perform the next event"""
         check = True
         while check:
             self.current_line_index += 1
-            check = "=" in self.get_current_line()
+            current_line = self.get_current_line()
+            check = "=" in current_line
             if check:
-                self._do_event(self.get_current_line())
+                do_event = True
+                if "++" in current_line:
+                    condition, current_line = current_line.split("++") 
+                    do_event = self._check_condition(condition)
+                if do_event:
+                    self._do_event(current_line)
                 continue
             if self.current_line_index < len(self.current_lines) - 1:
                 return True
@@ -124,6 +130,8 @@ class DialogManager:
         contextual_aliases = dialog_data.get("contextual_aliases", {})
         if input_lower in contextual_aliases.get(self.last_input, {}):
             input_lower = contextual_aliases[self.last_input][input_lower]
+        if input_lower in aliases:
+            input_lower = aliases[input_lower]
 
         if npc.__is__(ElevatorHelper):
             config = npc.args.get("elevator_config", {}) or dialog_data.get("elevator_config", {})
@@ -199,6 +207,53 @@ class DialogManager:
     def _check_condition(self, condition: str) -> bool:
         return self.engine.event_manager._check_condition(condition)
     
+    def format_text(self, text: str = ""):
+        if not text:
+            text = self.current_lines[self.current_line_index]
+        while True:
+            start_index = text.find("{")
+            end_index = text.find("}", start_index + 1)
+            if start_index < 0 or end_index < 0:
+                return text
+            formattable_chunk = text[start_index:(end_index+1)]
+            match formattable_chunk:
+                case "{time_of_day}":
+                    text = format_time_of_day(text, self.engine.schedule_manager.current_game_time)
+                case _:
+                    text = text.replace(formattable_chunk, "", 1)
+                    formattable_chunk = formattable_chunk[1:-1]
+                    #since formattable_chunk was removed, start_index should be the new home of {+
+                    if not text[start_index:(start_index+2)] == "{+":
+                        raise SyntaxError(f"Conditionals like {formattable_chunk}" +  "must have a positive result included immediately after, between {+ and +}")
+                    end_index = text.find("+}", start_index + 1)
+                    if end_index < 0:
+                        raise SyntaxError("Conditionals' positive results must end with +}")
+                    if len(text) >= end_index + 3:
+                        #Make sure this negative option belongs to this specific conditional
+                        negative_option = text[(end_index+1):(end_index+3)] == "{-"
+                    if self._check_condition(formattable_chunk):
+                        text = text.replace(text[start_index:(end_index+2)], text[(start_index+2):end_index])
+                        if negative_option:
+                            #We know 4 characters,{++}, were removed, so the "{" of "{-" moved to end_index-3
+                            start_index = end_index - 3
+                            end_index = text.find("-}", start_index+2)
+                            if end_index < 0:
+                                raise SyntaxError("Conditionals' negative results must end with -}")
+                            text = text.replace(text[start_index:(end_index+2)], "", 1)
+                    else:
+                        text = text.replace(text[start_index:(end_index+1)], "", 1)
+                        if negative_option:
+                            #We know where the start is for both if-else cases now, so no need to recalculate the start_index
+                            end_index = text.find("-}", start_index+2)
+                            if end_index < 0:
+                                raise SyntaxError("Conditionals' negative results must end with -}")
+                            text = text.replace(text[start_index:(end_index+2)], text[(start_index+2):end_index])
+
+
+
+                    
+            
+    
     def _do_event(self, event: str):
         return self.engine.event_manager._do_event(event)
     
@@ -217,9 +272,7 @@ class DialogManager:
     def get_current_line(self):
         """Get the current line of dialog"""
         if self.current_lines and self.current_line_index < len(self.current_lines):
-            current_line = self.current_lines[self.current_line_index]
-            if "{time_of_day}" in current_line:
-                current_line = format_time_of_day(current_line, self.engine.schedule_manager.current_game_time)
+            current_line = self.format_text()
             return current_line
         return ""
     

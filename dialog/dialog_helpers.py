@@ -10,6 +10,7 @@ def format_time_of_day(line, current_time):
         return line.replace("{time_of_day}", "evening")
 
 
+
 def generate_elevator_text(elevator_config, current_map):
     """Return lines describing available destinations from current map."""
     destinations = elevator_config.get("destinations", {})

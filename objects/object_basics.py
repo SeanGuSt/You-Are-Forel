@@ -34,6 +34,7 @@ class ElevatorTeleporter(Teleporter):
 @register_node_type("pillar")
 class Pillar(MapObject):
     is_passabe = False
+    can_see_thru = False
     @staticmethod
     def default_args():
         return {"spritesheet" : ["Static Objects", 0, 0]}
@@ -107,9 +108,14 @@ class NPCStudent(NPC):
 
 @register_node_type("book")  
 class Book(MapObject):
+    is_passable = False
     @staticmethod
     def default_args():
         return {"spritesheet" : ["Static Objects", 0, 6]}
+    
+@register_node_type("bookpillar")
+class BookPillar(Book):
+    pass
     
 @register_node_type("bookclosed")
 class BookClosed(Book):
@@ -185,13 +191,20 @@ class MonsterEventTrigger(Monster):
         self.round_counter += 1
         print(f"round counter is now {self.round_counter} out of {self.args.get("round_timer", 9999)}")
         if self.round_counter >= self.args.get("round_timer", 9999):
+            print("PARTY'S OVER")
+
             self.engine.combat_manager.exit_combat_mode()
             self.engine.change_state(GameState.EVENT)
+            return
 
 @register_node_type("animatedobject")
 class AnimatedObject(MapObject):
     frames_since_last_change: int = 0
-    frame_rule: int = 0
+    frame_rule = 0
+    loop = True
+    current_row = 0
+    min_row = 0
+    max_row = 7
     current_col = 0
     min_col = 0
     max_col = 7
@@ -199,21 +212,43 @@ class AnimatedObject(MapObject):
     def from_dict(cls, data, engine):
         cls = super().from_dict(data, engine)
         cls.current_col = cls.min_col
+        cls.current_row = cls.min_row
         return cls
     def update(self):
+        if self.frames_since_last_change < 0:
+            return
         self.frames_since_last_change += 1
         if self.frames_since_last_change >= self.frame_rule:
             self.frames_since_last_change = 0
-            self.current_col += 1
+            self.current_col += self.width_in_tiles
             if self.current_col > self.max_col:
                 self.current_col = self.min_col
-            self.engine.sprite_db.get_sprite(self, new_col=self.current_col)
+                self.current_row += self.height_in_tiles
+                if self.current_row > self.max_row:
+                    self.current_row = self.min_row
+                    if not self.loop:
+                        self.frames_since_last_change = -1
+                        return
+            self.engine.sprite_db.get_sprite(self, new_row=self.current_row, new_col=self.current_col)
 
 @register_node_type("animatedburningman")
 class AnimatedBurningMan(AnimatedObject):
     frame_rule = 45
+    min_row = 1
+    max_row = 1
     min_col = 3
     max_col = 4
     @staticmethod
     def default_args():
         return {"spritesheet" : ["Static Objects", 1, 3]}
+
+@register_node_type("animatedforeleratonhug")
+class AnimatedForelEratonHug(AnimatedObject):
+    frame_rule = 8
+    width_in_tiles = 2
+    loop = False
+    max_row = 1
+    max_col = 8
+    @staticmethod
+    def default_args():
+        return {"spritesheet" : ["Forel Eraton Hug", 0, 0]}

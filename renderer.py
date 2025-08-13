@@ -1,6 +1,7 @@
 import pygame
 from typing import List, TYPE_CHECKING
 from constants import *
+from quests.quests import QuestStep
 from objects.characters import Party, Character
 from dialog.dialog import DialogManager
 from events.cutscenes import CutsceneManager
@@ -20,20 +21,9 @@ class Renderer:
         self.large_font = pygame.font.SysFont("consolas", 30)
         self.side_font = pygame.font.SysFont("consolas", 20)
         self.text_cache: dict[tuple[str, pygame.font.Font, tuple[int, int, int]], pygame.Surface] = {}
+        self._fov_cache = None
+        self._fov_cache_key = None
         
-        # Tile colors for simple rendering
-        self.tile_colors = {
-            TileType.GRASS: GREEN,
-            TileType.WATER: BLUE,
-            TileType.MOUNTAIN: GRAY,
-            TileType.FOREST: (0, 128, 0),
-            TileType.TOWN: YELLOW,
-            TileType.DUNGEON: DARK_GRAY,
-            TileType.FLOOR: (200, 180, 140),
-            TileType.WALL: (100, 100, 100),
-            TileType.DOOR: (139, 69, 19)
-        }
-    #@time_function("render map")
     def render_map(self):
         game_map = self.engine.current_map
         camera = self.engine.camera
@@ -48,84 +38,130 @@ class Renderer:
 
         base_tile_x = int(cam_x)
         base_tile_y = int(cam_y)
-
-        for y in range(MAP_HEIGHT + 1):  # +1 to cover partial bottom row
-            for x in range(MAP_WIDTH + 1):  # +1 to cover partial right column
-                map_x = base_tile_x + x
+        y0, y1 = 0, MAP_HEIGHT + 1
+        x0, x1 = 0, MAP_WIDTH + 1#The tiles of the map to actually render
+        observer_pos = self.engine.party.get_leader().position
+        
+        # Get visible positions
+        visible_positions = self.get_visible_positions(observer_pos, MAP_WIDTH)
+        
+        # Your existing render_map code, but add visibility checks:
+        game_map = self.engine.current_map
+        camera = self.engine.camera
+        # ... rest of your tile rendering code ...
+        
+        # When rendering tiles, check visibility:
+        for y in range(y0, y1):
+            for x in range(x0, x1):
+                map_x = base_tile_x + x  
                 map_y = base_tile_y + y
+                
+                # Only render if visible
+                if (map_x, map_y) in visible_positions:
+                    # Your existing tile rendering code
+                    tile = game_map.get_tile_lower((map_x, map_y))
+                    screen_x = x * TILE_WIDTH - pixel_offset_x
+                    screen_y = y * TILE_HEIGHT - pixel_offset_y
+                    if tile:
+                        if tile.image:
+                            self.screen.blit(tile.image, (screen_x, screen_y))
+                        else:
+                            rect = pygame.Rect(screen_x, screen_y, TILE_WIDTH, TILE_HEIGHT)
+                            pygame.draw.rect(self.screen, tile.color, rect)
 
-                tile = game_map.get_tile_lower((map_x, map_y))
-                screen_x = x * TILE_WIDTH - pixel_offset_x
-                screen_y = y * TILE_HEIGHT - pixel_offset_y
-
-                if tile:
-                    if tile.image:
-                        scaled_image = pygame.transform.scale(tile.image, (TILE_WIDTH, TILE_HEIGHT))
-                        self.screen.blit(scaled_image, (screen_x, screen_y))
-                    else:
-                        rect = pygame.Rect(screen_x, screen_y, TILE_WIDTH, TILE_HEIGHT)
-                        pygame.draw.rect(self.screen, tile.color, rect)
-
-                    if show_grid:
-                        pygame.draw.rect(self.screen, BLACK, rect, 1)
-        def incremental_movement(timer_name: str, screen_x, screen_y, prevent_jittering: bool = False,):
-            j = self.engine.event_manager.timers[timer_name]
-            j_max = self.engine.event_manager.timer_limits[timer_name]
-            dx, dy = obj.subtract_tuples(obj.position, obj.old_position)
-            screen_x -= dx*(TILE_WIDTH - j*TILE_WIDTH//j_max)
-            screen_y -= dy*(TILE_HEIGHT - j*TILE_HEIGHT//j_max)
-            if j == j_max and prevent_jittering:
-                obj.old_position = obj.position
-            return screen_x, screen_y
-        def bump_movement(screen_x, screen_y):
-            """Handle bump animation - goes halfway out, then back"""
-            j = self.engine.event_manager.timers["player_bump"]
-            j_max = self.engine.event_manager.timer_limits["player_bump"]
+                        if show_grid:
+                            pygame.draw.rect(self.screen, BLACK, rect, 1)
+        def smooth_movement(timer_name: str, screen_x, screen_y, obj):
+            """Handle smooth movement animation using TimerManager progress"""
+            timer_manager = self.engine.event_manager.timer_manager
             
+            if not timer_manager.is_active(timer_name):
+                return screen_x, screen_y
+                
+            # Get movement delta
+            dx, dy = obj.subtract_tuples(obj.position, obj.old_position)
+            
+            # Get progress (0.0 to 1.0)
+            progress = timer_manager.get_progress(timer_name)
+            
+            # Interpolate from old position to new position
+            # When progress = 0: show old position (full offset)
+            # When progress = 1: show new position (no offset)
+            screen_x -= dx * TILE_WIDTH * (1 - progress)
+            screen_y -= dy * TILE_HEIGHT * (1 - progress)
+            
+            # Clean up old position when animation completes
+            if progress >= 1.0:
+                obj.old_position = obj.position
+                
+            return screen_x, screen_y
+
+        def bump_movement(screen_x, screen_y, obj):
+            """Handle bump animation using TimerManager progress"""
+            timer_manager = self.engine.event_manager.timer_manager
+            
+            if not timer_manager.is_active("player_bump"):
+                return screen_x, screen_y
+                
             # Get bump direction from the character
             dx, dy = obj.bump_direction.value
             
+            # Get progress (0.0 to 1.0)
+            progress = timer_manager.get_progress("player_bump")
+            
             # Create a "bounce" effect - go out then come back
-            if j <= j_max // 2:
-                # First half: move toward the obstacle (halfway)
-                progress = j / (j_max // 2)
-                screen_x += dx * (TILE_WIDTH // 5) * progress
-                screen_y += dy * (TILE_HEIGHT // 5) * progress
+            if progress <= 0.5:
+                # First half: move toward the obstacle
+                half_progress = progress / 0.5  # Scale to 0-1 for first half
+                offset_x = dx * (TILE_WIDTH // 5) * half_progress
+                offset_y = dy * (TILE_HEIGHT // 5) * half_progress
             else:
-                # Second half: move back to original position
-                progress = (j - j_max // 2) / (j_max // 2)
-                screen_x += dx * (TILE_WIDTH // 5) * (1 - progress)
-                screen_y += dy * (TILE_HEIGHT // 5) * (1 - progress)
-            self.engine.event_manager.timers["player_bump"] += 1
-            # Clean up when animation is complete
-            if j >= j_max:
+                # Second half: move back to original position  
+                half_progress = (progress - 0.5) / 0.5  # Scale to 0-1 for second half
+                offset_x = dx * (TILE_WIDTH // 5) * (1 - half_progress)
+                offset_y = dy * (TILE_HEIGHT // 5) * (1 - half_progress)
+            
+            screen_x += offset_x
+            screen_y += offset_y
+            
+            # Clean up when animation completes
+            if progress >= 1.0:
                 obj.is_bumping = False
                 obj.bump_direction = None
-                self.engine.event_manager.timer_limits["player_bump"] = 0
-                self.engine.event_manager.timers["player_bump"] = 0
+                
             return screen_x, screen_y
-        
+    
         # Render map objects
+        timer_manager = self.engine.event_manager.timer_manager
+        
         for obj in game_map.objects:
             obj.update()
-            if type(obj) == Node:#No need to render nodes
+            if type(obj) == Node:  # No need to render nodes
                 continue
-            elif obj.__is__(Character):#If this is a party member other than the leader, don't render them outside of combat.
+            if obj.position not in visible_positions: 
+                continue
+            elif obj.__is__(Character):  # If this is a party member other than the leader, don't render them outside of combat.
                 if (not self.engine.state == GameState.COMBAT and not obj == self.engine.party.get_leader()):
                     continue
+                    
             map_x, map_y = obj.subtract_tuples(obj.position, camera)
             
             if -1 <= map_x <= MAP_WIDTH and -1 <= map_y <= MAP_HEIGHT:
-                screen_x = map_x*TILE_WIDTH
-                screen_y = map_y*TILE_HEIGHT
-                if self.engine.event_manager.timer_limits["player_move"]:
-                    screen_x, screen_y = incremental_movement("player_move", screen_x, screen_y, prevent_jittering=True)
-                elif obj == self.engine.party.get_leader() and self.engine.event_manager.timer_limits["player_bump"]:
-                    screen_x, screen_y = bump_movement(screen_x, screen_y)
-                elif obj in self.engine.event_manager.walkers and self.engine.event_manager.timer_limits["event_wait"]:
-                    screen_x, screen_y = incremental_movement("event_wait", screen_x, screen_y, True)
-                elif obj in self.engine.event_manager.walkers and self.engine.event_manager.timer_limits["enemy_move"]:
-                    screen_x, screen_y = incremental_movement("enemy_move", screen_x, screen_y)
+                screen_x = map_x * TILE_WIDTH
+                screen_y = map_y * TILE_HEIGHT
+                obj_in_walkers = obj in self.engine.event_manager.walkers
+                
+                # Handle different types of movement animations
+                if obj_in_walkers and timer_manager.is_active(f"{obj.name}_knockback"):
+                    screen_x, screen_y = smooth_movement(f"{obj.name}_knockback", screen_x, screen_y, obj)
+                elif timer_manager.is_active("player_move"):
+                    screen_x, screen_y = smooth_movement("player_move", screen_x, screen_y, obj)
+                elif obj == self.engine.party.get_leader() and timer_manager.is_active("player_bump"):
+                    screen_x, screen_y = bump_movement(screen_x, screen_y, obj)
+                elif obj_in_walkers and timer_manager.is_active("event_wait"):
+                    screen_x, screen_y = smooth_movement("event_wait", screen_x, screen_y, obj)
+                elif obj in self.engine.combat_manager.walkers and timer_manager.is_active("enemy_move"):
+                    screen_x, screen_y = smooth_movement("enemy_move", screen_x, screen_y, obj)
                 
                 if obj.image:
                     if obj != self.engine.party.get_leader() or not self.engine.event_manager.make_leader_invisible:
@@ -135,16 +171,16 @@ class Renderer:
                     pygame.draw.ellipse(self.screen, obj.color, rect)
                 elif obj.__is__(ItemHolder):
                     pygame.draw.circle(self.screen, obj.color, 
-                                     (screen_x + TILE_WIDTH//2, screen_y + TILE_HEIGHT//2), 4)
+                                    (screen_x + TILE_WIDTH//2, screen_y + TILE_HEIGHT//2), 4)
                 elif obj.__is__(NPC):
                     pygame.draw.rect(self.screen, obj.color, 
-                                   (screen_x + + TILE_WIDTH//4, screen_y + TILE_HEIGHT//4, TILE_WIDTH//2, TILE_HEIGHT//2))
+                                (screen_x + + TILE_WIDTH//4, screen_y + TILE_HEIGHT//4, TILE_WIDTH//2, TILE_HEIGHT//2))
                 elif obj.__is__(Teleporter):
                     pygame.draw.circle(self.screen, obj.color, 
-                                     (screen_x + TILE_WIDTH//2, screen_y + TILE_HEIGHT//2), 4)
+                                    (screen_x + TILE_WIDTH//2, screen_y + TILE_HEIGHT//2), 4)
                 elif obj.__is__(Monster):
                     pygame.draw.rect(self.screen, obj.color, 
-                                     (screen_x + TILE_WIDTH//4, screen_y + TILE_HEIGHT//4, TILE_WIDTH//2, TILE_HEIGHT//2))
+                                    (screen_x + TILE_WIDTH//4, screen_y + TILE_HEIGHT//4, TILE_WIDTH//2, TILE_HEIGHT//2))
     
     def render_main_menu(self):
         self.screen.fill(BLACK)
@@ -269,7 +305,7 @@ class Renderer:
                 rendered = self.small_font.render(slot_text, True, color)
                 self.screen.blit(rendered, (320, y_offset))
                 if i == selected_slot and equipped_item:
-                    lines = self._wrap_text(equipped_item.description, self.small_font, 240)
+                    lines = self._wrap_text(equipped_item.description, self.small_font, 2 * SCREEN_WIDTH // 5)
                     ren_width = rendered.get_width()
                     for j, line in enumerate(lines):
                         rendered = self.small_font.render(line, self.engine.antialias_text, WHITE)
@@ -355,66 +391,45 @@ class Renderer:
         self.screen.fill((0, 0, 0))  # Clear screen
         mid_x = SCREEN_WIDTH // 2
         mid_y = SCREEN_HEIGHT // 2
-
         focus_colors = [YELLOW, MAGENTA, CYAN]
-
-        text = self.large_font.render("Quests", self.engine.antialias_text, WHITE)
-        self.screen.blit(text, (20, 20))
-        # ---- LEFT: Quest Names ----
         quests = [q for q in quest_log.quests.values() if q.started]
-        quest_y = 40
-        for i, quest in enumerate(quests):
-            color = self._get_status_color(quest)
-            if current_focus == 0 and i == selected_indices[0]:
-                color = focus_colors[0]
-            text = self.large_font.render(quest.name, True, color)
-            self.screen.blit(text, (20, quest_y))
-            quest_y += text.get_height() + 10
-
-            # Show description below if selected
-            if i == selected_indices[0]:
-                desc_lines = self._wrap_text(quest.description, self.font, mid_x - 40)
-                for line in desc_lines:
-                    desc = self.font.render(line, True, (200, 200, 200))
-                    self.screen.blit(desc, (20, quest_y))
-                    quest_y += desc.get_height()
-
+        selected_quest = quests[selected_indices[0]]
+        def quest_bit(label: str, label_pos: tuple[int, int], i: int, x_end: int, quest_stuff: list[QuestStep]):
+            text = self.get_cached_text(label, self.large_font, WHITE)
+            self.screen.blit(text, label_pos)
+            y = text.get_height() + label_pos[1]
+            for j, quest in enumerate(quest_stuff):
+                if not quest.started:
+                    continue
+                color = self._get_status_color(quest)
+                if current_focus == i and j == selected_indices[i]:
+                    color = focus_colors[i]
+                text = self.get_cached_text(quest.name, self.large_font, color)
+                self.screen.blit(text, (label_pos[0], y))
+                y += text.get_height() + 10
+                # Show description below if selected
+                if current_focus == i and j == selected_indices[i]:
+                    desc_lines = self._wrap_text(quest.description, self.font, x_end)
+                    for line in desc_lines:
+                        desc = self.get_cached_text(line, self.font, (200, 200, 200))
+                        self.screen.blit(desc, (label_pos[0], y))
+                        y += desc.get_height()
+        # ---- LEFT: Quest Names ----
+        quest_bit("Quests", (20, 20), 0, mid_x - 40, quests)
         # ---- UPPER RIGHT: Quest Steps ----
-        text = self.large_font.render("Quest Steps", self.engine.antialias_text, WHITE)
-        self.screen.blit(text, (mid_x + 20, 20))
-        if quests:
-            selected_quest = quests[selected_indices[0]]
-            steps = list(selected_quest.steps.values())
-            step_y = 40
-            for i, step in enumerate(steps):
-                if step.started:
-                    color = self._get_status_color(step)
-                    if current_focus == 1 and i == selected_indices[1]:
-                        color = focus_colors[1]
-                    text = self.font.render(step.name, True, color)
-                    self.screen.blit(text, (mid_x + 20, step_y))
-                    step_y += text.get_height() + 5
-
+        steps = list(selected_quest.steps.values()) if quests else []
+        quest_bit("Quest Steps", (mid_x + 20, 20), 1, mid_x - 40, steps)
         # ---- LOWER RIGHT: Quest Hints ----
-        text = self.large_font.render("Quest Hints", self.engine.antialias_text, WHITE)
-        self.screen.blit(text, (mid_x + 20, mid_y + 20))
         hints = list(selected_quest.hints.values()) if quests else []
-        hint_y = mid_y + 20
-        for i, hint in enumerate(hints):
-            color = self._get_status_color(hint)
-            if current_focus == 2 and i == selected_indices[2]:
-                color = focus_colors[2]
-            text = self.font.render(hint.name, True, color)
-            self.screen.blit(text, (mid_x + 20, hint_y))
-            hint_y += text.get_height() + 5
+        quest_bit("Quest Hints", (mid_x + 20, mid_y + 20), 2, mid_x - 40, hints)
 
     def _get_status_color(self, obj):
         if getattr(obj, "failed", False):
-            return (255, 0, 0)
+            return RED
         elif getattr(obj, "completed", False):
-            return (150, 150, 150)
+            return GREEN
         elif getattr(obj, "started", False):
-            return (255, 255, 255)
+            return WHITE
         return (100, 100, 100)
 
     def _wrap_text(self, text, font, max_width):
@@ -563,39 +578,39 @@ class Renderer:
         # Create dialog box
         dialog_height = SCREEN_HEIGHT - MAP_VIEW_HEIGHT 
         dialog_y = SCREEN_HEIGHT - dialog_height
-        dialog_rect = pygame.Rect(0, dialog_y, SCREEN_WIDTH, dialog_height)
+        dialog_rect = pygame.Rect(0, dialog_y, MAP_VIEW_WIDTH, dialog_height)
         
         # Draw dialog box background
         pygame.draw.rect(self.screen, (40, 40, 60), dialog_rect)
         pygame.draw.rect(self.screen, WHITE, dialog_rect, 2)
+        if self.engine.state in [GameState.EVENT, GameState.DIALOG]:
+            # Render speaker name
+            self.draw_text_with_outline(f"{speaker_name}:", self.font, dialog_rect.x + 10, dialog_rect.y + 10, YELLOW)
+            if current_line:
+                
+                lines = self._wrap_text(current_line, self.font, dialog_rect.width - 40)
+                
+                # Render wrapped lines
+                for i, line in enumerate(lines):
+                    x = dialog_rect.x + 10
+                    y = dialog_rect.y + 40 + i * 25
+                    words = line.split(' ')
+                    line_part = ""
+                    for word in words:
+                        color = WHITE
+                        # Check for asterisk-wrapped word
+                        split_word = word.split("*")
+                        if len(split_word) == 3:
+                            line_part += (" " + split_word[0])
+                            self.draw_text_with_outline(line_part, self.font, x, y, color)
+                            x += self.font.size(line_part)[0]
+                            self.draw_text_with_outline(split_word[1], self.font, x, y, RED)
+                            x += self.font.size(split_word[1])[0]
+                            line_part = split_word[2]
+                        else:
+                            line_part += (" " + word)
 
-        # Render speaker name
-        self.draw_text_with_outline(f"{speaker_name}:", self.font, dialog_rect.x + 10, dialog_rect.y + 10, YELLOW)
-        if current_line:
-            
-            lines = self._wrap_text(current_line, self.font, dialog_rect.width - 40)
-            
-            # Render wrapped lines
-            for i, line in enumerate(lines):
-                x = dialog_rect.x + 10
-                y = dialog_rect.y + 40 + i * 25
-                words = line.split(' ')
-                line_part = ""
-                for word in words:
-                    color = WHITE
-                    # Check for asterisk-wrapped word
-                    split_word = word.split("*")
-                    if len(split_word) == 3:
-                        line_part += (" " + split_word[0])
-                        self.draw_text_with_outline(line_part, self.font, x, y, color)
-                        x += self.font.size(line_part)[0]
-                        self.draw_text_with_outline(split_word[1], self.font, x, y, RED)
-                        x += self.font.size(split_word[1])[0]
-                        line_part = split_word[2]
-                    else:
-                        line_part += (" " + word)
-
-                self.draw_text_with_outline(line_part, self.font, x, y, color)
+                    self.draw_text_with_outline(line_part, self.font, x, y, color)
         return dialog_rect
     
     def get_cached_text(self, text, font: pygame.font.Font, color):
@@ -640,4 +655,101 @@ class Renderer:
         # Show "Press SPACE to continue" message
         continue_text = self.small_font.render("Press SPACE to continue, or ENTER to SKIP...", True, GRAY)
         self.screen.blit(continue_text, (cutscene_textbox_rect.x + 10, cutscene_textbox_rect.y + cutscene_textbox_rect.height - 25))
+
+
+    def _bresenham_line(self, x0, y0, x1, y1):
+        """Yield (x,y) points on a grid from (x0,y0) to (x1,y1) inclusive (integer coords)."""
+        dx = abs(x1 - x0)
+        dy = abs(y1 - y0)
+        sx = 1 if x0 < x1 else -1
+        sy = 1 if y0 < y1 else -1
+        x, y = x0, y0
+        if dx >= dy:
+            err = dx // 2
+            while True:
+                yield x, y
+                if x == x1 and y == y1:
+                    break
+                x += sx
+                err -= dy
+                if err < 0:
+                    y += sy
+                    err += dx
+        else:
+            err = dy // 2
+            while True:
+                yield x, y
+                if x == x1 and y == y1:
+                    break
+                y += sy
+                err -= dx
+                if err < 0:
+                    x += sx
+                    err += dy
+
+    def get_visible_positions(self, observer_pos, max_distance=3):
+        """
+        Perimeter raycast FOV:
+        - cast one Bresenham ray to every tile on the perimeter of the square/circle of radius `max_distance`
+        - walk the ray; every tile visited is visible. stop the ray when an opaque tile is hit.
+        Caches last result and only recomputes when observer moves or map changes.
+        """
+
+        # Basic cache keys -- you should increment current_map.generation (or similar) whenever
+        # an opaque tile changes, doors open/close, etc. If you don't have this, you can
+        # detect map object identity but that won't notice internal changes.
+        game_map = self.engine.current_map
+        map_gen = getattr(game_map, "generation", None)  # preferred: an integer you increment on map change
+
+        # Fast cache check
+        if not self._fov_cache:
+            self._fov_cache = {}
+        cache_key = (observer_pos, max_distance, id(game_map), map_gen)
+        if cache_key == self._fov_cache_key:
+            return self._fov_cache  # cached set
+
+        ox, oy = observer_pos
+        visible = set()
+        visible.add((ox, oy))
+
+        radius = int(max_distance)
+        # Precompute perimeter points: use square perimeter but treat distance check so you still get near-circle
+        # We'll walk all points on the bounding square perimeter to ensure cardinals and diagonals are covered.
+        perim_points = []
+        for dx in range(-radius, radius + 1):
+            perim_points.append((ox + dx, oy - radius))  # top row
+            perim_points.append((ox + dx, oy + radius))  # bottom row
+        for dy in range(-radius + 1, radius):  # avoid double-adding corners
+            perim_points.append((ox - radius, oy + dy))  # left column
+            perim_points.append((ox + radius, oy + dy))  # right column
+
+        seen = set()
+        perim = []
+        for p in perim_points:
+            if p not in seen:
+                seen.add(p)
+                perim.append(p)
+
+        # Cast ray to each perimeter point
+        map_w = game_map.width
+        map_h = game_map.height
+
+        for tx, ty in perim:
+            for x, y in self._bresenham_line(ox, oy, tx, ty):
+                if ox == x and oy == y:
+                    continue
+                if x < 0 or y < 0 or x >= map_w or y >= map_h:
+                    break
+
+                visible.add((x, y))
+
+                if not game_map.can_see_thru((x, y)):
+                    # include the blocking tile (we can see it) but stop further tiles along this ray
+                    break
+
+        # Save cache
+        self._fov_cache = visible
+        self._fov_cache_key = cache_key
+
+        return visible
 

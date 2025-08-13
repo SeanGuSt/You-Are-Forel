@@ -37,7 +37,7 @@ def combat_inputs(self: 'GameEngine', event):
                 if self.current_map.is_passable(tpos):
                     current_unit.old_position = current_unit.position
                     current_unit.position = tpos
-                    self.event_manager.timer_limits["player_move"] = 12
+                    self.event_manager.timer_manager.start_timer("player_move", 180)
                     self.combat_manager.advance_turn()
                 
             for message in messages:
@@ -46,6 +46,9 @@ def combat_inputs(self: 'GameEngine', event):
         case pygame.K_a:
             self.attack_mode = True
             self.combat_manager.append_to_combat_log(f"{current_unit.name} readies {current_unit.possessive} weapon.")
+        case pygame.K_s:
+            current_unit.special = True
+            self.combat_manager.append_to_combat_log(f"{current_unit.name} prepares to use a special ability.")
         case pygame.K_c:
             self.change_state(GameState.DIALOG)  # Reuse dialog UI for spell input
             self.dialog_manager.awaiting_input = True

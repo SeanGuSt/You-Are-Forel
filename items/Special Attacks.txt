@@ -1,0 +1,2 @@
+Spear:
+Wary Sweep: A spinning strike to ward off foes by reminding them of your weapon's reach. Units in adjacent tiles will jump back two spaces if they can. If the unit can't jump back, they will slam into whatever is blocking them, taking damage.
