@@ -22,6 +22,27 @@
       "event_start": "burning_student"
     }
   },
+  "replace_jin_shi_event": {
+    "object_type": "node",
+    "x": -99,
+    "y": -99,
+    "args": {
+      "event_start": "burning_student_replace"
+    }
+  },
+  "map_edge_teleporter": {
+    "object_type": "node",
+    "x": -99,
+    "y": -98,
+    "args": {
+      "adjacent_maps": {
+        "S": {
+          "map": "Kesvelt_Morgue",
+          "offset": "(-8, 0)"
+        }
+      }
+    }
+  },
   "corner_guard": {
     "object_type": "npcsoldier",
     "x": 20,
@@ -185,8 +206,8 @@
   },
   "new_game_spawner": {
     "object_type": "node",
-    "x": 8,
-    "y": 19
+    "x": 16,
+    "y": 34
   },
   "pillar0": {
     "object_type": "pillar",
@@ -350,12 +371,6 @@
     "object_type": "node",
     "x": 4,
     "y": 19,
-    "args": {}
-  },
-  "test_hug": {
-    "object_type": "animatedforeleratonhug",
-    "x": 8,
-    "y": 17,
     "args": {}
   }
 }

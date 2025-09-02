@@ -1,4 +1,4 @@
-import os
+import os, pygame
 from dataclasses import dataclass, asdict, fields, MISSING, field
 from random import randint
 from typing import List, Dict, Any, Optional, Type, TYPE_CHECKING, Literal
@@ -26,13 +26,14 @@ class Node:
     width_in_tiles = 1
     height_in_tiles = 1
     can_bump: bool = True
-    is_bumping: bool = True
+    is_bumping: bool = False
     bump_direction: Direction = None
+    init_position: tuple[int, int] = (0, 0)
     old_position: tuple[int, int]= (0, 0)
     position: tuple[int, int]= (0, 0)
     skin_color: tuple[int, int, int] = (0, 0, 0)
     state: ObjectState = ObjectState.STAND
-    after_state: ObjectState = None
+    after_state: ObjectState = ObjectState.STAND
     parent: 'Node' = None
     children: list['Node'] = field(default_factory=lambda: [])
     pronoun: str = "it"
@@ -63,21 +64,33 @@ class Node:
         data["args"] = merged_args
         new_node = cls(**data)
         new_node.engine = engine
-        if "spritesheet" in new_node.args:
-            if new_node.args["spritesheet"][0].startswith("Generic People"):
-                if "skin_color" in data:
-                    if type(data["skin_color"]) == list:
-                        new_node.skin_color = tuple(data["skin_color"])
+        try:
+            if "spritesheet" in new_node.args:
+                if new_node.args["spritesheet"][0].startswith("Generic People"):
+                    if "skin_color" in data:
+                        if type(data["skin_color"]) == list:
+                            new_node.skin_color = tuple(data["skin_color"])
+                        else:
+                            new_node.skin_color = new_node.engine.sprite_db.common_skin_colors[int(data["skin_color"])]
                     else:
-                        new_node.skin_color = new_node.engine.sprite_db.common_skin_colors[int(data["skin_color"])]
-                else:
-                    new_node.skin_color = new_node.engine.sprite_db.common_skin_colors[randint(0, len(new_node.engine.sprite_db.common_skin_colors) - 1)]
-        new_node.engine.sprite_db.get_sprite(new_node)
+                        new_node.skin_color = new_node.engine.sprite_db.common_skin_colors[randint(0, len(new_node.engine.sprite_db.common_skin_colors) - 1)]
+            new_node.engine.sprite_db.get_sprite(new_node)
+        except:
+            print(f"could not load sprite for {new_node.name}")
+        new_node.init_position = (new_node.x, new_node.y)
         new_node.old_position = (new_node.x, new_node.y)
         new_node.position = (new_node.x, new_node.y)
         return new_node
+    
     def interact(self) -> bool:
         return False
+    
+    def get_objects_in_adjacent_tiles(self):
+        for i in (-1, 0, 1):
+            for j in (-1, 0, 1):
+                for obj in self.map.get_objects_at(self.add_tuples(self.position, (i, j))):
+                    yield obj
+
     @staticmethod
     def default_args() -> dict:
         return {}
@@ -124,14 +137,31 @@ class Node:
             raise ValueError
         return tuple(a * b for a, b in zip(tuple1, tuple2))
     
+    def distance(self, obj: 'Node', can_move_diagonally: bool = True):
+        diff = self.subtract_tuples(self.position, obj.position)
+        if can_move_diagonally:
+            return max(abs(diff[0]), abs(diff[1]))
+        return abs(diff[0]) + abs(diff[1])
+    
     def update(self, **args):
         pass
+
+    def draw(self):
+        pass
+
+    def on_map_load(self):
+        if "event_start" in self.args:
+            self.engine.event_manager.start_event(self.args["event_start"], self, treat_as_event=False)
+
+    
 
     def destroy(self):
         if self.parent:
             self.parent.children.remove(self)
         if self.map:
             self.map.objects.remove(self)
+        if self in self.engine.combat_manager.enemy_turn_queue:
+            self.engine.combat_manager.enemy_turn_queue.remove(self)
         del self
         
 
@@ -146,7 +176,7 @@ class MapObject(Node):
     patrol_node_template: str = ""
     max_node: int = -1
     node_id = 1
-    look_text = None
+    look_text: str = None
     is_hostile = False
     is_passable = False
     last_move_direction: tuple[int, int] = None
@@ -291,7 +321,6 @@ class MapObject(Node):
 
     def next_node(self):
         next_num = int(self.current_target.name.split("_")[-1]) + 1
-        
         if next_num >= self.max_node:
             next_num = 0
         self.current_target = self.map.get_object_by_name(f"{self.patrol_node_template}_{str(next_num)}")
@@ -309,10 +338,21 @@ class Chest(MapObject):
     color = DARK_GRAY
     node_id = 2
     def interact(self):
+        if "spritesheet" in self.args:
+            self.engine.sprite_db.get_sprite(self, new_col=1 - self.args["spritesheet"][2])
         items = self.args.get("items", {})
         for item_name, quantity in items.items():
-            self.engine.party.add_item_by_name(item_name, quantity)
+            item = self.engine.party.add_item_by_name(item_name, quantity)
+            if quantity > 1:
+                message = f"You got {item.plural} x{quantity}"
+            else:
+                article = ""
+                if not item.omit_article:
+                    article = "the " if "special" in item_name else ("an " if any([item_name.startswith(vowel) for vowel in 'aeiou']) else "a ")
+                message = f"You got {article}{item.name}!"
+            self.engine.append_to_message_log(message)
         self.args["items"] = {}
+        return True
 
 @register_node_type("itemholder")
 class ItemHolder(MapObject):
@@ -344,6 +384,11 @@ class CombatStatsMixin:
     guard: int = 0
     guard_delta: int = 0
     guard_mult: float = 1.0
+    engine: 'GameEngine' = None
+    pos: tuple[int, int] = (0, 0)
+    map: 'Map' = None
+    name: str = ""
+    can_move_diagonally: bool = True
     equipped: Dict[str, Optional[Item]] = None  # New field
     strength: int = 0
     min_strength: int = 0
@@ -357,6 +402,15 @@ class CombatStatsMixin:
     min_faith: int = 0
     faith_delta: int = 0
     faith_mult: float = 1.0
+    body_status_in: InternalBodyStatus = None
+    body_status_in_counter: int = 0
+    body_status_ex: ExternalBodyStatus = None
+    body_status_ex_counter: int = 0
+    mind_status: MindStatus = None
+    mind_status_counter: int = 0
+    parasite_in: 'CombatStatsMixin' = None
+    parasite_ex: 'CombatStatsMixin' = None
+    dies_if_host_on_fire: bool = True
 
     def get_total_power(self):
         return int(self.power_mult*(self.get_strength() + self.power + self.power_delta))
@@ -376,17 +430,57 @@ class CombatStatsMixin:
     def get_faith(self):
         return max(self.faith + self.faith_delta, self.min_faith)
     
-    def attack(self, target: 'CombatStatsMixin'):
-        damage = max(0, self.get_total_power() - target.get_total_guard())
+    def get_closest_enemy(self, obj_list: List = None):
+        closest_obj = None
+        min_dist = 999999
+        if not obj_list:
+            obj_list = self.map.objects
+        for obj in obj_list:
+            if obj == self:
+                continue
+            if not hasattr(obj, 'hp') or not hasattr(obj, 'experience'):
+                continue
+            dist = obj.distance(self, self.can_move_diagonally)
+            if not closest_obj:
+                closest_obj = obj
+                min_dist = dist
+            elif dist < min_dist:
+                closest_obj = obj
+                min_dist = dist
+            elif dist == min_dist and obj.hp < closest_obj.hp:
+                closest_obj = obj
+        return closest_obj
+                
+    def restore_hp(self, amount: int) -> int:
+        max_hp = self.get_max_hp()
+        if max_hp < self.hp + amount:
+            amount_restored = max_hp - self.hp
+            self.hp = max_hp
+        else:
+            amount_restored = amount
+            self.hp += amount
+        return amount_restored
+    
+    def attack(self, target: 'CombatStatsMixin', damage: int = 0):
+        if not damage:
+            damage = max(0, self.get_total_power() - target.get_total_guard())
         target.hp -= damage
         target.attacked(self, damage)
+        if target.hp <= 0 and target == self.current_target:
+            self.current_target = None
         return damage
 
     def attacked(self, attacker, damage: int = 0):
+        if self.hp <= 0:
+            self.death()
+
+
+    def death(self):
         pass
     
     def my_battle_tactics(self):
-        pass
+        if self.hp <= 0:
+            return
 
     
 @register_node_type("monster")
@@ -455,9 +549,8 @@ class Missile(MapObject):
         super().destroy()
             
 
-@register_node_type("spawner")
-@dataclass
-class Spawner(NPC):
+
+class Spawner:
     def spawn_object_at_position(self, obj_type: str, obj_name: str = "", position: tuple[int, int] = None):
         if not obj_name:
             obj_name = self.name + "_" + obj_type + "_" + str(0 if not self.children else len(self.children))

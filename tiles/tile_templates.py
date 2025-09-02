@@ -49,6 +49,9 @@ class Walkway(Tile):
 class TargetTile(Tile):
     color = WHITE
 
+class AreaTile(Tile):
+    color = BLACK
+
 class WalkwayCobblestone(Walkway):
     color = (195, 191, 191)
 

@@ -1,0 +1,133 @@
+{
+  "morgue_lady": {
+    "__hi__": [
+      {
+        "text": [
+          "Hm? You need something? The *bodies* are over there.",
+          "I already gave them a once over, even the fresh one in the middle. Nothing noteworthy."
+        ],
+        "conditions": [
+          "!talked=",
+          "!leader_wear=acc_harem_robe"
+        ],
+        "events": []
+      },
+      {
+        "text": [
+          "Hm? Oh, a faithful. The *bodies* are over there.",
+          "!leader_wear=armor_none++Just keep your clothes on and the noise down. Oops, did I say that out loud. How embarassing.",
+          "leader_wear=armor_none++Just... just try and keep the noise down. I'm not allowed to kick you out. Or stab you. So the least you could do is not make me listen to your perversion."
+        ],
+        "conditions": [
+          "!talked=",
+          "leader_wear=acc_harem_robe"
+        ],
+        "events": []
+      },
+      {
+        "text": [
+          "You know, people generally don't come here more than once. Just saying."
+        ],
+        "conditions": [
+          "talked="
+        ],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "text": [
+          "I'm a coroner. That means I prod at dead bodies to see how they died.",
+          "Let's see here. It looks like these *three* burned alive. Wow. I'm so good at my job."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "show burnt book cover": [
+      {
+        "text": [
+          "What? Is that supposed to be relevant to me?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "yes": [
+      {
+        "text": [
+          "Oh. Well in that case. Oh wow. Call the gossip mongers. Disciples who burned alive had burned books with them.",
+          "Look. It's cute you're playing detective. But I'm the coroner here. I know what's useful information and what isn't.",
+          "!leader_wear=acc_harem_robe++So you let me do my job, and I'll let you do whatever yours is. Sound fair?",
+          "leader_wear=acc_harem_robe++So you let me do my job, and I'll let you do yours, kind faithful.",
+          "...And you're still here. Hey, have you ever heard of books?",
+          "!leader_wear=acc_harem_robe++They're really great if you're bored.",
+          "leader_wear=acc_harem_robe++I see one of your faithful buddies at the book store in the afternoons. Maybe you could go bother them to... I dunno, make out. --n Oops, did I say that out loud. How embarassing."
+        ],
+        "conditions": [
+          "last_dialog=show burnt book cover",
+          "!finished_quest=kesvelt_burnt_books"
+        ],
+        "events": []
+      },
+      {
+        "text": [
+          "",
+          ""
+        ],
+        "conditions": [
+          "last_dialog=renald",
+          "!finished_quest=kesvelt_burnt_books"
+        ],
+        "events": []
+      },
+      {
+        "text": [
+          "He was the one responsible for the students burning themselves alive? OK... so what?",
+          "Are you shaming me for not figuring that out because"
+        ],
+        "conditions": [
+          "last_dialog=renald",
+          "finished_quest=kesvelt_burnt_books"
+        ],
+        "events": []
+      }
+    ],
+    "no": [
+      {
+        "text": [
+          "Oh, you just wanted to show it off? Neat. You can keep it if you want. Not exactly a shock to find disciples with books. Not that you can call that a book anymore."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "bodies": [
+      {
+        "text": [
+          "Three of them. All burned. Kinda neat honestly. --n Oops, did I say that out loud. How embarassing."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "renald": [
+      {
+        "text": [
+          "Is that name supposed to mean something to me?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "show book from renald": [
+      {
+        "text": [
+          "Cool book. Maybe you should read it. Somewhere that isn't here."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ]
+  }
+}

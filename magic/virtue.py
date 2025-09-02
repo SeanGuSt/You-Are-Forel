@@ -50,8 +50,8 @@ class VirtueManager:
             VirtueType.LIGHTNING: (OverusePenalty.ACCURACY_REDUCTION, 10),
             VirtueType.EARTH: (OverusePenalty.STAT_REDUCTION, 2),
             VirtueType.WATER: (OverusePenalty.SPELL_FAILURE, 25),
-            VirtueType.WIND: (OverusePenalty.HP_DAMAGE, 5),
-            VirtueType.LAVA: (OverusePenalty.STAT_REDUCTION, 2),
+            VirtueType.AIR: (OverusePenalty.HP_DAMAGE, 5),
+            VirtueType.MAGMA: (OverusePenalty.STAT_REDUCTION, 2),
             VirtueType.NATURE: (OverusePenalty.STAT_REDUCTION, 1),
         }
         

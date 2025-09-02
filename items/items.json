@@ -186,9 +186,9 @@
         "item_type": "accessory",
         "uid": 14
     },
-    "key_reminder_note" : {
-        "name" : "Note from Eraton",
-        "description" : "A folded up piece of paper in Eraton's calligraphic penmanship.",
+    "key_quest_log" : {
+        "name" : "Quest Log",
+        "description" : "",
         "item_type" : "keyitem",
         "uid" : 15
     }

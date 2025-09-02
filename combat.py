@@ -1,6 +1,6 @@
-from constants import MAP_HEIGHT, MAP_WIDTH, MAPS_DIR, GameState, ObjectState, DIRECTIONS
+from constants import *
 from objects.object_templates import Monster, CombatStatsMixin
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 import os, json
 import pygame
 if TYPE_CHECKING:
@@ -27,6 +27,8 @@ class CombatManager:
         self.walkers = []
         self.enemy_turn_in_progress = False
         self.enemy_move_duration = self.engine.FPS//6  # frames for enemy move animation
+        self.player_made_move: bool = False
+        self.animation_queue = []
 
     def enter_combat_mode(self, allies_in_combat: list = []):
         self.active_combat = True
@@ -62,6 +64,7 @@ class CombatManager:
     def get_hostile_objects_in_view(self):
         objects = self.engine.current_map.get_objects_subset(Monster)
         camera_x, camera_y = self.engine.camera
+        return objects
         return [
             obj for obj in objects if obj.is_hostile
             and camera_x <= obj.position[0] < camera_x + MAP_WIDTH
@@ -74,6 +77,7 @@ class CombatManager:
         target.hp -= damage
         target.is_hostile = True
         self.append_to_combat_log(f"{attacker.name} hits {target.name} for {damage} damage!")
+        target.attacked(attacker, damage)
         if target.hp <= 0:
             self.engine.current_map.remove_object(target)
             self.append_to_combat_log(f"{target.name} was defeated!")
@@ -84,7 +88,7 @@ class CombatManager:
         if not self.combat_log[0]:
             self.combat_log.pop(0)
         else:
-            self.combat_scroll_index = len(self.combat_log) - 5
+            self.combat_scroll_index = len(self.combat_log) - 4
         self.combat_log.append(text)
 
 
@@ -95,10 +99,40 @@ class CombatManager:
             return unit
         return None
 
+    def conclude_current_player_turn(self):
+        self.player_made_move = True
+
     def advance_turn(self):
-        messages = self.engine.party.members[self.current_unit_index].virtue_manager.apply_turn_end_penalties(self.engine.party.members[self.current_unit_index])
-        for message in messages:
+        if self.player_turn and self.player_made_move:
+            print("Made a move")
+            self.finish_current_player_turn()
+        elif not self.player_turn and self.enemy_turn_in_progress:
+            self.finish_current_enemy_turn()
+
+    def finish_current_player_turn(self):
+        self.player_made_move = False
+        member = self.engine.party.members[self.current_unit_index]
+        messages = member.virtue_manager.apply_turn_end_penalties(member)
+        message = ""
+        if member.body_status_ex == ExternalBodyStatus.ON_FIRE:
+            member.hp -= member.body_status_ex_counter
+            message = f"{member.name} was burned for {member.body_status_ex_counter} damage!"
+            if member.hp <= 0:
+                member.death()
+                member.body_status_ex_counter = 0
+                member.body_status_ex = None
+                message += f" {member.possessive.capitalize()} screams were drowned out by the flames until... silence."
+            else:
+                member.body_status_ex_counter -= 1
+                if member.body_status_ex_counter <= 0:
+                    member.body_status_ex_counter = 0
+                    member.body_status_ex = None
+                    message += f"The flames encompassing {member.possessive} body finally dissipated."
+        if message:
             self.append_to_combat_log(message)
+        for message in messages:
+            if message:
+                self.append_to_combat_log(message)
         self.current_unit_index += 1
 
         if self.current_unit_index >= len(self.engine.party.members):
@@ -111,18 +145,19 @@ class CombatManager:
         self.enemy_turn_queue = self.get_hostile_objects_in_view()
         self.current_enemy_index = 0
         self.enemy_turn_in_progress = False
-        
         if self.enemy_turn_queue:
             self.execute_next_enemy_turn()
         else:
             # No enemies, return to player turn
+            
             self.player_turn = True
 
     def execute_next_enemy_turn(self):
         """Execute the current enemy's turn"""
-        print(f"Player turn is set to {self.player_turn}")
+        
         if self.current_enemy_index < len(self.enemy_turn_queue):
             current_enemy = self.enemy_turn_queue[self.current_enemy_index]
+            print(f"It is now {current_enemy.name}'s turn")
             if current_enemy.__is__(Monster):
                 # Store old position before move
                 current_enemy.old_position = current_enemy.position
@@ -132,12 +167,44 @@ class CombatManager:
                 
                 # Start the movement animation timer
                 self.enemy_turn_in_progress = True
-                self.engine.event_manager.timer_manager.start_timer("enemy_move",150)
-                # Add to walkers list for animation (similar to player movement)
-                self.walkers.append(current_enemy)
+                if current_enemy.old_position != current_enemy.position:
+                    self.engine.event_manager.timer_manager.start_timer("enemy_move",300)
+                    # Add to walkers list for animation (similar to player movement)
+                    self.walkers.append(current_enemy)
         else:
             # All enemies have moved, return to player turn
             self.finish_enemy_turns()
+
+
+    def finish_current_enemy_turn(self):
+        """Clean up current enemy turn and move to next"""
+        current_enemy = self.enemy_turn_queue[self.current_enemy_index]
+        
+        # Update old position
+        current_enemy.old_position = current_enemy.position
+        
+        # Move to next enemy
+        self.current_enemy_index += 1
+        self.enemy_turn_in_progress = False
+        if current_enemy in self.walkers:
+            self.walkers.remove(current_enemy)
+        
+        # Small delay before next enemy (optional)
+        # You could add a brief pause here if desired
+        
+        self.execute_next_enemy_turn()
+
+    def finish_enemy_turns(self):
+        """Clean up after all enemy turns are complete"""
+        self.enemy_turn_queue = []
+        self.current_enemy_index = 0
+        self.enemy_turn_in_progress = False
+        
+        # Clear any remaining timers
+        self.engine.event_manager.timer_manager.cancel_timer("enemy_move")
+        
+        self.player_turn = True
+
     def update_special(self):
         player = self.get_current_unit()
         if not player:
@@ -157,9 +224,9 @@ class CombatManager:
             if not self.engine.event_manager.walkers:#Don't proceed to the next turn until all animations are finished
                 self.attack_frame = 0
                 player.special = False
-                self.advance_turn()
+                self.conclude_current_player_turn()
             else:
-                self.attack_frame = 21
+                self.attack_frame = 22
         
 
     def end_push(self):
@@ -168,39 +235,4 @@ class CombatManager:
                 if not self.engine.event_manager.timer_manager.is_active(f"{obj.name}_knockback"):
                     obj.state = ObjectState.STAND
                     self.engine.event_manager.walkers.remove(obj)
-    def update_enemy_turn(self):
-        """Call this in your main game loop to handle enemy turn progression"""
-        if not self.player_turn and self.enemy_turn_in_progress:
-            # Check if current enemy's move animation is complete
-            timer_manager = self.engine.event_manager.timer_manager
-            current_enemy = self.enemy_turn_queue[self.current_enemy_index]
-            if not (timer_manager.is_active("enemy_move") or timer_manager.is_active(f"{current_enemy.name}_knockback")):
-                self.finish_current_enemy_turn()
-
-    def finish_current_enemy_turn(self):
-        """Clean up current enemy turn and move to next"""
-        current_enemy = self.enemy_turn_queue[self.current_enemy_index]
-        
-        # Update old position
-        current_enemy.old_position = current_enemy.position
-        
-        # Move to next enemy
-        self.current_enemy_index += 1
-        self.enemy_turn_in_progress = False
-        self.walkers.remove(current_enemy)
-        
-        # Small delay before next enemy (optional)
-        # You could add a brief pause here if desired
-        
-        self.execute_next_enemy_turn()
-
-    def finish_enemy_turns(self):
-        """Clean up after all enemy turns are complete"""
-        self.enemy_turn_queue = []
-        self.current_enemy_index = 0
-        self.enemy_turn_in_progress = False
-        
-        # Clear any remaining timers
-        self.engine.event_manager.timer_manager.cancel_timer("enemy_move")
-        
-        self.player_turn = True
+    

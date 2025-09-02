@@ -1,0 +1,228 @@
+{
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 5,
+    "y": 8
+  },
+  "map_edge_teleporter": {
+    "object_type": "node",
+    "x": -99,
+    "y": -98,
+    "args": {
+      "adjacent_maps": {
+        "N": {
+          "map": "Kesvelt_Ground",
+          "offset": "(8, 0)"
+        }
+      }
+    }
+  },
+  "book_merchant": {
+    "object_type": "npc",
+    "x": 1,
+    "y": 2,
+    "args": {}
+  },
+  "bookseller_renald": {
+    "object_type": "npc",
+    "x": 1,
+    "y": 4,
+    "args": {}
+  },
+  "bookstore_kesvelt": {
+    "object_type": "npc",
+    "x": 2,
+    "y": 2,
+    "args": {}
+  },
+  "bookstore_sign": {
+    "object_type": "mapobject",
+    "x": 5,
+    "y": 1,
+    "look_text": [
+      "bookstore sign"
+    ],
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        3,
+        0
+      ]
+    }
+  },
+  "medicine_sign": {
+    "object_type": "mapobject",
+    "x": 9,
+    "y": 1,
+    "look_text": [
+      "medicine sign"
+    ],
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        3,
+        1
+      ]
+    }
+  },
+  "armor_sign": {
+    "object_type": "mapobject",
+    "x": 5,
+    "y": 9,
+    "look_text": [
+      "A heater shield with an emerald cross is painted above the smith's surname, 'Veltoph.' --n Armorers hanging this sort of sign out front typically deal in more expensive, but higher quality defensive-wear. Normally Nertus would look down upon such arrogance, but the cross doesn't mean high-quality necessarily?",
+      "Eraton had tried explaining it to you once. He says the cross technically means the smith will paint or embed your family crest for an additional fee. 'Your crest here', basically. But in making such an offer, they imply the armor and shields they make are worth carrying your family's legacy.",
+      "That still makes it sound like bragging, but then, who are you to argue with a god?"
+    ],
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        3,
+        2
+      ]
+    }
+  },
+  "weapons_sign": {
+    "object_type": "mapobject",
+    "x": 9,
+    "y": 9,
+    "look_text": [
+      "weapons sign"
+    ],
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        3,
+        3
+      ]
+    }
+  },
+  "medicine_merchant": {
+    "object_type": "npc",
+    "x": 13,
+    "y": 2,
+    "args": {}
+  },
+  "medicinestore_kesvelt": {
+    "object_type": "npc",
+    "x": 12,
+    "y": 2,
+    "args": {}
+  },
+  "armor_merchant": {
+    "object_type": "npc",
+    "x": 1,
+    "y": 8,
+    "args": {}
+  },
+  "armorstore_kesvelt": {
+    "object_type": "npc",
+    "x": 2,
+    "y": 8,
+    "args": {}
+  },
+  "weaponstore_kesvelt": {
+    "object_type": "npc",
+    "x": 12,
+    "y": 8,
+    "args": {}
+  },
+  "weapon_merchant": {
+    "object_type": "npc",
+    "x": 13,
+    "y": 8,
+    "args": {}
+  },
+  "food_merchant": {
+    "object_type": "npc",
+    "x": 1,
+    "y": 14,
+    "args": {}
+  },
+  "foodstore_kesvelt": {
+    "object_type": "npc",
+    "x": 1,
+    "y": 13,
+    "args": {}
+  },
+  "foodstore_sign": {
+    "object_type": "mapobject",
+    "x": 5,
+    "y": 13,
+    "look_text": [
+      "This way leads to the Kesvelt marketplace. Foodstuffs and kitchenware aplenty are being sold.",
+      "Much to see and taste there, but nothing you'll need for your quest. Besides, a lot of bad memories lie down those streets."
+    ],
+    "args": {}
+  },
+  "morguesign": {
+    "object_type": "mapobject",
+    "x": 9,
+    "y": 13,
+    "args": {}
+  },
+  "corpse": {
+    "object_type": "mapobject",
+    "x": 12,
+    "y": 13,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        3,
+        4
+      ]
+    }
+  },
+  "corpse2": {
+    "object_type": "mapobject",
+    "x": 11,
+    "y": 13,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        3,
+        4
+      ]
+    }
+  },
+  "trashbin" : {
+    "object_type" : "mapobject",
+    "x" : 13,
+    "y" : 14,
+    "args" : {
+      "spritesheet": [
+        "Static Objects",
+        3,
+        5
+      ]
+    }
+    
+
+  },
+  "corpse3": {
+    "object_type": "mapobject",
+    "x": 13,
+    "y": 13,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        3,
+        2
+      ]
+    }
+  },
+  "morgue_attendant": {
+    "object_type": "npc",
+    "x": 13,
+    "y": 15,
+    "args": {
+      "name" : "Mordenia",
+      "dialog_key" : "morgue_lady",
+      "spritesheet": [
+        "Static Objects",
+        3,
+        6
+      ]
+    }
+  }
+}

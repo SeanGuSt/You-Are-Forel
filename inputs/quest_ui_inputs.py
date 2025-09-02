@@ -16,6 +16,10 @@ def quest_log_inputs(self: 'GameEngine', event):
             return  # Nothing to do
         quest = quests[selected_indices[0]]
         if event.key == pygame.K_TAB:
+            if self.current_quest_focus == 2:
+                self.event_manager.finish_quest_step("learn_quest_log__view_steps")
+                self.event_manager.finish_quest("learn_quest_log")
+                self.event_manager.finish_quest_step("assure_eraton__look_at_quest_log")
             self.current_quest_focus = (current_focus + 1) % 3
 
         elif event.key == pygame.K_UP:

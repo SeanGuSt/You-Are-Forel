@@ -12,35 +12,21 @@ def dialog_inputs(self: 'GameEngine', event):
                 self.spell_input_mode = False
                 spell = self.spellbook.process_user_input(self.dialog_manager.user_input)
                 self.dialog_manager.user_input = ""
-                self.dialog_manager.awaiting_input = False
+                self.dialog_manager.awaiting_keyword = False
+                self.dialog_manager.waiting_for_input = False
                 if self.previous_state == GameState.COMBAT:
                     caster = self.combat_manager.get_current_unit()
                 else:
                     caster = self.party.get_leader()
                 caster.prep_spell(spell)
-            if self.dialog_manager.awaiting_input:
+            if self.dialog_manager.awaiting_keyword:
                 # Process user input
                 user_input = self.dialog_manager.process_user_input()
-                if user_input == "bye":
-                    self.dialog_manager.end_dialog()
-                    self.revert_state()
-            elif self.dialog_manager.looking:
-                if not self.dialog_manager.advance_looking():
-                    self.dialog_manager.end_dialog()
-                    self.revert_state()
         case pygame.K_SPACE:
             # Advance dialog
-            if not self.dialog_manager.awaiting_input:
-                if self.dialog_manager.looking:
-                    if not self.dialog_manager.advance_looking():
-                        self.dialog_manager.end_dialog()
-                        self.revert_state()
-                elif not self.dialog_manager.advance_dialog():
-                    # Dialog finished advancing, now awaiting input
-                    if self.event_manager.force_end:
-                        self.dialog_manager.end_dialog()
-                        self.revert_state()
-    if self.dialog_manager.awaiting_input:
+            if not self.dialog_manager.awaiting_keyword:
+                self.dialog_manager.waiting_for_input = False
+    if self.dialog_manager.awaiting_keyword:
         # Handle text input for dialog responses
         if event.key == pygame.K_BACKSPACE:
             self.dialog_manager.user_input = self.dialog_manager.user_input[:-1]
@@ -48,5 +34,5 @@ def dialog_inputs(self: 'GameEngine', event):
             pass
         elif event.unicode.isprintable() and len(self.dialog_manager.user_input) < 50:
             self.dialog_manager.user_input += event.unicode 
-            if self.dialog_manager.user_input in ["nigge", "faggo", "rapis", "chink"]:
+            if self.dialog_manager.user_input in ["nigger", "faggot", "chink"]:
                 self.running = False

@@ -1,38 +1,38 @@
 {
   "guy0": {
     "object_type": "monsterguardrookie",
-    "x": 5,
-    "y": 4,
+    "x": 4,
+    "y": 3,
     "args": {}
   },
   "guy1": {
     "object_type": "monsterguardrookie",
     "x": 1,
-    "y": 7,
+    "y": 5,
     "args": {}
   },
   "guy2": {
     "object_type": "monsterguardrookie",
-    "x": 5,
-    "y": 10,
+    "x": 4,
+    "y": 8,
     "args": {}
   },
   "guy4": {
     "object_type": "monsterguardrookie",
-    "x": 16,
-    "y": 7,
+    "x": 14,
+    "y": 5,
     "args": {}
   },
   "guy5": {
     "object_type": "monsterguardrookie",
-    "x": 12,
-    "y": 4,
+    "x": 11,
+    "y": 3,
     "args": {}
   },
   "guy6": {
     "object_type": "monsterguardrookie",
-    "x": 12,
-    "y": 10,
+    "x": 11,
+    "y": 8,
     "args": {}
   },
   "map_event_countdown": {
@@ -45,26 +45,26 @@
   },
   "special_0": {
     "object_type": "node",
-    "x": 8,
-    "y": 7,
+    "x": 7,
+    "y": 5,
     "args": {}
   },
   "special_1": {
     "object_type": "node",
-    "x": 9,
-    "y": 7,
+    "x": 8,
+    "y": 5,
     "args": {}
   },
   "special_2": {
     "object_type": "node",
-    "x": 8,
-    "y": 8,
+    "x": 7,
+    "y": 6,
     "args": {}
   },
   "special_3": {
     "object_type": "node",
-    "x": 9,
-    "y": 8,
+    "x": 8,
+    "y": 6,
     "args": {}
   }
 }

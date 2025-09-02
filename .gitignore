@@ -1,4 +1,7 @@
 /.venv
 /smoothtest.py
 /animation_test.py
-/smoothtest.py
+/render_group_object_test.py
+/slime_split.py
+/objects/characters_rect.py
+/objects/object_templates_rect.py

@@ -5,7 +5,7 @@ from objects.characters import Party
 from objects.map_objects import MapObject
 from objects.object_basics import ElevatorHelper
 from dialog.dialog_helpers import *
-from constants import TALK_DIR
+from constants import TALK_DIR, GameState
 import re
 if TYPE_CHECKING:
     from ultimalike import GameEngine
@@ -16,9 +16,11 @@ class DialogManager:
         self.dialogs = {}
         self.load_dialogs()
         self.dialog_key = ""
+        self._merge_cache = {}
         self.current_dialog = None
         self.current_speaker = None
         self.current_lines = []
+        self.current_line = ""
         self.npc_vocab = {}
         self._config_words = ["elevator_config"]
         self.engine = engine
@@ -27,7 +29,8 @@ class DialogManager:
         self.user_input = ""
         self.last_input = ""
         self.cursor_blink = 0
-        self.awaiting_input = False
+        self.awaiting_keyword = False
+        self.waiting_for_input = False
         
         
     def load_dialogs(self):
@@ -38,18 +41,43 @@ class DialogManager:
                 with open(os.path.join(TALK_DIR, file_name), 'r') as f:
                     dialogs = json.load(f)
                     if dialogs:
-                        for key, value in dialogs.items():
-                            self.dialogs[key] = value
+                        for dialog_key, dialog_dict in dialogs.items():
+                            self.dialogs[dialog_key] = dialog_dict
+
+    def get_dialog_data(self, dialog_key: str) -> dict | None:
+        """Resolve dialog inheritance dynamically (multi-step)."""
+        if dialog_key in self._merge_cache:
+            return self._merge_cache[dialog_key]
+
+        if dialog_key not in self.dialogs:
+            return None
+
+        data = self.dialogs[dialog_key]
+        parts = dialog_key.split("#")
+
+        if len(parts) > 1:
+            # Reconstruct hierarchy step by step
+            base_key = parts[0]
+            merged = self.get_dialog_data(base_key) or {}
+            for i in range(1, len(parts)):
+                variant_key = "__".join(parts[:i+1])
+                if variant_key in self.dialogs:
+                    merged = merge_dialogs(merged, self.dialogs[variant_key])
+            self._merge_cache[dialog_key] = merged
+            return merged
+
+        # Base dialog, no inheritance
+        return data
 
     def start_dialog(self, npc: MapObject):
         """Start a dialog with a map object"""
         # Get the NPC name from object args
         npc_name = npc.args.get("name", "").lower()
         dialog_key = npc.args.get("dialog_key", npc_name)
-        
-        if dialog_key not in self.dialogs:
+        dialog_data = self.get_dialog_data(dialog_key)
+        if not dialog_data:
             print(f"cannot find key {dialog_key}")
-            return False  # Cannot talk to this object
+            return False
         self.engine.event_manager.talked_to_npcs.add(self.dialog_key)
         
         self.current_speaker = npc
@@ -68,48 +96,56 @@ class DialogManager:
         self.current_line_index = -1
         self.advance_dialog()
         self.user_input = ""
-        self.awaiting_input = True if len(self.current_lines) == 1 else False
+        self.awaiting_keyword = True if len(self.current_lines) == 1 else False
+        self.waiting_for_input = True
         self.cursor_blink = 0
         return True
     
     def start_looking(self, obj: MapObject):
-        self.current_speaker = obj
         if obj.look_text:
+            self.current_speaker = obj
             self.current_lines = obj.look_text
-        else:
-            self.current_lines = [f"Nothing but a boring old {obj.name}."]
-        self.looking = True
-        return True
-
-    def advance_looking(self):
-        self.current_line_index += 1
-        if self.current_line_index < len(self.current_lines):
+            self.current_line_index = 0
+            self.current_line = self.get_current_line()
+            self.looking = True
+            self.waiting_for_input = True
             return True
         return False
+        
     def advance_dialog(self):
         """Advance to the next line of dialog or perform the next event"""
-        check = True
-        while check:
-            self.current_line_index += 1
-            current_line = self.get_current_line()
-            check = "=" in current_line
-            if check:
-                do_event = True
-                if "++" in current_line:
-                    condition, current_line = current_line.split("++") 
-                    do_event = self._check_condition(condition)
-                if do_event:
-                    self._do_event(current_line)
-                continue
-            if self.current_line_index < len(self.current_lines) - 1:
-                return True
+        if not self.current_lines or self.waiting_for_input or self.awaiting_keyword:
+            return
+        if self.engine.event_manager.timer_manager.get_remaining_time("event_pause") > 0:
+            return
+        self.current_line_index += 1
+        if self.current_line_index >= len(self.current_lines)-1:
+            if self.engine.event_manager.force_end:
+                self.end_dialog()
+                self.engine.revert_state()
+                return
+            elif not self.looking:
+                self.awaiting_keyword = True
+                self.user_input = ""
+            elif self.current_line_index >= len(self.current_lines):
+                self.end_dialog()
+                self.engine.revert_state()
+        current_line = self.get_current_line()
+        use_line = True
+        has_cond = "++" in current_line
+        if has_cond:
+            condition, current_line = current_line.split("++") 
+            use_line = self._check_condition(condition)
+        if use_line:
+            is_event = "=" in current_line
+            if is_event:
+                self._do_event(current_line)
             else:
-                check = False
+                self.current_line = current_line
+                self.waiting_for_input = True
                 
         # Reached end of current dialog, now await user input
-        self.awaiting_input = True
-        self.user_input = ""
-        return False
+        
     
     def process_user_input(self):
         npc = self.current_speaker
@@ -123,15 +159,21 @@ class DialogManager:
 
         input_lower = input_text.lower().strip()
 
-        if input_lower in self._config_words:
-            input_lower = "bleh"
-
         aliases = dialog_data.get("aliases", {})
         contextual_aliases = dialog_data.get("contextual_aliases", {})
         if input_lower in contextual_aliases.get(self.last_input, {}):
             input_lower = contextual_aliases[self.last_input][input_lower]
         if input_lower in aliases:
             input_lower = aliases[input_lower]
+
+        if input_lower in self._config_words:
+            input_lower = "bleh"
+        if input_lower == "show":
+            self.engine.state = GameState.MENU_INVENTORY
+            return
+        if input_lower == "bye":
+            self.end_dialog()
+            self.engine.revert_state()
 
         if npc.__is__(ElevatorHelper):
             config = npc.args.get("elevator_config", {}) or dialog_data.get("elevator_config", {})
@@ -142,9 +184,10 @@ class DialogManager:
                 if not "seen_red_text_tutorial" in self.engine.event_manager.flags:
                     self.engine.event_manager.flags.add("seen_red_text_tutorial")
                     self.current_lines[-1] += "(Type keywords to continue a conversation. Most keywords will be highlighted in red.)"
-                self.awaiting_input = True
+                self.awaiting_keyword = True
                 self.last_input = input_lower  # <- track last keyword
                 self.user_input = ""
+                self.current_line = self.get_current_line()
                 return
             aliases = config.get("aliases", {})
             # Resolve alias if it exists
@@ -156,11 +199,12 @@ class DialogManager:
                 response = get_destination_response(config, input_lower, current_map)
                 self.current_lines = response["text"]
                 self.engine.event_manager.pending_events = response.get("events", {})
-                self.awaiting_input = True
+                self.awaiting_keyword = True
+                self.waiting_for_input = True
                 self.last_input = input_lower  # <- track last keyword
                 self.user_input = ""
+                self.current_line = self.get_current_line()
                 return
-
         # Try exact match
         responses = dialog_data.get(input_lower, [])
 
@@ -199,7 +243,8 @@ class DialogManager:
             selected = [self._translate_line(line) for line in selected]
 
         self.current_lines = selected
-        self.awaiting_input = True if len(self.current_lines) == 1 else False
+        self.current_line = self.get_current_line()
+        self.awaiting_keyword = True if len(self.current_lines) == 1 else False
         
         self.user_input = ""
         return input_lower
@@ -278,7 +323,7 @@ class DialogManager:
     
     def is_dialog_finished(self):
         """Check if we're at the end of a dialog sequence and awaiting input"""
-        return self.awaiting_input
+        return self.awaiting_keyword
     
     def end_dialog(self):
         """End the current dialog"""
@@ -287,10 +332,38 @@ class DialogManager:
         self.current_speaker = None
         self.current_lines = []
         self.current_line_index = 0
+        self.current_line = ""
         self.user_input = ""
-        self.awaiting_input = False
+        self.waiting_for_input = False
+        self.awaiting_keyword = False
         self.looking = False
         for tl in self.engine.event_manager.timer_limits:
             self.engine.event_manager.timer_limits[tl] = 0
+
+def merge_dialogs(base: dict, overrides: dict) -> dict:
+    """Merge override dialog entries into a base dict, returning new dict."""
+    result = dict(base)  # shallow copy
+
+    for key, value in overrides.items():
+        if key.startswith("-"):
+            # Remove entry
+            to_remove = key[1:]
+            result.pop(to_remove, None)
+            continue
+
+        if key.endswith("+"):
+            # Append mode
+            target_key = key[:-1]
+            if target_key in result and isinstance(result[target_key], list) and isinstance(value, list):
+                result[target_key] = result[target_key] + value
+            else:
+                # If base doesn’t exist, just set it
+                result[target_key] = value
+            continue
+
+        # Default: replace
+        result[key] = value
+
+    return result
     
     

@@ -1,73 +1,108 @@
 {
-    "dmitri_elevator" : {
+  "dmitri_elevator": {
     "__hi__": [
       {
-        "text": ["Good {time_of_day}, kind faithful! Have you need of the *elevator*?"],
-        "conditions": ["talked=true"]
+        "text": [
+          "Good {time_of_day}, kind faithful! Have you need of the elevator?"
+        ],
+        "conditions": [
+          "talked=true"
+        ]
       },
-      {
-        "text": ["Good {time_of_day}, kind faithful! Have you need of the elevator? (This game makes use of keywords for dialog. Here, you can type 'yes' or 'no' to answer Dmitri's question.)"],
-        "conditions": [],
-        "events" : ["talked=true"]
-      }
-    ],
-    "job" : [
       {
         "text": [
-                  "I am a wizard of *Nertus*, kind faithful. I serve both She and our *king* however they bless me.", 
-                  "In this moment, I serve in this elevator. I pray to Her that it may move, and She graces my requests.",
-                  "Perhaps not the most glamorous role, but we are all clay to the *Eight*s' potters. Besides, I enjoy the silence. Wonderful as my children are, they can be... much."
-                ],
-      "conditions" : []
+          "Good {time_of_day}, kind faithful! Have you need of the elevator? (This game makes use of keywords for dialog. Here, you can type 'yes' or 'no' to answer Dmitri's question.)"
+        ],
+        "conditions": [],
+        "events": [
+          "talked=true"
+        ]
       }
     ],
-    "eight" : [
+    "job": [
       {
-        "text" : ["The Gods of Sewinso, of which *Nertus* is but one. Beyond this, I cannot say much more outside a *temple*. It is not my place."],
-        "condition" : []
+        "text": [
+          "I am a wizard of Nertus, kind faithful. I serve both She and our king however they bless me.",
+          "In this moment, I serve in this elevator. I pray to Her that it may move, and She graces my requests.",
+          "Perhaps not the most glamorous role, but we are all clay to the *Eight*s' potters. Besides, I enjoy the silence. Wonderful as my children are, they can be... much."
+        ],
+        "conditions": []
       }
     ],
-    "temple" : [
+    "eight": [
       {
-        "text" : [
+        "text": [
+          "The Gods of Sewinso, of which *Nertus* is but one. Beyond this, I cannot say much more outside a *temple*. It is not my place."
+        ],
+        "condition": []
+      }
+    ],
+    "temple": [
+      {
+        "text": [
           "Temples are where those weary of body or soul may find respite. They are also where, if prayed for by a head priest and one of the king's favor, the body and soul may be connected once more.",
           "Even if you are not weary, there can be much to learn from the priests and wizards teaching there.",
-          "There is, of course, a temple here in Kesvelt, on the *ground* floor. Would you like to visit?"
+          "There is, of course, a temple here in Kesvelt, on the ground floor. Would you like to visit?"
         ],
-        "conditions" : []
+        "conditions": []
       }
     ],
-    "nertus" : [
+    "nertus": [
       {
-        "text" : [
-                  "Nertus is one of the *Eight*. You may know Her as the God of stone and metal, perhaps of the Earth itself. Reductive, but She is not so tempremental as some.",
-                  "Do you wish to earn her favor, kind faithful?"
+        "text": [
+          "Nertus is one of the Eight. As I said, however, I cannot say more outside of a *temple*."
+        ]
+      },
+      {
+        "text": [
+          "Nertus is one of the *Eight*. You may know Her as the God of stone and metal, perhaps of the Earth itself. Reductive, but She is not so tempremental as some.",
+          "...Forgive me, kind faithful. I speak out of turn, it is not my place to preach of her outside of a temple. But I must know. Do you wish to earn her favor?"
         ],
-        "conditions" : ["have_quest=earn_favor"]
+        "conditions": [
+          "have_quest=earn_favor"
+        ]
       }
     ],
-    "yes" : [
+    "yes": [
       {
-        "text" : ["Excellent! I can take you to the archmage's *lab* at once! He'll be able to help you."],
-        "conditions" : ["have_quest=earn_favor", "last_dialog=Nertus"]
+        "text": [
+          "Excellent! I can take you to the archmage's *lab* at once! He'll be able to help you."
+        ],
+        "conditions": [
+          "have_quest=earn_favor",
+          "last_dialog=Nertus"
+        ]
       },
       {
-        "text" : ["Yes? Yes to what?"],
-        "conditions" : []
+        "text": [
+          "Yes? Yes to what?"
+        ],
+        "conditions": []
       }
     ],
-    "no" : [
+    "no": [
       {
-        "text" : ["A shame."],
-        "conditions" : ["have_quest=earn_favor", "last_dialog=nertus"]
+        "text": [
+          "A shame."
+        ],
+        "conditions": [
+          "have_quest=earn_favor",
+          "last_dialog=nertus"
+        ]
       },
       {
-        "text" : ["Where would you like to go, then? Or is there something you wish to discuss?"],
-        "conditions" : ["last_dialog=temple"]
+        "text": [
+          "Where would you like to go, then? Or is there something you wish to discuss?"
+        ],
+        "conditions": [
+          "last_dialog=temple"
+        ]
       },
       {
-        "text" : ["No? No what?"],
-        "conditions" : []
+        "text": [
+          "No? No what?"
+        ],
+        "conditions": []
       }
     ],
     "elevator": [
@@ -83,23 +118,46 @@
           "We have arrived.",
           "Do not hesitate to make use of my services in the future. It is an honor to serve my king and his faithful."
         ],
+        "conditions": [
+          "saw_bye_tutorial"
+        ],
         "events": [
           "elevator_change_tile=dmitri_elevator_door__wallbrick",
           "delayed_teleport=1500",
           "revert_map_tiles=true"
         ]
+      },
+      {
+        "text": [
+          "Kua stein. Kua stein.",
+          "Alkua stein. Kua stein.",
+          "We have arrived.",
+          "Do not hesitate to make use of my services in the future. It is an honor to serve my king and his faithful. (If you're done here, you can say *bye* to go along on your way. If you want to keep talking to Dmitri, you can ask him about his *job*. Not all keywords you can talk about with people will show up in their own dialog, but that one is a good place to get started.)"
+        ],
+        "events": [
+          "elevator_change_tile=dmitri_elevator_door__wallbrick",
+          "delayed_teleport=1500",
+          "set_flag=saw_bye_tutorial",
+          "revert_map_tiles=true"
+        ]
       }
     ],
-    "contextual_aliases" : {
-      "__hi__" : {
-        "yes" : "elevator"
+    "contextual_aliases": {
+      "__hi__": {
+        "yes": "elevator"
       }
     },
     "elevator_config": {
       "teleporters": "dmitri_elevators",
-      "confirm" : ["Very well. Sit then, and *pray* with me."],
-      "deny" : ["I don't know where that is, kind Faithful."],
-      "already_here" : ["We are already here, kind Faithful."],
+      "confirm": [
+        "Very well. Sit then, and *pray* with me."
+      ],
+      "deny": [
+        "I don't know where that is, kind Faithful."
+      ],
+      "already_here": [
+        "We are already here, kind Faithful."
+      ],
       "destinations": {
         "chambers": {
           "map": "Kesvelt_Royal_Hallway",
@@ -119,7 +177,7 @@
         "cookroom": "kitchen",
         "throne": "ground",
         "main hall": "ground",
-        "bedroom" : "chambers"
+        "bedroom": "chambers"
       },
       "contextual_aliases": {
         "temple": {

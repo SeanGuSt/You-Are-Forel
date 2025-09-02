@@ -1,0 +1,35 @@
+{
+    "meet_ginny" : {
+        "trigger" : "on_step",
+        "conditions" : ["have_item=armor_leather", "!met_ginny"],
+        "flags" : ["met_ginny"],
+        "script" : [
+            "text=???__Geronimooooooooo!!--dai",
+            "wait=1800",
+            "walk=leader__X4E1--40&&ginny_phitemos__S10--20",
+            "text=Ginny__Oof!!--dai",
+            "wait=2000",
+            "walk=ginny_phitemos__N1S1--40",
+            "text=Ginny__Down from the rafters, it's PhiteSirmaq!",
+            "text=???__(whimpering)",
+            "text=???__...",
+            "text=Ginny__Defeating evil floor shades one broken tooth at a time! We--",
+            "text=Ginny__Oh, hey Forel!",
+            "leader_wear=armor_pjs++text=Ginny__Haven't seen you in here for a while.",
+            "leader_wear=armor_none++text=Ginny__Haven't seen you in here for a while. Nice jonnies.",
+            "text=Ginny__You here to play Luchadores with us?",
+            "have_quest=assure_eraton++text=Ginny__Huh? Eraton just asked you to get your armor? Oh, right! That quest thingy you've been training for. You're actually gonna go through with it? That's so cool!",
+            "!have_quest=assure_eraton++text=Ginny__Huh? You're just here to grab your armor? Oh, right! That quest thingy you've been training for. You're really asking Eraton's permission today? That's so cool!",
+            "text=Ginny__You think PhiteSirmaq could go too? Ooh! and PhitePezpalda! Wouldn't that be great--",
+            "walk=ginny_phitemos__N1",
+            "walk=ginny_phitemos__S2",
+            "text=Ginny__PhitePezpalda?",
+            "walk=ginny_phitemos__N1",
+            "text=Ginny__...Maddy?",
+            "text=Maddy__I want my books.",
+            "text=Ginny__OK, maybe take a rain check on that. You, uh... you go do your thing. This may take a while.",
+            "walk=ginny_phitemos__S5",
+            "walk=ginny_phitemos__S19--1"
+        ]
+    }
+}

@@ -6,6 +6,7 @@ from objects.characters import Party, Character
 from dialog.dialog import DialogManager
 from events.cutscenes import CutsceneManager
 from objects.map_objects import Map, Node, NPC, Monster, ItemHolder, Teleporter, MapObject
+from objects.projectiles import BattleProjectile
 from options import GameOptions
 from combat import CombatManager
 
@@ -23,6 +24,40 @@ class Renderer:
         self.text_cache: dict[tuple[str, pygame.font.Font, tuple[int, int, int]], pygame.Surface] = {}
         self._fov_cache = None
         self._fov_cache_key = None
+
+    def smooth_movement(self, obj):
+        """Ultra-precise movement with explicit rounding control"""
+        timer_manager = self.engine.event_manager.timer_manager
+        
+        # Get the exact same timer and progress that the camera uses
+        actual_timer_name = self.engine.get_movement_timer_name(obj)
+        
+        if not timer_manager.is_active(actual_timer_name):
+            # No animation - use exact position
+            map_pos = obj.subtract_tuples(obj.position, self.engine.camera)
+            screen_x = int(round(map_pos[0] * TILE_WIDTH))
+            screen_y = int(round(map_pos[1] * TILE_HEIGHT))
+            return screen_x, screen_y
+        
+        # Get progress and ensure it's bounded
+        progress = timer_manager.get_progress(actual_timer_name)
+        
+        # Calculate interpolated world position
+        dx, dy = obj.subtract_tuples(obj.position, obj.old_position)
+        world_x = obj.old_position[0] + dx * progress
+        world_y = obj.old_position[1] + dy * progress
+        
+        # Convert to screen coordinates with consistent rounding
+        map_x = world_x - self.engine.camera[0]
+        map_y = world_y - self.engine.camera[1]
+        
+        screen_x = int(round(map_x * TILE_WIDTH))
+        screen_y = int(round(map_y * TILE_HEIGHT))
+
+        if progress >= 1.0:
+            obj.old_position = obj.position
+        
+        return screen_x, screen_y
         
     def render_map(self):
         game_map = self.engine.current_map
@@ -33,8 +68,8 @@ class Renderer:
         tile_offset_x = cam_x % 1  # fractional offset in tile
         tile_offset_y = cam_y % 1
 
-        pixel_offset_x = tile_offset_x * TILE_WIDTH
-        pixel_offset_y = tile_offset_y * TILE_HEIGHT
+        pixel_offset_x = int(tile_offset_x * TILE_WIDTH)
+        pixel_offset_y = int(tile_offset_y * TILE_HEIGHT)
 
         base_tile_x = int(cam_x)
         base_tile_y = int(cam_y)
@@ -43,12 +78,7 @@ class Renderer:
         observer_pos = self.engine.party.get_leader().position
         
         # Get visible positions
-        visible_positions = self.get_visible_positions(observer_pos, MAP_WIDTH)
-        
-        # Your existing render_map code, but add visibility checks:
-        game_map = self.engine.current_map
-        camera = self.engine.camera
-        # ... rest of your tile rendering code ...
+        #visible_positions = self.get_visible_positions(observer_pos, MAP_WIDTH)
         
         # When rendering tiles, check visibility:
         for y in range(y0, y1):
@@ -57,7 +87,7 @@ class Renderer:
                 map_y = base_tile_y + y
                 
                 # Only render if visible
-                if (map_x, map_y) in visible_positions:
+                if True:#(map_x, map_y) in visible_positions:
                     # Your existing tile rendering code
                     tile = game_map.get_tile_lower((map_x, map_y))
                     screen_x = x * TILE_WIDTH - pixel_offset_x
@@ -71,30 +101,6 @@ class Renderer:
 
                         if show_grid:
                             pygame.draw.rect(self.screen, BLACK, rect, 1)
-        def smooth_movement(timer_name: str, screen_x, screen_y, obj):
-            """Handle smooth movement animation using TimerManager progress"""
-            timer_manager = self.engine.event_manager.timer_manager
-            
-            if not timer_manager.is_active(timer_name):
-                return screen_x, screen_y
-                
-            # Get movement delta
-            dx, dy = obj.subtract_tuples(obj.position, obj.old_position)
-            
-            # Get progress (0.0 to 1.0)
-            progress = timer_manager.get_progress(timer_name)
-            
-            # Interpolate from old position to new position
-            # When progress = 0: show old position (full offset)
-            # When progress = 1: show new position (no offset)
-            screen_x -= dx * TILE_WIDTH * (1 - progress)
-            screen_y -= dy * TILE_HEIGHT * (1 - progress)
-            
-            # Clean up old position when animation completes
-            if progress >= 1.0:
-                obj.old_position = obj.position
-                
-            return screen_x, screen_y
 
         def bump_movement(screen_x, screen_y, obj):
             """Handle bump animation using TimerManager progress"""
@@ -133,12 +139,11 @@ class Renderer:
     
         # Render map objects
         timer_manager = self.engine.event_manager.timer_manager
-        
         for obj in game_map.objects:
             obj.update()
             if type(obj) == Node:  # No need to render nodes
                 continue
-            if obj.position not in visible_positions: 
+            if False:#obj.position not in visible_positions: 
                 continue
             elif obj.__is__(Character):  # If this is a party member other than the leader, don't render them outside of combat.
                 if (not self.engine.state == GameState.COMBAT and not obj == self.engine.party.get_leader()):
@@ -147,21 +152,13 @@ class Renderer:
             map_x, map_y = obj.subtract_tuples(obj.position, camera)
             
             if -1 <= map_x <= MAP_WIDTH and -1 <= map_y <= MAP_HEIGHT:
-                screen_x = map_x * TILE_WIDTH
-                screen_y = map_y * TILE_HEIGHT
+                screen_x, screen_y = obj.multiply_tuples((map_x, map_y), (TILE_WIDTH, TILE_HEIGHT))
                 obj_in_walkers = obj in self.engine.event_manager.walkers
                 
-                # Handle different types of movement animations
-                if obj_in_walkers and timer_manager.is_active(f"{obj.name}_knockback"):
-                    screen_x, screen_y = smooth_movement(f"{obj.name}_knockback", screen_x, screen_y, obj)
-                elif timer_manager.is_active("player_move"):
-                    screen_x, screen_y = smooth_movement("player_move", screen_x, screen_y, obj)
-                elif obj == self.engine.party.get_leader() and timer_manager.is_active("player_bump"):
+                if obj == self.engine.party.get_leader() and timer_manager.is_active("player_bump"):
                     screen_x, screen_y = bump_movement(screen_x, screen_y, obj)
-                elif obj_in_walkers and timer_manager.is_active("event_wait"):
-                    screen_x, screen_y = smooth_movement("event_wait", screen_x, screen_y, obj)
-                elif obj in self.engine.combat_manager.walkers and timer_manager.is_active("enemy_move"):
-                    screen_x, screen_y = smooth_movement("enemy_move", screen_x, screen_y, obj)
+                else:
+                    screen_x, screen_y = self.smooth_movement(obj)
                 
                 if obj.image:
                     if obj != self.engine.party.get_leader() or not self.engine.event_manager.make_leader_invisible:
@@ -246,20 +243,20 @@ class Renderer:
         self.screen.blit(title, (20, 20))
         
         gold_text = self.font.render(f"Gold: {party.gold}", True, YELLOW)
-        self.screen.blit(gold_text, (20, 50))
+        self.screen.blit(gold_text, (SCREEN_WIDTH//40, SCREEN_HEIGHT//12))
         
         y_offset = 90
         for item in party.inventory:
             item_text = self.small_font.render(f"{item.name} x{item.quantity}", self.engine.antialias_text, WHITE)
             desc_text = self.small_font.render(f"  {item.description}", True, GRAY)
             
-            self.screen.blit(item_text, (20, y_offset))
-            self.screen.blit(desc_text, (20, y_offset + 20))
+            self.screen.blit(item_text, (SCREEN_WIDTH//40, y_offset))
+            self.screen.blit(desc_text, (SCREEN_WIDTH//40, y_offset + 20))
             y_offset += 45
             
         # Instructions
         instruction = self.small_font.render("Press ESC to return", True, YELLOW)
-        self.screen.blit(instruction, (20, SCREEN_HEIGHT - 30))
+        self.screen.blit(instruction, (SCREEN_WIDTH//40, 19*SCREEN_HEIGHT//20))
     
     def render_equipment_menu(self):
         party = self.engine.party
@@ -313,28 +310,27 @@ class Renderer:
                 y_offset += 25
             
             # Equipment list (when selecting equipment to equip)
-            if show_equipment_list:
-                available_text = self.font.render("Available Equipment:", self.engine.antialias_text, WHITE)
-                self.screen.blit(available_text, (20, 300))
+            available_text = self.font.render("Available Equipment:", self.engine.antialias_text, WHITE)
+            self.screen.blit(available_text, (20, 300))
+            
+            current_slot = list(EquipmentSlot)[selected_slot]
+            available_equipment = [eq for eq in party.inventory 
+                                    if eq.slot == current_slot]
+            
+            for i, equipment in enumerate(available_equipment):
+                color = YELLOW if i == selected_equipment and show_equipment_list else WHITE
+                eq_text = equipment.name
+                if equipment.slot == EquipmentSlot.WEAPON:
+                    eq_text += f" (Power: {equipment.power})"
+                elif equipment.slot == EquipmentSlot.ARMOR:
+                    eq_text += f" (Guard: {equipment.guard})"
                 
-                current_slot = list(EquipmentSlot)[selected_slot]
-                available_equipment = [eq for eq in party.inventory 
-                                     if eq.slot == current_slot]
-                
-                for i, equipment in enumerate(available_equipment):
-                    color = YELLOW if i == selected_equipment else WHITE
-                    eq_text = equipment.name
-                    if equipment.slot == EquipmentSlot.WEAPON:
-                        eq_text += f" (Power: {equipment.power})"
-                    elif equipment.slot == EquipmentSlot.ARMOR:
-                        eq_text += f" (Guard: {equipment.guard})"
-                    
-                    rendered = self.small_font.render(eq_text, True, color)
-                    self.screen.blit(rendered, (40, 330 + i * 25))
-                
-                if not available_equipment:
-                    no_eq_text = self.small_font.render("No equipment available for this slot", True, GRAY)
-                    self.screen.blit(no_eq_text, (40, 330))
+                rendered = self.small_font.render(eq_text, True, color)
+                self.screen.blit(rendered, (40, 330 + i * 25))
+            
+            if not available_equipment:
+                no_eq_text = self.small_font.render("No equipment available for this slot", True, GRAY)
+                self.screen.blit(no_eq_text, (40, 330))
         
         # Instructions
         instructions = [
@@ -507,7 +503,7 @@ class Renderer:
     def render_dialog(self):
         dialog_manager = self.engine.dialog_manager
         # Render current dialog line
-        current_line = dialog_manager.get_current_line()
+        current_line = dialog_manager.current_line
         # Get speaker name
         speaker_name = ""
         if "__" in current_line:
@@ -521,7 +517,7 @@ class Renderer:
         dialog_rect = self.render_bottom_text_box(speaker_name, current_line)
 
         # Show input area if awaiting input
-        if dialog_manager.awaiting_input:
+        if dialog_manager.awaiting_keyword:
             input_y = dialog_rect.y + dialog_rect.height - 35
             input_rect = pygame.Rect(dialog_rect.x + 10, input_y, dialog_rect.width - 20, 25)
             pygame.draw.rect(self.screen, (20, 20, 40), input_rect)
@@ -545,7 +541,25 @@ class Renderer:
             else:
                 continue_text = self.get_cached_text("Press SPACE to continue...", self.small_font, GRAY)
             self.screen.blit(continue_text, (dialog_rect.x + 10, dialog_rect.y + dialog_rect.height - 25))
-
+    def render_debug(self):
+        dialog_manager = self.engine.dialog_manager
+        dialog_rect = self.render_bottom_text_box("Debug Input", "")
+        input_y = dialog_rect.y + dialog_rect.height - 35
+        input_rect = pygame.Rect(dialog_rect.x + 10, input_y, dialog_rect.width - 20, 25)
+        pygame.draw.rect(self.screen, (20, 20, 40), input_rect)
+        pygame.draw.rect(self.screen, WHITE, input_rect, 1)
+        
+        # Render user input
+        input_text = self.font.render(dialog_manager.user_input, self.engine.antialias_text, WHITE)
+        self.screen.blit(input_text, (input_rect.x + 5, input_rect.y + 3))
+        
+        # Render blinking cursor
+        dialog_manager.cursor_blink += 1
+        if dialog_manager.cursor_blink % 60 < 30:  # Blink every second
+            cursor_x = input_rect.x + 5 + self.font.size(dialog_manager.user_input)[0]
+            pygame.draw.line(self.screen, WHITE, 
+                            (cursor_x, input_rect.y + 3), 
+                            (cursor_x, input_rect.y + input_rect.height - 3), 2)
     def render_event_dialog(self):
         event_manager = self.engine.event_manager
         try:
@@ -583,9 +597,14 @@ class Renderer:
         # Draw dialog box background
         pygame.draw.rect(self.screen, (40, 40, 60), dialog_rect)
         pygame.draw.rect(self.screen, WHITE, dialog_rect, 2)
-        if self.engine.state in [GameState.EVENT, GameState.DIALOG]:
+        if self.engine.state in [GameState.TOWN]:
+            current_line = ""
+            for i in range(5):
+                current_line += " --n " + self.engine.messages[i]
+        if self.engine.state in [GameState.EVENT, GameState.DIALOG, GameState.TOWN, GameState.COMBAT]:
             # Render speaker name
-            self.draw_text_with_outline(f"{speaker_name}:", self.font, dialog_rect.x + 10, dialog_rect.y + 10, YELLOW)
+            if speaker_name:
+                self.draw_text_with_outline(f"{speaker_name}:", self.font, dialog_rect.x + 10, dialog_rect.y + 10, YELLOW)
             if current_line:
                 
                 lines = self._wrap_text(current_line, self.font, dialog_rect.width - 40)
@@ -637,10 +656,13 @@ class Renderer:
             self.screen.blit(rendered, (MAP_VIEW_WIDTH + 10, 50*i + TILE_HEIGHT))
             rendered = self.get_cached_text(f"HP: {character.hp}/{character.max_hp}", self.side_font, WHITE)
             self.screen.blit(rendered, (MAP_VIEW_WIDTH + 10, side_font_height + 2 + 50*i + TILE_HEIGHT))
+            virtue_penalty_text = ""
             for type, virtue in character.virtue_manager.virtues.items():
                 if virtue.overuse_points:
-                    rendered = self.get_cached_text(f"{type.value}: {virtue.overuse_points}/{virtue.get_threshold()}", self.side_font, WHITE)
-                    self.screen.blit(rendered, (MAP_VIEW_WIDTH + 10, 2*side_font_height + 2 + 50*i + TILE_HEIGHT))
+                    virtue_penalty_text += f"{type.value[0].capitalize()}: {virtue.overuse_points}/{virtue.get_threshold()} "
+            if virtue_penalty_text:
+                rendered = self.get_cached_text(virtue_penalty_text, self.side_font, WHITE)
+                self.screen.blit(rendered, (MAP_VIEW_WIDTH + 10, 2*side_font_height + 2 + 50*i + TILE_HEIGHT))
             if character.image:
                 self.screen.blit(character.image, (SCREEN_WIDTH - TILE_WIDTH, 20 + 50*i + TILE_HEIGHT))
         rendered = self.get_cached_text(f"{self.engine.schedule_manager.current_game_time}", self.side_font, WHITE)
@@ -687,7 +709,7 @@ class Renderer:
                     x += sx
                     err += dy
 
-    def get_visible_positions(self, observer_pos, max_distance=3):
+    def get_visible_positions(self, observer_pos, max_distance=3) -> set:
         """
         Perimeter raycast FOV:
         - cast one Bresenham ray to every tile on the perimeter of the square/circle of radius `max_distance`

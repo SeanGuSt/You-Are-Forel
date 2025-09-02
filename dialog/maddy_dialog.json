@@ -1,0 +1,115 @@
+{
+  "maddy": {
+    "__hi__": [
+      {
+        "text": [
+          "Oh, Forel! Uh, good-- good {time_of_day}."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "text": [
+          "My job is talking to you."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "king": [
+      {
+        "text": [
+          "His Majesty?",
+          "...",
+          "...Honestly? Eraton is wonderful. I always had trouble saying no to people, even before my parents gave me away. --n When I learned what was expected of me as faithful, I...",
+          "But it hasn't been like I feared. Not at all. Eraton, it's like he has a sixth sense for how I feel. I've never had to say no to him because he just... well, knows."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "sixth sense": [
+      {
+        "text": [
+          "You've never noticed? The way Eraton can sometimes tell what you're thinking or feeling?",
+          "I'd read the stories of Queen Felt, but just thought that's all they were, stories. It makes me wonder what other kinds of abilities His Majesty is hiding.",
+          "...That didn't sound dirty, did it? I'm sorry if it did! I don't-- well, I mean I do... sometimes... uh um I-I-I-I-- So, anything *interesting* happen today?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "interesting": [
+      {
+        "text": [
+          "There was an accident outside? Someone was burned alive? Oh. Oh, gods. --n Y-you're going to help them, right, Forel? I-I know it's too late, but, you can at least find out what happened, can't you?"
+        ],
+        "conditions": [
+          "saw_jin_shi_die|updated_burning student"
+        ],
+        "events": []
+      }
+    ],
+    "yes": [
+      {
+        "text": [
+          "Oh, Forel, you're wonderful! If you need any help, anything at all, just tell me. --n I mean... I'm only really good with *book*s, but..."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "no": [],
+    "show burnt book cover": [
+      {
+        "text": [
+          ""
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ]
+  },
+  "maddy#phitemos": {
+    "__hi__": [
+      {
+        "text": [
+          "Oh, Forel! Uh, good-- good {time_of_day}."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "text": [
+          "My job is"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ]
+  },
+  "maddy#bookstore": {
+    "__hi__": [
+      {
+        "text": [
+          "Oh, Forel! Uh, good-- good {time_of_day}."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "text": [
+          "My job is"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ]
+  }
+}

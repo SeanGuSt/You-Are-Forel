@@ -52,11 +52,25 @@ def equipment_menu_inputs(self: 'GameEngine', event):
             self.show_equipment_list = False
 
 def inventory_menu_inputs(self: 'GameEngine', event):
-    if event.key == pygame.K_ESCAPE:
-        self.revert_state()
-    elif event.key == pygame.K_e:
-        self.state = GameState.MENU_EQUIPMENT
-        self.show_equipment_list = True
+    inventory = self.party.inventory
+    match event.key:
+        case pygame.K_ESCAPE:
+            if not self.picking_item_to_show:
+                self.revert_state()
+                self.show_equipment_list = False
+        case pygame.K_e:
+            if not self.picking_item_to_show:
+                self.state = GameState.MENU_EQUIPMENT
+                self.show_equipment_list = True
+        case pygame.K_UP:
+            self.selected_equipment = (self.selected_equipment - 1) % len(inventory)
+        case pygame.K_DOWN:
+            self.selected_equipment = (self.selected_equipment + 1) % len(inventory)
+        case pygame.K_RETURN:
+            if self.picking_item_to_show:
+                self.state = GameState.DIALOG
+                self.picking_item_to_show = False
+                self.dialog_manager.user_input = inventory[self.selected_equipment].name
 
 def stats_menu_inputs(self: 'GameEngine', event):
     if event.key == pygame.K_ESCAPE:
@@ -84,7 +98,7 @@ def equip_selected_item(self: 'GameEngine'):
         if previously_equipped:
             self.party.add_item(previously_equipped)
         
-        print(f"{current_member.name} equipped {equipment_to_equip.name}")
+        self.append_to_message_log(f"{current_member.name} equipped {equipment_to_equip.name}")
         self.show_equipment_list = False
 
 def unequip_selected_item(self: 'GameEngine'):
@@ -99,4 +113,4 @@ def unequip_selected_item(self: 'GameEngine'):
     
     if unequipped_item:
         self.party.add_item(unequipped_item)
-        print(f"{current_member.name} unequipped {unequipped_item.name}")
+        self.append_to_message_log(f"{current_member.name} unequipped {unequipped_item.name}")

@@ -31,15 +31,15 @@ from inputs.combat_ui_inputs import combat_inputs
 from inputs.travel_ui_inputs import travel_inputs
 from inputs.quest_ui_inputs import quest_log_inputs
 from inputs.events_inputs import events_inputs
+from inputs.debug_inputs import debug_inputs
 
 
 # Initialize Pygame
 pygame.init()
 pygame.mixer.init()
 pygame.key.set_repeat(DEFAULT_INPUT_REPEAT_DELAY, DEFAULT_INPUT_REPEAT_INTERVAL)
-init_map = "Kesvelt_Royal_Hallway"
+init_map = "Battle Test Map"
 init_time = 420#in minutes
-init_quest = "get_eratons_blessing"
 init_cutscene = ""
 
 class GameEngine:
@@ -47,7 +47,7 @@ class GameEngine:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption(GAME_TITLE)
         self.clock = pygame.time.Clock()
-        self.FPS = 240
+        self.FPS = 60
         self.running = True
         self.antialias_text = True
         # Game state
@@ -81,6 +81,8 @@ class GameEngine:
         self.selected_slot = 0
         self.selected_equipment = 0
         self.show_equipment_list = False
+        self.picking_item_to_show = False
+        self.messages = ["", "", "", "", ""]
 
         self.combat_manager = CombatManager(self)
         self.attack_mode = False
@@ -89,6 +91,7 @@ class GameEngine:
         self.spell_input_mode = False
         self.spell_direction_mode = False
         self.spell_target_mode = False
+        self.spell_self_mode = False
         self.use_range = -1
         self.cursor_position = None
         self.oops = False
@@ -138,7 +141,9 @@ class GameEngine:
         print(f"state is now {self.state}")
 
     def revert_state(self):
+        state_copy = GameState(self.state.value)
         self.state = self.previous_state
+        self.previous_state = state_copy
         print(f"state is now {self.state}")
         
     def start_new_game(self):
@@ -164,6 +169,7 @@ class GameEngine:
         self.current_map = self.maps[init_map]
         party_leader = self.party.get_leader()
         new_game_spawner = self.current_map.get_object_by_name(NEW_GAME_SPAWNER)
+        party_leader.init_position = new_game_spawner.position
         party_leader.position = new_game_spawner.position
         party_leader.map = self.current_map
         for i in self.party.members:
@@ -175,9 +181,6 @@ class GameEngine:
         else:
             self.state = GameState.TOWN
         self.previous_state = GameState.TOWN
-
-        if init_quest in self.quest_log.quests:
-            self.quest_log.quests[init_quest].started = True
         
     def load_map(self, map_name: str, updated_objs: dict = {}):
         """Load a map from files"""
@@ -199,6 +202,7 @@ class GameEngine:
         if target_map not in self.maps:#self.maps is a dictionary of maps
             if not self.load_map(target_map):
                 return
+        #If the teleport happens mid dialog, be sure the npc being spoken to has a version of itself on the new map.
         talker = self.dialog_manager.current_speaker
         talking_to_someone = talker and self.state == GameState.DIALOG
         # Switch to target map
@@ -206,6 +210,8 @@ class GameEngine:
             self.current_map.objects.remove(i)
         self.current_map = self.maps[target_map]
         npc_move_intervals = {}
+        for obj in self.current_map.get_objects_at((-99, -99)):
+            obj.on_map_load()
         for obj in self.current_map.get_objects_subset(MapObject):
             npc_move_intervals[obj.name] = obj.move_interval
         results = self.schedule_manager.process_map_load(npc_move_intervals)
@@ -235,6 +241,8 @@ class GameEngine:
             if new_talker:
                 self.dialog_manager.current_speaker = new_talker
                 return
+            else:
+                raise Exception(f"A MapObject with the same name as {talker.name} should be present when warping to {self.current_map.name} during dialog.")
         elif "combat" in target_map:
             self.combat_manager.enter_combat_mode(teleporter.args.get("allies_in_combat", []))
         else:
@@ -248,17 +256,6 @@ class GameEngine:
         for obj in objects_at_position:
             if obj.__is__(Teleporter):
                 self.handle_teleporter(obj)
-                break
-            elif obj.__is__(Item):
-                # Pick up item
-                item = Item(
-                    name=obj.args.get("name", "Unknown Item"),
-                    description=obj.args.get("description", "A mysterious item"),
-                    value=obj.args.get("value", 0)
-                )
-                self.party.add_item(item)
-                self.current_map.remove_object(obj)
-                print(f"Picked up: {item.name}")
                 break
             event_start = obj.args.get("event_start", "")
             
@@ -292,6 +289,58 @@ class GameEngine:
             obj.move_one_step()
 
     #@time_function("Updating camera")
+    def get_movement_timer_name(self, entity):
+        """Get the correct timer name for an entity's movement"""
+        timer_manager = self.event_manager.timer_manager
+        
+        # Check in priority order (same as your renderer logic)
+        obj_in_walkers = entity in self.event_manager.walkers
+        
+        # 1. Knockback has highest priority
+        if obj_in_walkers and timer_manager.is_active(f"{entity.name}_knockback"):
+            return f"{entity.name}_knockback"
+        
+        # 2. Player movement
+        elif timer_manager.is_active("player_move"):
+            return "player_move"
+        
+        # 3. Player bump (only for leader)
+        elif entity == self.party.get_leader() and timer_manager.is_active("player_bump"):
+            return "player_bump"
+        
+        # 4. Event movement for walkers
+        elif obj_in_walkers and timer_manager.is_active(f"event_wait_{entity.name}"):
+            return f"event_wait_{entity.name}"
+        
+        # 5. Combat/enemy movement
+        elif entity in self.combat_manager.walkers and timer_manager.is_active("enemy_move"):
+            return "enemy_move"
+        
+        # 6. Fallback - no active movement
+        else:
+            return None
+    
+    def get_interpolated_position(self, entity):
+        """Get the interpolated position for an entity, handling all timing logic centrally"""
+        timer_name = self.get_movement_timer_name(entity)
+        
+        # If no active movement timer, return current position
+        if timer_name is None:
+            return entity.position
+        
+        # Special handling for bump movement (doesn't use interpolation the same way)
+        if timer_name == "player_bump":
+            return entity.position  # Let bump_movement handle this separately
+            
+        progress = self.event_manager.timer_manager.get_progress(timer_name, False)
+        
+        if progress >= 1.0:
+            return entity.position
+            
+        # Calculate delta and interpolate
+        delta = entity.subtract_tuples(entity.position, entity.old_position)
+        return entity.add_tuples(entity.old_position, entity.multiply_tuples(delta, progress))
+    
     def update_camera(self):
         leader = self.party.get_leader()
         if not leader:
@@ -300,26 +349,27 @@ class GameEngine:
             else:
                 raise ValueError
         
-        current_pos = leader.position
+        # Get interpolated position using centralized method
+        current_pos = self.get_interpolated_position(leader)
         
-        # Only interpolate if the LEADER is actively moving
-        progress = self.event_manager.timer_manager.get_progress("player_move", False)
-        current_pos = leader.position
-        if leader in self.event_manager.walkers:
-            progress = self.event_manager.timer_manager.get_progress("event_wait", False)
-        if progress < 1.0:
-            delta = leader.subtract_tuples(leader.position, leader.old_position)
-            current_pos = leader.add_tuples(leader.old_position, leader.multiply_tuples(delta, progress))
-
         # Center camera on leader (with sub-tile precision)
-        camera = leader.subtract_tuples(current_pos, (MAP_WIDTH / 2, MAP_HEIGHT / 2))
-
+        # Use integer division to avoid floating point precision issues
+        camera_x = current_pos[0] - MAP_WIDTH // 2
+        camera_y = current_pos[1] - MAP_HEIGHT // 2
+        
+        # Handle odd MAP dimensions to maintain consistent centering
+        if MAP_WIDTH % 2 == 1:
+            camera_x -= 0.5
+        if MAP_HEIGHT % 2 == 1:
+            camera_y -= 0.5
+        
         # Clamp to map bounds (allowing partial tile views)
         max_cam_x = self.current_map.width - MAP_WIDTH
         max_cam_y = self.current_map.height - MAP_HEIGHT
+        
         self.camera = (
-            max(0, min(max_cam_x, camera[0])),
-            max(0, min(max_cam_y, camera[1])),
+            max(0.0, min(float(max_cam_x), camera_x)),
+            max(0.0, min(float(max_cam_y), camera_y)),
         )
         
     def try_talk_to_object(self, obj: NPC):
@@ -327,7 +377,7 @@ class GameEngine:
             return False
         if self.dialog_manager.start_dialog(obj):
             self.change_state(GameState.DIALOG)
-            self.sprite_db.get_sprite(self.party.get_leader(), new_col = 3)
+            self.party.get_leader().state = ObjectState.TALK
             return True
         
         return False  # No talkable object found
@@ -370,6 +420,7 @@ class GameEngine:
             old_map = self.current_map.name
             # Handle the teleportation to combat map
             self.handle_teleporter(obj)
+            edge_teleporter = self.map_obj_db.create_obj("edge_teleporter", "node", {"x" : -99, "y" : -98, "args" : {}})
             self.current_map.create_ring_of_return_teleporters(old_map)
             return True
         return False
@@ -380,9 +431,6 @@ class GameEngine:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            
-            
-                
             elif event.type == pygame.KEYDOWN:
                 match self.state:
                     case GameState.MAIN_MENU:
@@ -399,8 +447,10 @@ class GameEngine:
                         inventory_menu_inputs(self, event)
                     case GameState.MENU_QUEST_LOG:
                         quest_log_inputs(self, event)
+                    case GameState.DEBUG:
+                        debug_inputs(self, event)
                     case GameState.DIALOG:
-                        if "teleporter" in self.event_manager.delayed_events:
+                        if "teleporter" in self.event_manager.delayed_events or not self.dialog_manager.waiting_for_input:
                             continue
                         dialog_inputs(self, event)
                     case GameState.EVENT:
@@ -418,7 +468,7 @@ class GameEngine:
                                     self.cutscene_manager.end_scene()
                                     self.revert_state()
                     case GameState.COMBAT:
-                        if self.event_manager.walkers or not self.combat_manager.player_turn or self.combat_manager.attack_frame:
+                        if self.event_manager.walkers or not self.combat_manager.player_turn or self.combat_manager.attack_frame or self.combat_manager.player_made_move:
                             continue
                         combat_inputs(self, event)
                     case GameState.TOWN:
@@ -464,6 +514,10 @@ class GameEngine:
                 self.options = GameOptions.from_dict(options_data)
         except Exception as e:
             print(f"Error loading options: {e}")
+
+    def append_to_message_log(self, text):
+        self.messages.pop(0)
+        self.messages.append(text)
     
     def handle_save_load_selection(self):
         """Handle save/load menu selection"""
@@ -494,8 +548,6 @@ class GameEngine:
                     print(f"Error loading save: {e}")
 
     def update(self, update_dict: dict = {}):
-        if self.current_map and self.party:
-            self.update_camera()
         movement_penalty = update_dict.get("movement_penalty", 0)#If no time passes, the world shouldn't change.
         if movement_penalty:
             self.update_world_after_action(movement_penalty)
@@ -509,6 +561,7 @@ class GameEngine:
             case GameState.MENU_STATS:
                 self.renderer.render_stats_menu()
             case GameState.MENU_INVENTORY:
+                print("HELLO")
                 self.renderer.render_inventory_menu()
             case GameState.MENU_OPTIONS:
                 self.renderer.render_options_menu()
@@ -532,6 +585,14 @@ class GameEngine:
             case GameState.CUTSCENE:
                 self.screen.fill(BLACK)
                 self.renderer.render_cutscene()
+            case GameState.DEBUG:
+                # Render game world in background
+                self.screen.fill(BLACK)
+                if self.current_map and self.party:
+                    self.renderer.render_map()
+                    
+                    self.renderer.render_sidebar_stats()
+                self.renderer.render_debug()
             case GameState.EVENT:
                 # Render game world in background
                 self.screen.fill(BLACK)
@@ -561,43 +622,41 @@ class GameEngine:
     
     #@time_function("This frame")
     def while_running(self):
-        if not self.event_manager.timer_manager.is_active("player_move") and self.current_map:
-            for obj in self.current_map.get_objects_subset(Missile):
-                if obj.destroy_after_use:
-                    obj.destroy()
         if self.current_map:
-            if self.event_manager.timer_manager.get_progress("player_move", False) >= 1.0 and self.state == GameState.TOWN:
-                if self.state in [GameState.TOWN, GameState.COMBAT]:
-                    self.sprite_db.get_sprite(self.party.get_leader(), new_col = 0)
+            self.update_camera()
+            if not self.event_manager.timer_manager.is_active("player_move"):
+                for obj in self.current_map.get_objects_subset(Missile):
+                    if obj.destroy_after_use:
+                        obj.destroy()
+                    
                 start_event = self.event_manager.delayed_events.get("event_start", "")
                 if start_event:
                     self.event_manager.delayed_events.pop("event_start")
                     self.event_manager.start_event(start_event, self.event_manager.event_master, True)
             if self.event_manager.delayed_events:
-                if "event_start" in self.event_manager.delayed_events and self.dialog_manager.awaiting_input:
+                if "event_start" in self.event_manager.delayed_events and self.dialog_manager.awaiting_keyword:
                     event = self.event_manager.delayed_events.pop("event_start")
                     self.event_manager.start_event(event, self.event_manager.event_master, True)
-                    
                 elif "teleporter" in self.event_manager.delayed_events:
                     if self.event_manager.timer_manager.get_progress("teleporter_delay") >= 1.0:
                         self.handle_teleporter(self.event_manager.delayed_events["teleporter"], True)
                         self.event_manager.delayed_events = {}
                         self.dialog_manager.current_line_index += 1
+                        self.dialog_manager.current_line = self.dialog_manager.get_current_line()
         input_results_for_updates = self.handle_input()
         self.update(input_results_for_updates)
+        any_active = self.event_manager.timer_manager.any_active()
+        if self.dialog_manager.current_lines:
+            self.dialog_manager.advance_dialog()
         if self.event_manager.current_event_queue:
             self.event_manager.advance_queue()
-        if self.state in [GameState.EVENT , GameState.DIALOG]:
-            if self.event_manager.walkers:
-                self.event_manager.continue_walk()
-        if self.state == GameState.COMBAT:
-            self.combat_manager.end_push()
+        if self.event_manager.walkers:
+            self.event_manager.continue_walk()
+        if self.state == GameState.COMBAT and not any_active:
+            self.combat_manager.advance_turn()
             if self.combat_manager.player_turn:
                 self.combat_manager.update_special()
-            if not (self.combat_manager.player_turn or self.event_manager.timer_manager.is_active("player_move")):
-                self.combat_manager.update_enemy_turn()
         self.render()
-        
         self.clock.tick(self.FPS)  # Cap to 60 FPS
         
     def run(self):

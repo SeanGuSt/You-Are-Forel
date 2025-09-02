@@ -104,6 +104,7 @@ class QuestLog:
             if quest_name in self.quests:
                 quest = self.quests[quest_name]
                 if step_name in quest.steps:
+                    print(f"{step_name} completed")
                     step = quest.steps[step_name]
                     step.started = True #Since quest steps won't show up until the quest itself is started, it's fine to show this.
                     if did_succeed:

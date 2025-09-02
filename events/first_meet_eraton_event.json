@@ -1,10 +1,8 @@
 {
     "first_meet_eraton" : {
-        "destroy_trigger_object" : "after_trigger",
         "trigger" : "on_step",
-        "conditions" : ["!leader_wear=acc_harem_robe|acc_harem_robe_adult"],
+        "conditions" : ["!leader_wear=acc_harem_robe|acc_harem_robe_adult", "!attacked_by_eratons_guards"],
         "flags" : ["attacked_by_eratons_guards"],
-        "destroy_even_if_conditions_fail" : true,
         "script" : [
             "text=???__HALT!!",
             "walk=cutscene_guard_a__W2S1",

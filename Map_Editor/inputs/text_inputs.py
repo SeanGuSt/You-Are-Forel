@@ -17,27 +17,45 @@ def input_new_tile_inputs(self: 'MapEditor', event):
                             print(f"{self.input1} is not a valid tile.")
                             return
                         self.tile_map[self.input0] = self.input1
+                        self.tile_map = dict(sorted(self.tile_map.items(), key=lambda item: item[1]))
                         self.char_list = list(self.tile_map.keys())
-                        self.char_list.sort()
                         self.state = EditState.TILE
                         self.input_field = 0
                         self.input1 = ""
+                        self.tile_search = ""
         case pygame.K_ESCAPE:
             self.state = self.previous_state
             self.input_field = 0
             self.input1 = ""
+        case pygame.K_LEFT | pygame.K_RIGHT:
+            self.tile_search = ""
+            len_all_tiles = len(self.tile_types)
+            check = True
+            if event.key == pygame.K_LEFT:
+                while check:
+                    self.all_tiles_index = (self.all_tiles_index - 1) % len_all_tiles
+                    check = self.tile_types[self.all_tiles_index] in self.tile_map.values()
+            else:
+                while check:
+                    self.all_tiles_index = (self.all_tiles_index + 1) % len_all_tiles
+                    check = self.tile_types[self.all_tiles_index] in self.tile_map.values()
+            self.input1 = self.tile_types[self.all_tiles_index]
         case pygame.K_BACKSPACE:
-            if self.input1 and self.input_field == 1:
-                self.input1 = self.input1[:-1]
-            elif self.input0 and self.input_field == 0:
+            if self.input0 and self.input_field == 0:
                 input0 = input0[:-1]
-        case pygame.K_TAB:
-            self.input_field = 1 - self.input_field  # Toggle between 0 and 1
         case _:
             if self.input_field == 0 and len(self.input0) < 1:
                 self.input0 += event.unicode
-            elif self.input_field == 1 and len(self.input1) < 20:
-                self.input1 += event.unicode
+            else:
+                self.tile_search += event.unicode
+                index = next((i for i, s in enumerate(self.tile_types) if s.startswith(self.tile_search) and s not in self.tile_map.values()), -1)
+                if index < 0:
+                    self.tile_search = self.tile_search[:-1]
+                else:
+                    self.all_tiles_index = index
+                self.input1 = self.tile_types[self.all_tiles_index]
+                    
+
 def input_new_objects_inputs(self: 'MapEditor', event):
     match event.key:
         case pygame.K_RETURN:

@@ -15,7 +15,7 @@ from Map_Editor.inputs.text_inputs import input_new_tile_inputs, input_new_objec
 from Map_Editor.inputs.mouse_inputs import place_or_move_object, place_tile, move_ghost, drag_paint_tiles
 
 pygame.init()
-map_name = "Kesvelt_Phitemos_Chambers"
+map_name = "Battle Test Map"
 FONT = pygame.font.SysFont(None, 18)
 pygame.key.set_repeat(600, 200)
 
@@ -30,6 +30,7 @@ class MapEditor:
         # Add undo/redo stacks
         self.undo_stack = []
         self.redo_stack = []
+        
 
         #Databases
         self.odb = MapObjectDatabase(GameEngine)
@@ -47,6 +48,10 @@ class MapEditor:
         self.ascii_map = [[]]
         self.tile_map = {}
         self.char_list = []
+        self.tile_types = list(self.tdb.tiles.keys())
+        self.tile_types.sort()
+        self.all_tiles_index = 0
+        self.tile_search = ""
         self.objects_data = {}
         self.object_types = list(self.odb.obj_templates.keys())
         self.object_types.sort()
@@ -106,8 +111,8 @@ class MapEditor:
 
         with open(self.tiles_path) as f:
             self.tile_map = json.load(f)
+            self.tile_map = dict(sorted(self.tile_map.items(), key=lambda item: item[1]))
         self.char_list = list(self.tile_map.keys())
-        self.char_list.sort()
 
         with open(self.objects_path) as f:
             self.objects_data = json.load(f)

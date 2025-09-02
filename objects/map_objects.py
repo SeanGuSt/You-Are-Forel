@@ -10,6 +10,8 @@ import copy
 from objects.characters import Character
 from objects.object_templates import Node, Monster, MapObject, Teleporter, Chest, NPC, ItemHolder, NODE_REGISTRY
 from objects.object_basics import BedBasic, BedRoyal, DoorBasic
+import objects.monsters
+import objects.projectiles
 #from map_objects import MapObject  # for circular dep. resolution if needed
 if TYPE_CHECKING:
     from ultimalike import GameEngine
@@ -128,6 +130,7 @@ class Map:
     @classmethod
     def load_from_files(cls, map_name: str, map_obj_db: MapObjectDatabase, tile_db: TileDatabase, engine: 'GameEngine', objects_data: dict = None):
         """Load map from ASCII file and JSON mapping file"""
+        print(map_name)
         map_folder = os.path.join(MAPS_DIR, map_name)
         map_file = os.path.join(map_folder, f"map_{map_name}.txt")
         mapping_file = os.path.join(map_folder, f"tiles_{map_name}.json")
@@ -177,6 +180,9 @@ class Map:
                 map_object.map = game_map
                 game_map.add_object(map_object)
         return game_map
+    
+    def in_map_range(self, pos: tuple[int, int]):
+        return pos[0] in range(self.width) and pos[1] in range(self.height)
     
     def create_ring_of_return_teleporters(self, old_map: str, map_obj_db: MapObjectDatabase):
         map_x = len(self.tiles)

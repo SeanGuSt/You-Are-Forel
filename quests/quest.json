@@ -1,22 +1,18 @@
 {
-    "earn_favor" : {
-        "name" : "Earn Favor",
-        "description" : "Travel about Sewinso and earn the favor of the Eight.",
+    "learn_quest_log" : {
+        "name" : "Logging Your Adventures",
+        "description" : "This is your personal quest journal! I know you like keeping things organized, so it's divided into three sections: Quests, Steps, and Hints. This is the Quest section, which gives you a general overview of what you need to do. Press 'Tab' to head to the 'Steps' section.",
         "steps" : {
-
+            "view_steps" : {
+                "name" : "Steps Tab",
+                "description" : "",
+                "started" : true
+            }
         },
         "hints" : {
-
-        }
-
-    },
-    "get_eratons_blessing" : {
-        "name" : "Receive Eraton's Blessing",
-        "description" : "Even if you are your king's favorite, you are still a faithful of the Phitemos. Before you can go anywhere outside the city walls, you require his blessing. Receiving this blessing will be easy. The hard part will be looking your beloved king in the eyes and asking for it.",
-        "steps" : {
-            "train_weapons" : {
-                "name" : "The Hard Part",
-                "description" : "Just say it. That's all you need to do. Just look him in the eye, and say you need to leave, that this is a journey you need to take.",
+            "view_hints" : {
+                "name" : "Hints Tab",
+                "description" : "",
                 "started" : true
             }
         }
@@ -25,6 +21,11 @@
         "name" : "The Quest to Assure Eraton",
         "description" : "You already have permission to leave, but doing this before you go will keep your king's mind at ease.",
         "steps" : {
+            "look_at_quest_log" : {
+                "name" : "Learn to Use This Journal",
+                "description" : "Eraton gave you a journal to record your journey and your quests in.",
+                "started" : true
+            },
             "get_dressed" : {
                 "name" : "Dress to Impress",
                 "description" : "Your king wishes to see you properly clothed before anything else. ...Honestly, you're lucky he's so fond of you. Walking out like you just woke up and requesting the boon of a journey across the kingdom? He would've been right to lock you away in the crazy house."
@@ -40,15 +41,17 @@
             }
         },
         "hints" : {
-            "hint_train_weapons" : {
-                "name" : "Training Grounds",
-                "description" : "You'll find the training grounds past the castle's north entrance. --n You spent some time training with conventional weaponry when you first decided to take on this quest. It... didn't go well, but the master-at-arms, Sergeant Caballera, respects your tenacity... you think.",
-                "started" : true
+            "fake_harem_wall" : {
+                "name" : "False Wall",
+                "description" : "There's a false wall on the north side of your king's chambers. You can simply walk through it to get to your personal bedroom in the Phitemos, and your wardrobe within."
             },
-            "hint_train_magic" : {
+            "train_weapons" : {
+                "name" : "Training Grounds",
+                "description" : "You'll find the training grounds past the castle's north entrance. --n You spent some time training with conventional weaponry when you first decided to take on this quest. It... didn't go well, but the master-at-arms, Sergeant Caballera, respects your tenacity... you think."
+            },
+            "train_magic" : {
                 "name" : "Temple",
-                "description" : "You'll find the Temple of Prometus past the castle's south entrance. --n You could also get Dmitri to bring you up to the Archmage's lab, but... maybe it's better to start at the Temple.",
-                "started" : true
+                "description" : "You'll find the Temple of Prometus past the castle's south entrance. --n You could also get Dmitri to bring you up to the Archmage's lab, but... maybe it's better to start at the Temple."
             }
         }
     },
@@ -81,5 +84,16 @@
                 "description" : "There's been an accident. You saw a young Lingin woman named Mei-Hua mourning a burnt corpse just east of the south entrance."
             }
         }
+    },
+    "earn_favor" : {
+        "name" : "Earn Favor",
+        "description" : "Travel about Sewinso and earn the favor of the Eight.",
+        "steps" : {
+
+        },
+        "hints" : {
+
+        }
+
     }
 }

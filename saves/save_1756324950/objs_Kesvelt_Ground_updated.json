@@ -1,0 +1,1468 @@
+{
+  "book_spawn_node_0": {
+    "object_type": "node",
+    "x": 26,
+    "y": 30,
+    "args": {},
+    "position": [
+      26,
+      30
+    ],
+    "old_position": [
+      26,
+      30
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "book_spawn_node_1": {
+    "object_type": "node",
+    "x": 30,
+    "y": 30,
+    "args": {},
+    "position": [
+      30,
+      30
+    ],
+    "old_position": [
+      30,
+      30
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "bubba_renald": {
+    "object_type": "npc",
+    "x": 28,
+    "y": 29,
+    "args": {},
+    "position": [
+      28,
+      29
+    ],
+    "old_position": [
+      28,
+      29
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "burn_jin_shi_event": {
+    "object_type": "node",
+    "x": 16,
+    "y": 27,
+    "args": {
+      "event_start": "burning_student"
+    },
+    "position": [
+      16,
+      27
+    ],
+    "old_position": [
+      16,
+      27
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "replace_jin_shi_event": {
+    "object_type": "node",
+    "x": 27,
+    "y": 11,
+    "args": {
+      "event_start": "burning_student_replace"
+    },
+    "position": [
+      27,
+      11
+    ],
+    "old_position": [
+      27,
+      11
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "corner_guard": {
+    "object_type": "npcsoldier",
+    "x": 20,
+    "y": 12,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      20,
+      12
+    ],
+    "old_position": [
+      20,
+      12
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "corner_guard_1": {
+    "object_type": "npcsoldier",
+    "x": 18,
+    "y": 12,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      18,
+      12
+    ],
+    "old_position": [
+      18,
+      12
+    ],
+    "skin_color": [
+      255,
+      220,
+      177
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "corner_guard_2": {
+    "object_type": "npcsoldier",
+    "x": 17,
+    "y": 26,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      17,
+      26
+    ],
+    "old_position": [
+      17,
+      26
+    ],
+    "skin_color": [
+      198,
+      134,
+      66
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "corner_guard_3": {
+    "object_type": "npcsoldier",
+    "x": 15,
+    "y": 26,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      15,
+      26
+    ],
+    "old_position": [
+      15,
+      26
+    ],
+    "skin_color": [
+      224,
+      172,
+      105
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "crossbower_0": {
+    "object_type": "npccrossbower",
+    "x": 6,
+    "y": 9,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        2
+      ]
+    },
+    "position": [
+      6,
+      9
+    ],
+    "old_position": [
+      6,
+      9
+    ],
+    "skin_color": [
+      224,
+      172,
+      105
+    ],
+    "move_interval": 1.0,
+    "state": "stand"
+  },
+  "crossbower_1": {
+    "object_type": "npccrossbower",
+    "x": 6,
+    "y": 11,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        2
+      ]
+    },
+    "position": [
+      6,
+      11
+    ],
+    "old_position": [
+      6,
+      11
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "move_interval": 1.0,
+    "state": "stand"
+  },
+  "crossbower_2": {
+    "object_type": "npccrossbower",
+    "x": 6,
+    "y": 13,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        2
+      ]
+    },
+    "position": [
+      6,
+      13
+    ],
+    "old_position": [
+      6,
+      13
+    ],
+    "skin_color": [
+      224,
+      172,
+      105
+    ],
+    "move_interval": 1.0,
+    "state": "stand"
+  },
+  "cutscene_guard_a": {
+    "object_type": "npcguard",
+    "x": 7,
+    "y": 18,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      7,
+      18
+    ],
+    "old_position": [
+      7,
+      18
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "cutscene_guard_b": {
+    "object_type": "npcguard",
+    "x": 7,
+    "y": 20,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      7,
+      20
+    ],
+    "old_position": [
+      7,
+      20
+    ],
+    "skin_color": [
+      141,
+      85,
+      36
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "dmitri_elevators": {
+    "object_type": "elevatorteleporter",
+    "x": 27,
+    "y": 10,
+    "args": {
+      "target_map": "Kesvelt_Laboratory",
+      "position": {
+        "from_any": "dmitri_elevators"
+      }
+    },
+    "position": [
+      27,
+      10
+    ],
+    "old_position": [
+      27,
+      10
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "elevator_wizard": {
+    "object_type": "elevatorhelper",
+    "x": 27,
+    "y": 9,
+    "args": {
+      "name": "Dmitri",
+      "dialog_key": "dmitri_elevator"
+    },
+    "position": [
+      27,
+      9
+    ],
+    "old_position": [
+      27,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "event_melee_training": {
+    "object_type": "node",
+    "x": 14,
+    "y": 4,
+    "args": {
+      "event_start": "melee_training"
+    },
+    "position": [
+      14,
+      4
+    ],
+    "old_position": [
+      14,
+      4
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "event_no_early_leave_node": {
+    "object_type": "node",
+    "x": 19,
+    "y": 12,
+    "args": {
+      "event_start": "generic_block_enterance_0"
+    },
+    "position": [
+      19,
+      12
+    ],
+    "old_position": [
+      19,
+      12
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "event_no_early_leave_node_1": {
+    "object_type": "node",
+    "x": 16,
+    "y": 26,
+    "args": {
+      "event_start": "generic_block_enterance_1"
+    },
+    "position": [
+      16,
+      26
+    ],
+    "old_position": [
+      16,
+      26
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "event_tester_node": {
+    "object_type": "node",
+    "x": 6,
+    "y": 19,
+    "args": {
+      "event_start": "first_meet_eraton",
+      "target_map": "Kesvelt_Guard_Ambush_Before_Throne",
+      "positions": {
+        "from_any": "special_"
+      }
+    },
+    "position": [
+      6,
+      19
+    ],
+    "old_position": [
+      6,
+      19
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "guard_jogger": {
+    "object_type": "npcsoldier",
+    "x": 1,
+    "y": 5,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      1,
+      5
+    ],
+    "old_position": [
+      1,
+      5
+    ],
+    "skin_color": [
+      141,
+      85,
+      36
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "guard_sergeant": {
+    "object_type": "npc",
+    "x": 10,
+    "y": 1,
+    "args": {},
+    "position": [
+      10,
+      1
+    ],
+    "old_position": [
+      10,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "jogger_patrol_0_1": {
+    "object_type": "node",
+    "x": 1,
+    "y": 14,
+    "args": {},
+    "position": [
+      1,
+      14
+    ],
+    "old_position": [
+      1,
+      14
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_10": {
+    "object_type": "node",
+    "x": 1,
+    "y": 1,
+    "args": {},
+    "position": [
+      1,
+      1
+    ],
+    "old_position": [
+      1,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_2": {
+    "object_type": "node",
+    "x": 4,
+    "y": 14,
+    "args": {},
+    "position": [
+      4,
+      14
+    ],
+    "old_position": [
+      4,
+      14
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_3": {
+    "object_type": "node",
+    "x": 4,
+    "y": 7,
+    "args": {},
+    "position": [
+      4,
+      7
+    ],
+    "old_position": [
+      4,
+      7
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_4": {
+    "object_type": "node",
+    "x": 13,
+    "y": 7,
+    "args": {},
+    "position": [
+      13,
+      7
+    ],
+    "old_position": [
+      13,
+      7
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_5": {
+    "object_type": "node",
+    "x": 13,
+    "y": 1,
+    "args": {},
+    "position": [
+      13,
+      1
+    ],
+    "old_position": [
+      13,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_6": {
+    "object_type": "node",
+    "x": 11,
+    "y": 1,
+    "args": {},
+    "position": [
+      11,
+      1
+    ],
+    "old_position": [
+      11,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_7": {
+    "object_type": "node",
+    "x": 11,
+    "y": 2,
+    "args": {},
+    "position": [
+      11,
+      2
+    ],
+    "old_position": [
+      11,
+      2
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_8": {
+    "object_type": "node",
+    "x": 9,
+    "y": 2,
+    "args": {},
+    "position": [
+      9,
+      2
+    ],
+    "old_position": [
+      9,
+      2
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jogger_patrol_0_9": {
+    "object_type": "node",
+    "x": 9,
+    "y": 1,
+    "args": {},
+    "position": [
+      9,
+      1
+    ],
+    "old_position": [
+      9,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "leave_node_0": {
+    "object_type": "node",
+    "x": 16,
+    "y": 36,
+    "args": {},
+    "position": [
+      16,
+      36
+    ],
+    "old_position": [
+      16,
+      36
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "leave_node_1": {
+    "object_type": "node",
+    "x": 15,
+    "y": 36,
+    "args": {},
+    "position": [
+      15,
+      36
+    ],
+    "old_position": [
+      15,
+      36
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 19,
+    "y": 16,
+    "args": {},
+    "position": [
+      19,
+      16
+    ],
+    "old_position": [
+      19,
+      16
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "pillar0": {
+    "object_type": "pillar",
+    "x": 6,
+    "y": 17,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      6,
+      17
+    ],
+    "old_position": [
+      6,
+      17
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar1": {
+    "object_type": "pillar",
+    "x": 6,
+    "y": 21,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      6,
+      21
+    ],
+    "old_position": [
+      6,
+      21
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar2": {
+    "object_type": "pillar",
+    "x": 10,
+    "y": 17,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      10,
+      17
+    ],
+    "old_position": [
+      10,
+      17
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar3": {
+    "object_type": "pillar",
+    "x": 10,
+    "y": 21,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      10,
+      21
+    ],
+    "old_position": [
+      10,
+      21
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar4": {
+    "object_type": "pillar",
+    "x": 14,
+    "y": 17,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      14,
+      17
+    ],
+    "old_position": [
+      14,
+      17
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar5": {
+    "object_type": "pillar",
+    "x": 14,
+    "y": 21,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      14,
+      21
+    ],
+    "old_position": [
+      14,
+      21
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar6": {
+    "object_type": "pillar",
+    "x": 18,
+    "y": 17,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      18,
+      17
+    ],
+    "old_position": [
+      18,
+      17
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar7": {
+    "object_type": "pillar",
+    "x": 18,
+    "y": 21,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      18,
+      21
+    ],
+    "old_position": [
+      18,
+      21
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "shooting_range_0": {
+    "object_type": "node",
+    "x": 6,
+    "y": 9,
+    "args": {},
+    "position": [
+      6,
+      9
+    ],
+    "old_position": [
+      6,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "shooting_range_1": {
+    "object_type": "node",
+    "x": 6,
+    "y": 11,
+    "args": {},
+    "position": [
+      6,
+      11
+    ],
+    "old_position": [
+      6,
+      11
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "shooting_range_2": {
+    "object_type": "node",
+    "x": 6,
+    "y": 13,
+    "args": {},
+    "position": [
+      6,
+      13
+    ],
+    "old_position": [
+      6,
+      13
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "student_0": {
+    "object_type": "npcstudent",
+    "x": 26,
+    "y": 31,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ],
+      "name": "Disciple",
+      "dialog_key": "student_0"
+    },
+    "position": [
+      26,
+      31
+    ],
+    "old_position": [
+      26,
+      31
+    ],
+    "skin_color": [
+      141,
+      85,
+      36
+    ],
+    "move_interval": 0.5,
+    "state": "stand"
+  },
+  "student_1": {
+    "object_type": "npcstudent",
+    "x": 27,
+    "y": 31,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ],
+      "name": "Disciple",
+      "dialog_key": "student_1"
+    },
+    "position": [
+      27,
+      31
+    ],
+    "old_position": [
+      27,
+      31
+    ],
+    "skin_color": [
+      255,
+      220,
+      177
+    ],
+    "move_interval": 1,
+    "state": "stand"
+  },
+  "student_2": {
+    "object_type": "npcstudent",
+    "x": 28,
+    "y": 31,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ]
+    },
+    "position": [
+      28,
+      31
+    ],
+    "old_position": [
+      28,
+      31
+    ],
+    "skin_color": [
+      141,
+      85,
+      36
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "student_3": {
+    "object_type": "npcstudent",
+    "x": 29,
+    "y": 31,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ],
+      "name": "Mei-Hua",
+      "dialog_key": "student_3"
+    },
+    "position": [
+      29,
+      31
+    ],
+    "old_position": [
+      29,
+      31
+    ],
+    "skin_color": [
+      255,
+      220,
+      177
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "student_shi": {
+    "object_type": "npcstudent",
+    "x": 30,
+    "y": 31,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ]
+    },
+    "position": [
+      30,
+      31
+    ],
+    "old_position": [
+      30,
+      31
+    ],
+    "skin_color": [
+      198,
+      134,
+      66
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "student_shi_space": {
+    "object_type": "node",
+    "x": 30,
+    "y": 31,
+    "args": {},
+    "position": [
+      30,
+      31
+    ],
+    "old_position": [
+      30,
+      31
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "target0": {
+    "object_type": "archerytarget",
+    "x": 12,
+    "y": 9,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        1,
+        2
+      ]
+    },
+    "position": [
+      12,
+      9
+    ],
+    "old_position": [
+      12,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "target1": {
+    "object_type": "archerytarget",
+    "x": 10,
+    "y": 11,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        1,
+        2
+      ]
+    },
+    "position": [
+      10,
+      11
+    ],
+    "old_position": [
+      10,
+      11
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "target2": {
+    "object_type": "archerytarget",
+    "x": 8,
+    "y": 13,
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        1,
+        2
+      ]
+    },
+    "position": [
+      8,
+      13
+    ],
+    "old_position": [
+      8,
+      13
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "throne_eraton": {
+    "object_type": "npc",
+    "x": 4,
+    "y": 19,
+    "args": {
+      "name": "Eraton Sydan",
+      "dialog_key": "eraton_throne",
+      "spritesheet": [
+        "Eraton",
+        0,
+        0
+      ]
+    },
+    "position": [
+      4,
+      19
+    ],
+    "old_position": [
+      4,
+      19
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "training_guard_0": {
+    "object_type": "npcsoldier",
+    "x": 8,
+    "y": 4,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      8,
+      4
+    ],
+    "old_position": [
+      8,
+      4
+    ],
+    "skin_color": [
+      255,
+      220,
+      177
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "training_guard_1": {
+    "object_type": "npcsoldier",
+    "x": 7,
+    "y": 4,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      7,
+      4
+    ],
+    "old_position": [
+      7,
+      4
+    ],
+    "skin_color": [
+      198,
+      134,
+      66
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "training_guard_2": {
+    "object_type": "npcsoldier",
+    "x": 12,
+    "y": 6,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ],
+      "name": "Eieun",
+      "dialog_key": "training_guard_2"
+    },
+    "position": [
+      12,
+      6
+    ],
+    "old_position": [
+      12,
+      6
+    ],
+    "skin_color": [
+      255,
+      220,
+      177
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "training_guard_3": {
+    "object_type": "npcsoldier",
+    "x": 11,
+    "y": 6,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      11,
+      6
+    ],
+    "old_position": [
+      11,
+      6
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "event_waiting_node": {
+    "object_type": "node",
+    "x": 31,
+    "y": 0,
+    "args": {},
+    "position": [
+      31,
+      0
+    ],
+    "old_position": [
+      31,
+      0
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "throne_node": {
+    "object_type": "node",
+    "x": 4,
+    "y": 19,
+    "args": {},
+    "position": [
+      4,
+      19
+    ],
+    "old_position": [
+      4,
+      19
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -9,8 +9,14 @@ if TYPE_CHECKING:
     
 def travel_inputs(self: 'GameEngine', event) -> dict | None:
     match event.key:
+        case pygame.K_BACKQUOTE:
+            self.change_state(GameState.DEBUG)
+        case pygame.K_m:
+            if self.current_map.name == "Battle Test Map":
+                self.change_state(GameState.COMBAT)
         case pygame.K_SPACE:
             self.party.get_leader().old_position = self.party.get_leader().position
+            self.event_manager.timer_manager.start_timer("player_move", 270)
             return {"movement_penalty" : DEFAULT_WAIT_PENALTY}
         case pygame.K_UP | pygame.K_DOWN | pygame.K_LEFT | pygame.K_RIGHT:
             direc = self.get_direction(event.key)
@@ -49,12 +55,14 @@ def travel_inputs(self: 'GameEngine', event) -> dict | None:
                                 if self.try_initial_attack(obj):
                                     break
                             else:
+                                print("trying to talk")
                                 if self.try_talk_to_object(obj):
                                     break
-                        if obj.__is__(Chest):
+                        elif obj.__is__(Chest):
                             if obj.interact():
                                 break
-                        if obj.__is__(MapObject):
+                        elif obj.__is__(MapObject):
+                            print("trying to look")
                             if self.try_look_at_object(obj):
                                 break
                                 
@@ -73,10 +81,13 @@ def travel_inputs(self: 'GameEngine', event) -> dict | None:
             self.look_mode = True
         case pygame.K_c:
             self.change_state(GameState.DIALOG)  # Reuse dialog UI for spell input
-            self.dialog_manager.awaiting_input = True
+            self.dialog_manager.awaiting_keyword = True
+            self.dialog_manager.waiting_for_input = True
             self.dialog_manager.user_input = ""
             self.spell_input_mode = True
         case pygame.K_q:
+            if not self.quest_log.quests["learn_quest_log"].started:
+                return {}
             self.change_state(GameState.MENU_QUEST_LOG)
             self.current_quest_focus = 0
             self.selected_quest_indices = [0, 0, 0]

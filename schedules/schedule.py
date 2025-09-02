@@ -339,8 +339,6 @@ class ScheduleManager:
         """
         current_event = self.get_current_event(npc_name)
         
-        current_event = self.get_current_event(npc_name)
-        
         if not current_event:
             return {
                 "current_event": None,

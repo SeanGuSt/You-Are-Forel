@@ -1,6 +1,5 @@
 {
     "burning_student" : {
-        "destroy_trigger_object" : "after_trigger",
         "trigger" : "on_step",
         "flags" : ["saw_jin_shi_die"],
         "script" : [
@@ -26,7 +25,7 @@
             "text=???__No more grammar lectures, we can finally start burning stuff?",
             "text=Bubba Renald__Did I not just say you weren't done? That includes grammar.",
             "text=Disciples (in unison)__Uuuuuuugh!",
-            "text=Bubba Renald__And the miracle you'll perform today is hardly for burning things. Turn to page 17 of your texts, and find the prayer of raising temperature.",
+            "text=Bubba Renald__And the miracle you'll perform today is hardly for burning things. Turn to page 17 of your texts, and find the prayer of lowering temperature.",
             "spawn=bookclosed__book_spawn_node_0__E__4",
             "wait=500",
             "destroy=bookclosed__book_spawn_node_0__E__4",
@@ -39,20 +38,51 @@
             "destroy=bookfake__book_spawn_node_1",
             "text=Bubba Renald__Feel the warmth within your body. Feel how it flows through your veins like blood. That is because blood is where we keep our warmth, our heat, our... flame.",
             "text=Bubba Renald__Now whisper the words, whisper your prayer. Let Prometus, and only Prometus, hear your desire, feel it.",
-            "text=Disciples (Whispered)__Nos Heat.",
-            "text=Mei-Hua__By Aeolus, Bubba Renald I think it's working! My body feels so warm--",
-            "text=Jin-Shi (Whispered)__...Maniret Fire.",
+            "text=Mei-Hua__B-b-by Aeolus, Bubba Renald I think it's working! My body feels so c-cold--",
             "destroy=npcstudent__student_shi_space",
             "spawn=animatedburningman__student_shi_space",
-            "walk=student_2__N1W1&&student_3__S1W2&&bubba_renald__S2",
+            "walk=student_2__N1W1--50&&student_3__S1W2--50&&bubba_renald__S2--200",
             "text=Jin-Shi__Ahhhhh! Ahhhhh!",
             "text=Jin-Shi__Someone! Anyone! Help me! I--",
             "destroy=animatedburningman__student_shi_space",
-            "spawn=burntcorpse__student_shi_space",
+            "spawn=burntcorpse__student_shi_space--dead_jin_shi",
             "add_schedule=student_0__leave_node_0__0",
             "add_schedule=student_1__leave_node_1__3",
             "text=Jin-Shi__...bubba...",
-            "walk=leader__W8&&student_3__E2N1",
+            "walk=student_3__E2N1",
+            "change_event_key=burn_jin_shi_event__recovering_burnt_body",
+            "walk=leader__W8",
+            "invisible_leader=false"
+        ]
+    },
+    "burning_student_replace" : {
+        "trigger" : "on_step",
+        "flags" : ["updated_burning_student"],
+        "conditions" : ["!updated_burning_student", "have_quest=kesvelt_fake_books"],
+        "script" : [
+            "change_event_key=burn_jin_shi_event__recovering_burnt_body",
+            "spawn=npc__student_shi_space__S__1--medic_",
+            "walk=medic_0__N1--1&&student_2__N1E1--1",
+            "destroy=npcstudent__student_0",
+            "destroy=npcstudent__student_1",
+            "destroy=npcstudent__student_shi_space",
+            "destroy=npc__bubba_renald",
+            "spawn=burntcorpse__student_shi_space--dead_jin_shi"
+        ]
+    },
+    "recovering_burnt_body" : {
+        "trigger" : "on_step",
+        "conditions" : ["have_quest=kesvelt_fake_books"],
+        "flags" : ["saw_jin_shi_taken_away"],
+        "script" : [
+            "saw_jin_shi_die++text=Mei-Hua__Didi...",
+            "!saw_jin_shi_die++text=???__Didi...",
+            "invisible_leader=true", 
+            "walk=leader__S3E8",
+            "walk=dead_jin_shi0__S1&&medic_0__S1&&medic_1__S1",
+            "text=Mei-Hua__Didi... why...",
+            "walk=dead_jin_shi0__S18--200&&medic_0__S18--200&&medic_1__S18--200",
+            "walk=leader__W8N3",
             "invisible_leader=false"
         ]
     }

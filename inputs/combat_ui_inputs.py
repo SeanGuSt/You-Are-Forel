@@ -22,10 +22,11 @@ def combat_inputs(self: 'GameEngine', event):
                     if obj.hp > 0:
                         self.combat_manager.perform_attack(current_unit, obj)
                         break
-                self.combat_manager.advance_turn()
+                self.combat_manager.conclude_current_player_turn()
             elif self.spell_direction_mode:
                 direction = self.get_direction(event.key)
                 messages = current_unit.cast_spell(direction = direction)
+                self.current_map.revert_map_tiles()
                 self.spell_direction_mode = False
             elif self.spell_target_mode:
                 if not self.cursor_position:
@@ -38,7 +39,7 @@ def combat_inputs(self: 'GameEngine', event):
                     current_unit.old_position = current_unit.position
                     current_unit.position = tpos
                     self.event_manager.timer_manager.start_timer("player_move", 180)
-                    self.combat_manager.advance_turn()
+                    self.combat_manager.conclude_current_player_turn()
                 
             for message in messages:
                 self.combat_manager.append_to_combat_log(message)
@@ -51,16 +52,23 @@ def combat_inputs(self: 'GameEngine', event):
             self.combat_manager.append_to_combat_log(f"{current_unit.name} prepares to use a special ability.")
         case pygame.K_c:
             self.change_state(GameState.DIALOG)  # Reuse dialog UI for spell input
-            self.dialog_manager.awaiting_input = True
+            self.dialog_manager.awaiting_keyword = True
+            self.dialog_manager.waiting_for_input = True
             self.dialog_manager.user_input = ""
             self.spell_input_mode = True
         case pygame.K_SPACE:
             # Wait action
-            self.combat_manager.advance_turn()
+            self.combat_manager.conclude_current_player_turn()
         case pygame.K_RETURN:
             if self.spell_target_mode:
                 cursor_position = self.cursor_position
                 current_unit.cast_spell(position = cursor_position)
                 self.spell_target_mode = False
+                self.current_map.revert_map_tiles()
+                self.cursor_position = None
+            if self.spell_self_mode:
+                print("Debug: Arrived at spell self mode")
+                current_unit.cast_spell(party_member = current_unit)
+                self.spell_self_mode = False
                 self.current_map.revert_map_tiles()
                 self.cursor_position = None

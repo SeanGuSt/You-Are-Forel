@@ -1,0 +1,249 @@
+{
+  "guy0": {
+    "object_type": "monsterguardrookie",
+    "x": 8,
+    "y": 4,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      8,
+      4
+    ],
+    "old_position": [
+      8,
+      4
+    ],
+    "skin_color": [
+      141,
+      85,
+      36
+    ]
+  },
+  "guy1": {
+    "object_type": "monsterguardrookie",
+    "x": 6,
+    "y": 5,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      6,
+      5
+    ],
+    "old_position": [
+      6,
+      5
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ]
+  },
+  "guy2": {
+    "object_type": "monsterguardrookie",
+    "x": 8,
+    "y": 7,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      8,
+      7
+    ],
+    "old_position": [
+      8,
+      7
+    ],
+    "skin_color": [
+      255,
+      220,
+      177
+    ]
+  },
+  "guy4": {
+    "object_type": "monsterguardrookie",
+    "x": 9,
+    "y": 5,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      9,
+      5
+    ],
+    "old_position": [
+      9,
+      5
+    ],
+    "skin_color": [
+      141,
+      85,
+      36
+    ]
+  },
+  "guy5": {
+    "object_type": "monsterguardrookie",
+    "x": 8,
+    "y": 3,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      8,
+      3
+    ],
+    "old_position": [
+      8,
+      3
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ]
+  },
+  "guy6": {
+    "object_type": "monsterguardrookie",
+    "x": 8,
+    "y": 8,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      8,
+      8
+    ],
+    "old_position": [
+      8,
+      8
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ]
+  },
+  "map_event_countdown": {
+    "object_type": "monstereventtrigger",
+    "x": 1,
+    "y": 1,
+    "args": {
+      "round_timer": 5
+    },
+    "position": [
+      1,
+      1
+    ],
+    "old_position": [
+      1,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_0": {
+    "object_type": "node",
+    "x": 7,
+    "y": 5,
+    "args": {},
+    "position": [
+      7,
+      5
+    ],
+    "old_position": [
+      7,
+      5
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_1": {
+    "object_type": "node",
+    "x": 8,
+    "y": 5,
+    "args": {},
+    "position": [
+      8,
+      5
+    ],
+    "old_position": [
+      8,
+      5
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_2": {
+    "object_type": "node",
+    "x": 7,
+    "y": 6,
+    "args": {},
+    "position": [
+      7,
+      6
+    ],
+    "old_position": [
+      7,
+      6
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  },
+  "special_3": {
+    "object_type": "node",
+    "x": 8,
+    "y": 6,
+    "args": {},
+    "position": [
+      8,
+      6
+    ],
+    "old_position": [
+      8,
+      6
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ]
+  }
+}

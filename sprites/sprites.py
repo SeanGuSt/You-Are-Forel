@@ -26,7 +26,7 @@ class SpriteDatabase:
         for file_name in onlyfiles:
             if file_name.endswith(".png"):
                 sheet_name = file_name[:-4]
-                self.sprites[sheet_name] = pygame.image.load(os.path.join(IMAGE_DIR, file_name))
+                self.sprites[sheet_name] = pygame.transform.scale_by(pygame.image.load(os.path.join(IMAGE_DIR, file_name)).convert_alpha(), 2)
                 
                 # Pre-generate color variants for people sprites
                 if sheet_name.startswith("Generic People"):

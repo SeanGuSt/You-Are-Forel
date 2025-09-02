@@ -2,17 +2,17 @@ from enum import Enum
 from functools import wraps
 import time
 # Constants
-SCREEN_WIDTH = 1188
-SCREEN_HEIGHT = 764
-TILE_SIZE = 32
+SCREEN_WIDTH = 1212
+SCREEN_HEIGHT = 768
+TILE_SIZE = 64
 TILE_WIDTH = TILE_SIZE
 TILE_HEIGHT = TILE_SIZE
-MAP_WIDTH = 26
+MAP_WIDTH = 15
 MAP_VIEW_WIDTH = TILE_WIDTH * MAP_WIDTH
-MAP_HEIGHT = 18
+MAP_HEIGHT = 9
 MAP_VIEW_HEIGHT = TILE_HEIGHT * MAP_HEIGHT
 DEFAULT_INPUT_REPEAT_DELAY = 300
-DEFAULT_INPUT_REPEAT_INTERVAL = 300
+DEFAULT_INPUT_REPEAT_INTERVAL = 100
 DEFAULT_PLAYER_MOVE_FRAMES = 16
 DEFAULT_MOVEMENT_PENALTY = 1
 DEFAULT_WAIT_PENALTY = 2
@@ -102,18 +102,30 @@ class GameState(Enum):
     DIALOG = 10 # New state for dialog
     CUTSCENE = 11
     EVENT = 12
+    DEBUG = 13
 
 class ObjectState(Enum):
     WALK = "walk"
+    TALK = "talk"
+    WIGGLE = "wiggle"
     STAND = "stand"
     SELL = "sell"#A state to ensure merchants can't try to sell to you while they want to kill you.
     SLEEP = "sleep"#Disables the ability to talk to the object
+    VORTEX = "vortex"
+    STAFF_SLAM = "staff_slam"
     PATROL = "patrol"
     PURSUE = "pursue"
     KNOCKBACK = "knockback"
+    ATTACKED = "attacked"
+    BURNING = "burning"
+    DYING = "dying"
+    DEATH = "death"
     ATTACK_MELEE = "attack_melee"
     ATTACK_RANGE = "attack_range"
     KEEP_MOVING = "keep_moving"
+    ATTACHING = "attaching"
+    ATTACHED = "attached"
+    SLIME_SPLIT = "slime_split"
 
 class TileType(Enum):
     GRASS = '.'
@@ -128,12 +140,12 @@ class TileType(Enum):
 
 class VirtueType(Enum):
     FIRE = "fire"
+    AIR = "air"
     ICE = "ice"
     LIGHTNING = "lightning"
-    EARTH = "earth"
     WATER = "water"
-    WIND = "wind"
-    LAVA = "lava"
+    MAGMA = "magma"
+    EARTH = "earth"
     NATURE = "nature"
 
 class OverusePenalty(Enum):
@@ -152,9 +164,9 @@ class DamageType(Enum):
     FIRE = "fire"
     WATER = "water"
     EARTH = "earth"
-    WIND = "wind"
+    AIR = "air"
     NATURE = "nature"
-    LAVA = "lava"
+    MAGMA = "magma"
     ICE = "ice"
     LIGHTNING = "lightning"
     POISON = "poison"
@@ -203,17 +215,22 @@ class EquipmentSlot(Enum):
 class TargetType(Enum):
     TARGET = "target"
     DIRECTION = "direction"
+    SELF = "self"
+    SELF_AREA = "self_area"
 
 class EffectType(Enum):
     STAT_BUFF = "stat_buff"
     DAMAGE = "damage"
+    MOVE = "move"
     HEAL = "heal"
+    AREA_DAMAGE = "area"
     ON_ATTACK_HEAL = "on_attack_heal"
     ON_DEFEND_DAMAGE = "on_defend_damage"
+    NO_EFFECT = "no_effect"
     ON_KILL_BONUS = "on_kill_bonus"
+    BODY_BURN = "body_burn"
     CHANGE_SPRITE = "change_sprite"
     # Expandable for future effects
-
 
 class EffectTrigger(Enum):
     PASSIVE = "passive"
@@ -223,6 +240,19 @@ class EffectTrigger(Enum):
     ON_EQUIP = "on_equip"
     ON_UNEQUIP = "on_unequip"
     ON_USE = "on_use"
+
+class ExternalBodyStatus(Enum):
+    ON_FIRE = "on_fire"
+    PARASITE = "parasite"
+    FROZEN = "frozen"
+
+class InternalBodyStatus(Enum):
+    POISONED = "poisoned"
+    PARASITE = "parasite"#Yup, you can have an external AND internal parasite
+
+class MindStatus(Enum):
+    HALLUCINATE = "hallucinate"
+    
 
 def time_function(label=None):
     def decorator(func):

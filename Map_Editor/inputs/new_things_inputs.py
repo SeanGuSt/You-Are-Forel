@@ -6,6 +6,7 @@ from Map_Editor.me_constants import EditState, SIDEBAR_SPACE_HEIGHT, SIDEBAR_SPA
 from Map_Editor.inputs.other_inputs import undo, redo
 if TYPE_CHECKING:
     from Map_Editor.map_editor import MapEditor
+full_map_mode = False
 def new_tile_input(self: 'MapEditor'):
     self.change_state(EditState.INPUT)
     self.input0 = ""
@@ -31,6 +32,14 @@ def recursive_dicts(big_dict, split_input: list[str], input1: str):
 
 def non_text_mode_inputs(self: 'MapEditor', event):
     mods = pygame.key.get_mods()
+    if mods & pygame.KMOD_ALT:
+        if event.unicode:
+            if self.state == EditState.OBJECT:
+                for i, object in enumerate(self.object_types):
+                    if object.startswith(event.unicode):
+                        self.object_index = i
+                        self.selected_object_type = self.object_types[i]
+                        break
     match event.key:
         case pygame.K_TAB:
             if self.state == EditState.OBJECT:
@@ -43,7 +52,8 @@ def non_text_mode_inputs(self: 'MapEditor', event):
             if mods & pygame.KMOD_CTRL:
                 undo(self)
             else:
-                new_tile_input(self)
+                if not all([tile in self.tile_map.values() for tile in self.tile_types]):
+                    new_tile_input(self)
         case pygame.K_y:
             if mods & pygame.KMOD_CTRL:
                 redo(self)
@@ -61,6 +71,7 @@ def non_text_mode_inputs(self: 'MapEditor', event):
             else: self.insert_row(above=False)
         case pygame.K_a:
             if mods & pygame.KMOD_CTRL:
+                global full_map_mode
                 full_map_mode = not full_map_mode
                 if full_map_mode:
                     self.VIEW_WIDTH, self.VIEW_HEIGHT = min(27, len(self.ascii_map[0])), min(20, len(self.ascii_map))

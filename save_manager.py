@@ -70,6 +70,9 @@ class SaveManager:
                 with open(filepath, 'r') as f:
                     updated_object_data = json.load(f)
                 map_name = file.split("objs_")[1].split("_updated.json")[0]
+                for obj in updated_object_data:
+                    if updated_object_data[obj] and updated_object_data[obj]["position"]:
+                        updated_object_data[obj]["position"] = (updated_object_data[obj]["position"][0], updated_object_data[obj]["position"][1])
                 self.engine.load_map(map_name, updated_object_data)
         self.engine.current_map = self.engine.maps[save_data["current_map"]]
         self.engine.change_state(GameState.TOWN)

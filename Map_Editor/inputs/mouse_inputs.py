@@ -46,7 +46,7 @@ def place_or_move_object(self: 'MapEditor', event, tx, ty, keys_at_tile, mods):
         return
     not_already_occupied = True#To clarify: not already occupied means that the tile is not occupied by an object that is not passable, not necessarily that the tile is empty.
     if not self.odb.obj_templates[self.selected_object_type].is_passable:
-        not_already_occupied = all(self.odb.obj_templates[self.objects_data[k]["object_type"]].is_passable() for k in keys_at_tile)
+        not_already_occupied = all(self.odb.obj_templates[self.objects_data[k]["object_type"]].is_passable for k in keys_at_tile)
             
     if not_already_occupied:
         self.pending_object = {

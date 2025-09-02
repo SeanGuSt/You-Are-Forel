@@ -33,7 +33,6 @@ def generate_elevator_text(elevator_config, current_map):
         f"And your destination? From here, I can take you to {joined}."
     ]
 
-
 def get_destination_response(elevator_config, keyword, current_map):
     """Return travel lines and event for destination keyword."""
     dest_data = elevator_config["destinations"].get(keyword)

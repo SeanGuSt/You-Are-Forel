@@ -1,5 +1,5 @@
 {
-  "#": "wall",
   "_": "floor",
-  ".": "grass"
+  ".": "grass",
+  "#": "wall"
 }

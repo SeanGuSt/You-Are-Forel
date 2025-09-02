@@ -15,7 +15,10 @@ class TileDatabase:
     
     def get_tile(self, name: str) -> Optional[Tile]:
         """Get a tile by name"""
-        return self.tiles.get(name)
+        tile = self.tiles.get(name)
+        if tile:
+            return tile()
+        return None
     
     def add_tile(self, name: str, tile: Tile):
         """Add a new tile to the database"""

@@ -18,5 +18,123 @@
         "power" : 5,
         "range" : 2,
         "virtue" : "water"
+    },
+    "maniret fire" : {
+        "name" : "Self-Immolation",
+        "overuse_cost" : 0,
+        "target_type" : "self",
+        "effect_type" : "body_burn",
+        "damage_type" : "fire",
+        "virtue" : "fire",
+        "power" : 5
+    },
+    "nos stein" : {
+        "name" : "Cardinal Pillars",
+        "overuse_cost" : 2,
+        "target_type" : "self_area",
+        "effect_type" : "area",
+        "damage_type" : "earth",
+        "virtue" : "earth",
+        "power" : 5,
+        "args" : {
+            "offset_layers" : [
+                {
+                    "offsets" : [
+                        "(0, 1)", "(1, 0)", "(0, -1)", "(-1, 0)"
+                    ],
+                    "delay" : 200,
+                    "spawn" : "battleprojectile",
+                    "destroy_after_spell" : true
+                },
+                {
+                    "offsets" : [
+                        "(0, 2)", "(2, 0)", "(0, -2)", "(-2, 0)"
+                    ],
+                    "delay" : 1000,
+                    "spawn" : "battleprojectile",
+                    "destroy_after_spell" : true
+                }
+            ]
+        } 
+    },
+    "nos kruzenstein" : {
+        "name" : "Diagonal Pillars",
+        "overuse_cost" : 2,
+        "target_type" : "self_area",
+        "effect_type" : "area",
+        "damage_type" : "earth",
+        "virtue" : "earth",
+        "power" : 5,
+        "args" : {
+            "offset_layers" : [
+                {
+                    "offsets" : [
+                        "(1, 1)", "(1, -1)", "(-1, 1)", "(-1, -1)"
+                    ],
+                    "delay" : 200,
+                    "spawn" : "battleprojectile",
+                    "destroy_after_spell" : true
+                },
+                {
+                    "offsets" : [
+                        "(2, 2)", "(2, -2)", "(-2, 2)", "(-2, -2)"
+                    ],
+                    "delay" : 1000,
+                    "spawn" : "battleprojectile",
+                    "destroy_after_spell" : true
+                }
+            ]
+        } 
+    },
+    "nos sternenstein" : {
+        "name" : "Star Pillars",
+        "overuse_cost" : 2,
+        "target_type" : "self_area",
+        "effect_type" : "area",
+        "damage_type" : "earth",
+        "virtue" : "earth",
+        "power" : 5,
+        "args" : {
+            "offset_layers" : [
+                {
+                    "offsets" : [
+                        "(0, 1)", "(1, 0)", "(0, -1)", "(-1, 0)", "(1, 1)", "(1, -1)", "(-1, 1)", "(-1, -1)"
+                    ],
+                    "delay" : 200,
+                    "spawn" : "battleprojectile",
+                    "destroy_after_spell" : true
+                },
+                {
+                    "offsets" : [
+                        "(0, 2)", "(2, 0)", "(0, -2)", "(-2, 0)", "(2, 2)", "(2, -2)", "(-2, 2)", "(-2, -2)"
+                    ],
+                    "delay" : 1000,
+                    "spawn" : "battleprojectile",
+                    "destroy_after_spell" : true
+                },
+                {
+                    "offsets" : [
+                        "(0, 3)", "(3, 0)", "(0, -3)", "(-3, 0)", "(3, 3)", "(3, -3)", "(-3, 3)", "(-3, -3)"
+                    ],
+                    "delay" : 2000,
+                    "spawn" : "battleprojectile",
+                    "destroy_after_spell" : true
+                }
+            ]
+        }
+    },
+    "ventus velos" : {
+        "name" : "Wind Speed",
+        "overuse_cost" : 2,
+        "target_type" : "direction",
+        "effect_type" : "move",
+        "damage_type" : "air",
+        "range_min" : 3,
+        "range" : 7,
+        "virtue" : "air",
+        "power" : 0,
+        "args" : {
+            "cardinal" : true
+        }
     }
 }

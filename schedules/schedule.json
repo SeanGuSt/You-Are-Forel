@@ -15,25 +15,21 @@
     "07:20": {
       "action": "fire_arrow",
       "direction": "E", 
-      "repeat_interval": 8
-    },
-    "08:30" : {
-      "action": "go_to",
-      "target": "crossbower_2"
+      "repeat_interval": 3
     }
   },
   "crossbower_1" : {
     "07:20": {
       "action": "fire_arrow",
       "direction": "E", 
-      "repeat_interval": 12
+      "repeat_interval": 5
     }
   },
   "crossbower_2" : {
     "07:20": {
       "action": "fire_arrow",
       "direction": "E", 
-      "repeat_interval": 12
+      "repeat_interval": 4
     }
   }
 }

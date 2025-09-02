@@ -1,6 +1,6 @@
 {
   "forels_dresser": {
-    "object_type": "chest",
+    "object_type": "haremwardrobe",
     "x": 10,
     "y": 6,
     "args": {
@@ -19,5 +19,25 @@
         "from_any": "harem_stairs_d_to_harem_lounge"
       }
     }
+  },
+  "meet_ginny_event": {
+    "object_type": "node",
+    "x": 5,
+    "y": 6,
+    "args": {
+      "event_start" : "meet_ginny"
+    }
+  },
+  "ginny_phitemos": {
+    "object_type": "npc",
+    "x": 5,
+    "y": -4,
+    "args": {}
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 10,
+    "y": 2,
+    "args": {}
   }
 }

@@ -64,6 +64,7 @@ class Item:
     description: str
     uid: int
     item_id = ""
+    plural: str = ""
     quantity: int = 1
     slot: EquipmentSlot = None#Equipmentslot
     value: int = 0#Price
@@ -72,6 +73,9 @@ class Item:
     max_hp: int = 0
     weight: int = 0
     max_stack: int = 7
+    omit_article: bool = False
+    is_usable: bool = True
+    consume_upon_use: bool = True
     is_discardable: bool = True
     can_be_sold: bool = True
     effect: str = ""
@@ -83,6 +87,8 @@ class Item:
     instance_data: Dict[str, Any] = None
 
     def __post_init__(self):
+        if not self.plural:
+            self.plural = self.name
         if self.effects is None:
             self.effects = []
 
@@ -114,8 +120,9 @@ class Consumable(Item):
 @register_item_type("keyitem")
 @dataclass
 class KeyItem(Item):
-    can_be_sold = False
-    is_discardable = False
+    is_usable: bool = False
+    can_be_sold: bool = False
+    is_discardable: bool = False
 
 @register_item_type("equipment")
 @dataclass
@@ -167,6 +174,7 @@ class Weapon_Ranged(Equipment):
 @dataclass
 class Armor(Equipment):
     slot: EquipmentSlot = EquipmentSlot.ARMOR
+    omit_article: bool = True
 
 @register_item_type("accessory")
 @dataclass

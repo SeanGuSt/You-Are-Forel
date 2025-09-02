@@ -4,8 +4,7 @@
 
       {
         "text" : [
-          "Hm? What? What is it this time? I swear, if another shade-humping disciple set themselves on fire *again*, I going to--",
-          "Oh, young Forel. Hmph. What brings you to my laboratory?"
+          "Hm? What? What is it this time? I swear, if another shade-humping disciple set themselves on fire *again*, I am going to-- --n Oh, young Forel. Hmph. What brings you to my laboratory?"
         ],
         "conditions" : []
       }
@@ -13,8 +12,7 @@
     "again" : [
       {
         "text" : [
-          "Yes, yes. Some of the fresh disciples have been praying for *self-immolation*. Ostensibly by practicing raising their body heat. Nonsense, I say. What fool would possibly mistake 'nos heat' for 'maniret fire'?",
-          "Not you, I should hope, young Forel."
+          "Yes, yes. Some of the fresh disciples have been praying for *self-immolation*. Ostensibly by practicing lowering their body heat. Nonsense, I say. What fool would possibly mistake 'alem heat' for 'maniret fire'? --n Not you, I should hope, young Forel."
         ],
         "conditions" : ["!have_quest=kesvelt_fake_books", "!have_quest=kesvelt_jin_shi_dies"],
         "events" : ["give_quest=kesvelt_fake_books"]

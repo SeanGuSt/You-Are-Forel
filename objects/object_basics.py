@@ -14,6 +14,12 @@ class BedBasic(MapObject):
 class BedRoyal(BedBasic):
     color = ROYAL_BLUE
 
+@register_node_type("haremwardrobe")
+class HaremWardrobe(Chest):
+    @staticmethod
+    def default_args():
+        return {"spritesheet" : ["Harem Wardrobe", 0, 0]}
+
 @register_node_type("doorbasic")
 class DoorBasic(MapObject):
     color = BROWN
@@ -54,7 +60,7 @@ class ArrowMissile(Missile):
     
 @register_node_type("arrowspawner")
 @dataclass
-class ArrowSpawner(Spawner):
+class ArrowSpawner(Spawner, NPC):
     pass
 
 @register_node_type("npccrossbower")
@@ -215,6 +221,7 @@ class AnimatedObject(MapObject):
         cls.current_row = cls.min_row
         return cls
     def update(self):
+        super().update()
         if self.frames_since_last_change < 0:
             return
         self.frames_since_last_change += 1
