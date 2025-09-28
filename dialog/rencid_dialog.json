@@ -77,11 +77,11 @@
             {
                 "script" : [
                     "SIGH",
-                    "...Alright then. Here we go.",
-                    ""
+                    "Alright then. Here we go.",
+                    "start_event=melee_training_fight"
                 ],
                 "conditions" : ["leader_wear=weapon_staff", "last_dialog=__hi__", "!finished_quest_step=assure_eraton__train_melee"],
-                "events" : ["delayed_event_start=melee_training_fight"]
+                "events" : []
             }
         ],
         "no" : [

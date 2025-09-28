@@ -436,8 +436,7 @@ class Party:
             tile_sound_name = game_map.get_tile_lower(new_pos).step_sound
             tile_sound = tile_sound_name + "_" + str(self.engine.step_tracker)
             if tile_sound in self.engine.sound_manager.sound:
-                pass
-                #self.engine.sound_manager.sound[tile_sound].play()
+                self.engine.sound_manager.sound[tile_sound].play()
             leader.old_position = leader.position
             leader.position = new_pos
             movement_penalty = DEFAULT_MOVEMENT_PENALTY

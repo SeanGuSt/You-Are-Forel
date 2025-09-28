@@ -75,10 +75,11 @@
           "If those disciples really were so foolish, better they die now, before they get someone else killed."
         ],
         "conditions": [
+          "!saw_jin_shi_die",
           "mid_quest=kesvelt_fake_books"
         ],
         "event": [
-          "give_quest_hint=kesvelt_fake_books__visit_morgue"
+          "give_quest_step=kesvelt_fake_books__visit_morgue"
         ],
         "events": []
       },
@@ -94,9 +95,12 @@
           "leader_wear=armor_pjs++...And for the love of all that's bright and beautiful, would you PLEASE not wear bear pajamas around corpses? Go to the Phitemos and change into some proper clothes."
         ],
         "conditions": [
+          "saw_jin_shi_die",
           "mid_quest=kesvelt_fake_books"
         ],
-        "events": []
+        "events": [
+          "give_quest_step=kesvelt_fake_books__visit_morgue"
+        ]
       }
     ],
     "brat": [

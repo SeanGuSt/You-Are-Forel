@@ -118,7 +118,7 @@
         "script": [
           "Hm? What's this?",
           "!told_maddy_about_accident++...A Promenti prayer tome cover? Forel, are you sure about that?",
-          "!told_maddy_about_accident++...A Promenti prayer tome cover? This was what that disciple had? Forel, are you sure about that?",
+          "told_maddy_about_accident++...A Promenti prayer tome cover? This was what that disciple had? Forel, are you sure about that?",
           "I'm not saying that you're lying! It's just... this cover is made of cowskin *leather*."
         ],
         "conditions": [],

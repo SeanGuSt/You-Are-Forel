@@ -102,6 +102,8 @@ class QuestLog:
                 if step_name in quest.steps:
                     step = quest.steps[step_name]
                     step.started = True #Since quest steps won't show up until the quest itself is started, it's fine to show this.
+                    if quest.started:
+                        self.engine.append_to_message_log(f"Forel wrote down {step.name} in his journal.")
 
 
     def finish_quest_step(self, quest_step: str, did_succeed: bool = True):

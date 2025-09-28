@@ -655,6 +655,14 @@ class Renderer:
                             x += self.font.size(split_word[1])[0]
                             line_part = split_word[2]
                         else:
+                            split_word = word.split("#")
+                            if len(split_word) == 3:
+                                line_part += (" " + split_word[0])
+                                self.draw_text_with_outline(line_part, self.font, x, y, color)
+                                x += self.font.size(line_part)[0]
+                                self.draw_text_with_outline(split_word[1], self.font, x, y, GREEN)
+                                x += self.font.size(split_word[1])[0]
+                                line_part = split_word[2]
                             line_part += (" " + word)
 
                     self.draw_text_with_outline(line_part, self.font, x, y, color)

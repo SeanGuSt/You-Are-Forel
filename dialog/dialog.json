@@ -103,11 +103,27 @@
       ]
     }
   ],
+  "shady guy" : [
+    {
+      "script" : [
+        "A suspicious man selling fradulent prayer tomes? I must say, young man, you'd make quite the mystery writer with some practice.",
+        "However, I fear I can't help you."
+      ]
+    }
+  ],
   "__bye_override__" : [
     {
       "script" : ["Couldn't afford what you needed? I wouldn't worry about it. Prometus's blessings can show up unexpectedly.", ""],
       "conditions" : ["leader_wear=acc_burqa"],
       "events" : ["set_flag=bookseller_said_code_phrase", "force_end="]
+    },
+    {
+      "script" : [
+        "Come back anytime, kind faithful. Oh, and do please tell Madison I said hello.",
+        ""
+      ],
+      "conditions" : ["leader_wear=acc_harem_robe"],
+      "events" : ["force_end="]
     },
     {
       "script" : ["Come again soon!",

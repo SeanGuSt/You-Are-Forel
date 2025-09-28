@@ -12,5 +12,17 @@
       "name": "Maddy",
       "dialog_key": "maddy#phitemos"
     }
+  },
+  "bahati#phitemos": {
+    "object_type": "bahati",
+    "x": 7,
+    "y": 4,
+    "args": {
+      "spritesheet": [
+        "Bahati Uzuri",
+        0,
+        0
+      ]
+    }
   }
 }

@@ -498,7 +498,7 @@ class CombatStatsMixin:
     
     def attack(self, target: 'CombatStatsMixin', damage: int = 0):
         if not damage:
-            damage = max(0, self.get_total_power() - target.get_total_guard())
+            damage = max(1, self.get_total_power() - target.get_total_guard())
         target.hp -= damage
         target.attacked(self, damage)
         if target.hp <= 0 and target == self.current_target:

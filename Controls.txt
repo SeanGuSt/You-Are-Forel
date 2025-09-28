@@ -1,19 +1,17 @@
 Controls:
 Main Map Controls:
-Arrow Keys- Movement
+Arrow Keys- Movement/Interaction
 Q - Quest Book
 I - Inventory Menu
 E - Equipment Menu
-S + Arrow Keys - Search*
-D + Arrow Keys - Dialog*
-C - Cast Magic (Prayer)
+C - Cast Magic (Combat Mode only)
 Backspace - Cancel Prayer if input is empty
-O - Options Menu
+O - Options Menu (Untested)
 Space - Wait
 Z - Stats Screen
 A + Arrow Keys - Attack (Combat Mode only)
-F1 - Save Game
-*Alternatively, you can walk into the object and one of these two will occur.
+1 - Save Game
+2 - Load Game
 
 Inventory Menu Controls:
 Arrow Keys - Navigate Menu

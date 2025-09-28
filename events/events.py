@@ -424,7 +424,7 @@ class EventManager:
                 previously_equipped = character.equip_item(item)
                 # Add previously equipped item back to inventory
                 if previously_equipped:
-                    self.party.add_item(previously_equipped)
+                    self.engine.party.add_item(previously_equipped)
 
     @evention("give_quest")
     def give_quest(self, quest_name: str):
@@ -620,6 +620,7 @@ class EventManager:
 
         temp_tele = Teleporter.from_dict({"name" : "", "x" : -1, "y" : -1, "args" : {"target_map" : map, "position" : {"from_any" : node}}}, self.engine)
         self.engine.handle_teleporter(temp_tele, True)
+        self.engine.combat_manager.round_counter = 1
 
     @evention("force_combat")
     def force_combat(self, line: str):
