@@ -1,99 +1,158 @@
 {
-    "learn_quest_log" : {
-        "name" : "Logging Your Adventures",
-        "description" : "This is your personal quest journal! I know you like keeping things organized, so it's divided into three sections: Quests, Steps, and Hints. This is the Quest section, which gives you a general overview of what you need to do. Press 'Tab' to head to the 'Steps' section.",
-        "steps" : {
-            "view_steps" : {
-                "name" : "Steps Tab",
-                "description" : "",
-                "started" : true
+    "learn_quest_log": {
+        "name": "Logging Your Adventures",
+        "description": "This is your personal quest journal! I know you like keeping things organized, so it's divided into three sections: Quests, Steps, and Hints. This is the Quest section, which gives you a general overview of what you need to do. Press 'Tab' to head to the 'Steps' section.",
+        "steps": {
+            "view_steps": {
+                "name": "Steps Tab",
+                "description": "This is where you can write down the tasks needed to complete a quest! Generally, a quest is only considered 'completed' once all its steps have been finished. Here's the first step of this quest: Press 'Tab' again to go to the 'Notes' section.",
+                "started": true
+            },
+            "talk_to_eraton": {
+                "name": "Talk to Eraton",
+                "description": "Speak to your Sydan once more and report that you've read the quest log.."
             }
         },
-        "hints" : {
-            "view_hints" : {
-                "name" : "Hints Tab",
-                "description" : "",
-                "started" : true
+        "hints": {
+            "view_hints": {
+                "name": "Notes Tab",
+                "description": "Here you can write down everything you think might be relevant to your quest. It's good to have, but it's not perfect. Sometimes, it's only with hindsight that information's relevance becomes obvious. --n And that's your journal! Come talk to me when you've finished reading it. And, since I know you don't like me being too sappy in court, thank you for humoring my concerns. I want you to succeed on your quest and return home safely, my precious treasure. --n Yours as you are mine, --n Eraton",
+                "started": true
+            }
+        },
+        "reward": {
+            "xp": 100,
+            "gold": 200,
+            "item": "acc_harem_robe--4 | consumable_stealth_potion__3--1"
+        }
+    },
+    "assure_eraton": {
+        "name": "The Quest to Assure Eraton",
+        "description": "You already have permission to leave, but doing this before you go will keep your Sydan's mind at ease.",
+        "steps": {
+            "look_at_quest_log": {
+                "name": "Learn to Use This Journal",
+                "description": "Eraton gave you a journal to record your journey and your quests in.",
+                "started": true
+            },
+            "get_dressed": {
+                "name": "Dress to Impress",
+                "description": "Your Sydan wishes to see you properly clothed before anything else. ...Honestly, you're lucky he's so fond of you. Walking out like you just woke up and requesting the boon of a journey across the Sydandom? He would've been right to lock you away in the crazy house."
+            },
+            "train_weapons": {
+                "name": "Melee Management",
+                "description": "Your Sydan asked you to show competence in the art of melee weaponry.",
+                "description_vague": "do thing"
+            },
+            "train_magic": {
+                "name": "Miracle Study",
+                "description": "Your Sydan has asked you to show competence in the art of miracles. No matter how you go about your journey, miracles will inevitably be of great import, so grasping the fundamentals is as well."
+            },
+            "find_friend": {
+                "name": "It's Dangerous to go Alone!",
+                "description": "Your Sydan asked you to not travel by yourself. You feel like having a companion would diminish the validity of your successes, but you can't bear to make him worry."
+            },
+            "get_equipment": {
+                "name": "Get Set",
+                "description": "This is the last thing your Sydan asked of you. Make sure that you and your new ally have at least a non-practice weapon, some armor, and enough food to get to the next town. You were going to do that anyways. You should also maybe thank Eraton for not insisting you just take drakken armor or blessed weapons from the armory."
+            }
+        },
+        "hints": {
+            "fake_harem_wall": {
+                "name": "False Wall",
+                "description": "There's a false wall on the north side of your Sydan's chambers. You can simply walk through it to get to your personal bedroom in the Phitemos, and your wardrobe within."
+            },
+            "train_weapons": {
+                "name": "Training Grounds",
+                "description": "You'll find the training grounds past the castle's north entrance. --n You spent some time training with conventional weaponry when you first decided to take on this quest. It... didn't go well, but the master-at-arms, Sergeant Caballera, respects your tenacity... you think."
+            },
+            "train_magic": {
+                "name": "Temple",
+                "description": "You'll find the Temple of Prometus past the castle's south entrance. --n You could also get Dmitri to bring you up to the Archmage's lab, but... maybe it's better to start at the Temple."
             }
         }
     },
-    "assure_eraton" : {
-        "name" : "The Quest to Assure Eraton",
-        "description" : "You already have permission to leave, but doing this before you go will keep your king's mind at ease.",
-        "steps" : {
-            "look_at_quest_log" : {
-                "name" : "Learn to Use This Journal",
-                "description" : "Eraton gave you a journal to record your journey and your quests in.",
-                "started" : true
-            },
-            "get_dressed" : {
-                "name" : "Dress to Impress",
-                "description" : "Your king wishes to see you properly clothed before anything else. ...Honestly, you're lucky he's so fond of you. Walking out like you just woke up and requesting the boon of a journey across the kingdom? He would've been right to lock you away in the crazy house."
-            },
-            "train_weapons" : {
-                "name" : "Melee Management",
-                "description" : "Your king asked you to show competence in the art of melee weaponry.",
-                "description_vague" : "do thing"
-            },
-            "train_magic" : {
-                "name" : "Miracle Study",
-                "description" : "Your king has asked you to show competence in the art of miracles. No matter how you go about your journey, miracles will inevitably be of great import, so grasping the fundaments is as well."
-            }
-        },
-        "hints" : {
-            "fake_harem_wall" : {
-                "name" : "False Wall",
-                "description" : "There's a false wall on the north side of your king's chambers. You can simply walk through it to get to your personal bedroom in the Phitemos, and your wardrobe within."
-            },
-            "train_weapons" : {
-                "name" : "Training Grounds",
-                "description" : "You'll find the training grounds past the castle's north entrance. --n You spent some time training with conventional weaponry when you first decided to take on this quest. It... didn't go well, but the master-at-arms, Sergeant Caballera, respects your tenacity... you think."
-            },
-            "train_magic" : {
-                "name" : "Temple",
-                "description" : "You'll find the Temple of Prometus past the castle's south entrance. --n You could also get Dmitri to bring you up to the Archmage's lab, but... maybe it's better to start at the Temple."
+    "kesvelt_jin_shi_dies": {
+        "name": "Burnt Disciple",
+        "description": "There's been an accident. You saw a young Lingin woman named Mei-Hua mourning a burnt corpse just east of the south entrance.",
+        "steps": {
+            "visit_imedes": {
+                "name": "Tell the Archmage",
+                "description": "Bubba Renald told you in the most diplomatic way he could to kick rocks. Nothing you're not used to, and at least this time you were told that to protect someone else. He's right about giving a heads up to the Archmage. Better ask Bubba Dmitri to take you to his lab."
             }
         }
     },
-    "kesvelt_jin_shi_dies" : {
-        "name" : "Burnt Disciple",
-        "description" : "There's been an accident. You saw a young Lingin woman named Mei-Hua mourning a burnt corpse just east of the south entrance.",
-        "steps" : {
-            "visit_imedes" : {
-                "name" : "Tell the Archmage",
-                "description" : "Bubba Renald told you in the most diplomatic way he could to kick rocks. Nothing you're not used to, and at least this time you were told that to protect someone else. He's right about giving a heads up to the Archmage. Better ask Bubba Dmitri to take you to his lab."
-            }
-        }
-    },
-    "kesvelt_fake_books" : {
-        "name" : "Mystery of the Burning Disciples",
-        "description" : "According to Archmage Imedes, several disciples of Prometus have burned themselves alive while casting miracles, recently. He doesn't buy the monks' excuses that it's just carelessness that leads to these tragedies, but he's too busy with his research to look into it himself without a solid lead. You aren't an investigator, but maybe if you solve this mystery, Imedes will find time for it, and you, as a show of thanks.",
-        "steps" : {
-            "visit_morgue" : {
-                "name" : "Visit the Morgue",
-                "description" : "Archmage Imedes recommended you visit the morgue to see if you can find any clues. Well, he didn't actually say anything about clues, he just wanted you to leave."
-            }
-        },
-        "hints" : {
-            "poor_only" : {
-                "name" : "Only Low-Class Casualties",
-                "description" : "So far, none of the nobles posturing as disciples have fallen victim to this seeming epidemic of self-immolation."
+    "kesvelt_fake_books": {
+        "name": "Mystery of the Burning Disciples",
+        "description": "According to Archmage Imedes, several disciples of Prometus have burned themselves alive while casting miracles, recently. He doesn't buy the monks' excuses that it's just carelessness that leads to these tragedies, but he's too busy with his research to look into it himself without a solid lead. You aren't an investigator, but maybe if you solve this mystery, Imedes will find time for it, and you, as a show of thanks.",
+        "steps": {
+            "visit_morgue": {
+                "name": "Visit the Morgue",
+                "description": "Archmage Imedes recommended you visit the morgue to see if you can find any clues. Well, he didn't actually say anything about clues, he just wanted you to leave."
             },
-            "recent_casualty" : {
-                "name" : "Another Victim",
-                "description" : "There's been an accident. You saw a young Lingin woman named Mei-Hua mourning a burnt corpse just east of the south entrance."
+            "obtain_book": {
+                "name": "Obtain Copy of Fake Book",
+                "description": "With your new... odd-fashion burqa, you might be able to trick whoever is selling these books that you're just as down on your luck as his prior victims."
+            },
+            "tell_mei_hua": {
+                "name": "Inform Mei-Hua",
+                "description": "The shady guy, Jin-Shi's killer was... Bubba Renald. Hopefully this tome is enough to convince Mei-Hua of the truth."
+            },
+            "confront_renald": {
+                "name": "Confront Bubba Renald",
+                "description": "When you're ready, tell Mei-Hua."
+            },
+            "visit_imedes": {
+                "name": "Visit the Archmage",
+                "description": "With Bubba Renald dead, the case is not only solved, but Archmage Imedes has agreed to review your competency with miracles."
+            }
+        },
+        "hints": {
+            "poor_only": {
+                "name": "Only Low-Class Casualties",
+                "description": "So far, none of the nobles posturing as disciples have fallen victim to this seeming epidemic of self-immolation."
+            },
+            "recent_casualty": {
+                "name": "Another Victim",
+                "description": "There's been an accident. You saw a young Lingin woman mourning a burnt corpse just east of the south entrance."
+            },
+            "uzuri_advice": {
+                "name": "Bahati's Instructions",
+                "description": "Bahati said to try and fail buying the real tome from the book store, then walking away, dejected."
             }
         }
     },
-    "earn_favor" : {
-        "name" : "Earn Favor",
-        "description" : "Travel about Sewinso and earn the favor of the Eight.",
-        "steps" : {
-
+    "kesvelt_gang": {
+        "name": "Reconciliation",
+        "description": "At your insistance, Sergeant Caballera agreed to only give the Sydan his approval once you've taken out some thugs in a wooden hut north-east of the castle.",
+        "steps": {
+            "fight_baddies": {
+                "name": "Beat Thugs",
+                "description": "Defeat the thugs in the wooden house. You're doing it to prove your matrial prowess to your Sydan. Nothing less."
+            },
+            "tell_sarge": {
+                "name": "Report to Caballera",
+                "description": "You've defeated the creatures infesting that house. Time to move on and tell the sergeant."
+            }
         },
-        "hints" : {
-
+        "hints": {
+            "home": {
+                "name": "Wooden House",
+                "description": "Given all the other huts in the poorer districts are made of stone, one made of wood, popelm wood no less, is impossible to miss. ...Isn't that the truth."
+            }
         }
-
+    },
+    "earn_favor": {
+        "name": "Earn Favor",
+        "description": "Travel about Sewinso and earn the favor of the Eight.",
+        "steps": {},
+        "hints": {},
+        "reward": {
+            "xp": 10000,
+            "items": [
+                "key_all_trials_stone",
+                "acc_lovers_bracelet__3"
+            ]
+        }
     }
 }

@@ -1,0 +1,9 @@
+{
+  "_": "floor",
+  "w": "floorwood",
+  ".": "grass",
+  "~": "sky",
+  "-": "walkwaycobblestone",
+  "#": "wall",
+  "W": "wallwood"
+}

@@ -1,10 +1,10 @@
 {
-  "#": "wall",
   "_": "floor",
-  ".": "grass",
   "-": "floorcarpetblue",
-  "B": "wallbrick",
-  "~": "sky",
+  ".": "grass",
   "M": "mountain",
-  "|": "rail"
+  "|": "rail",
+  "~": "sky",
+  "#": "wall",
+  "B": "wallbrick"
 }

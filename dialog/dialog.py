@@ -3,9 +3,9 @@ import json
 from typing import TYPE_CHECKING
 from objects.characters import Party
 from objects.map_objects import MapObject
-from objects.object_basics import ElevatorHelper
+from objects.object_basics import ElevatorHelper, Merchant
 from dialog.dialog_helpers import *
-from constants import TALK_DIR, GameState
+from constants import TALK_DIR, GameState, ObjectState
 import re
 if TYPE_CHECKING:
     from ultimalike import GameEngine
@@ -21,6 +21,7 @@ class DialogManager:
         self.current_speaker = None
         self.current_lines = []
         self.current_line = ""
+        self.scare_counter = 0
         self.npc_vocab = {}
         self._config_words = ["elevator_config"]
         self.engine = engine
@@ -54,13 +55,12 @@ class DialogManager:
 
         data = self.dialogs[dialog_key]
         parts = dialog_key.split("#")
-
         if len(parts) > 1:
             # Reconstruct hierarchy step by step
             base_key = parts[0]
             merged = self.get_dialog_data(base_key) or {}
             for i in range(1, len(parts)):
-                variant_key = "__".join(parts[:i+1])
+                variant_key = "#".join(parts[:i+1])
                 if variant_key in self.dialogs:
                     merged = merge_dialogs(merged, self.dialogs[variant_key])
             self._merge_cache[dialog_key] = merged
@@ -72,6 +72,8 @@ class DialogManager:
     def start_dialog(self, npc: MapObject):
         """Start a dialog with a map object"""
         # Get the NPC name from object args
+        if npc.state == ObjectState.SLEEP:
+            return False
         npc_name = npc.args.get("name", "").lower()
         dialog_key = npc.args.get("dialog_key", npc_name)
         dialog_data = self.get_dialog_data(dialog_key)
@@ -81,6 +83,7 @@ class DialogManager:
         self.engine.event_manager.talked_to_npcs.add(self.dialog_key)
         
         self.current_speaker = npc
+        self.current_speaker.state = ObjectState.TALK
         npc_id = f"{dialog_key}"
         self.dialog_key = npc_id
         
@@ -88,7 +91,6 @@ class DialogManager:
         self.user_input = "__hi__"
         
         # Get the greeting dialog
-        dialog_data = self.dialogs[dialog_key]
         if self.user_input in dialog_data:
             self.process_user_input()
         else:
@@ -114,7 +116,7 @@ class DialogManager:
         
     def advance_dialog(self):
         """Advance to the next line of dialog or perform the next event"""
-        if not self.current_lines or self.waiting_for_input or self.awaiting_keyword:
+        if not self.current_lines or self.waiting_for_input or self.awaiting_keyword or self.engine.event_manager.walkers:
             return
         if self.engine.event_manager.timer_manager.get_remaining_time("event_pause") > 0:
             return
@@ -122,14 +124,13 @@ class DialogManager:
         if self.current_line_index >= len(self.current_lines)-1:
             if self.engine.event_manager.force_end:
                 self.end_dialog()
-                self.engine.revert_state()
                 return
             elif not self.looking:
+                self.waiting_for_input = True
                 self.awaiting_keyword = True
                 self.user_input = ""
-            elif self.current_line_index >= len(self.current_lines):
+            elif self.looking and self.current_line_index >= len(self.current_lines):
                 self.end_dialog()
-                self.engine.revert_state()
         current_line = self.get_current_line()
         use_line = True
         has_cond = "++" in current_line
@@ -148,6 +149,7 @@ class DialogManager:
         
     
     def process_user_input(self):
+        print(self.user_input)
         npc = self.current_speaker
         if not npc:
             return
@@ -155,7 +157,8 @@ class DialogManager:
         self.current_line_index = 0
         npc_name = npc.args.get("name", "").lower()
         dialog_key = npc.args.get("dialog_key", npc_name)
-        dialog_data = self.dialogs.get(dialog_key, {})
+        dialog_data = self._merge_cache.get(dialog_key, self.dialogs.get(dialog_key, {}))
+        
 
         input_lower = input_text.lower().strip()
 
@@ -169,11 +172,26 @@ class DialogManager:
         if input_lower in self._config_words:
             input_lower = "bleh"
         if input_lower == "show":
-            self.engine.state = GameState.MENU_INVENTORY
+            self.engine.picking_item_to_show = True
+            self.engine.change_state(GameState.MENU_INVENTORY)
             return
+        elif "show" in input_lower:
+            item_name = input_lower[5:]
+            print(item_name)
+            if not self.engine.party.check_for_item_by_name(item_name):
+                self.current_lines = [f"(You don't have {item_name}.)"]
+                self.current_line_index = 0
+                self.current_line = self.get_current_line()
+                return
+        if input_lower == "shop":
+            if self.current_speaker.__is__(Merchant):
+                self.engine.change_state(GameState.MENU_SHOPPING)
+                self.user_input = ""
+                return
         if input_lower == "bye":
             self.end_dialog()
-            self.engine.revert_state()
+            return
+        self.current_speaker.state = ObjectState.TALK
 
         if npc.__is__(ElevatorHelper):
             config = npc.args.get("elevator_config", {}) or dialog_data.get("elevator_config", {})
@@ -187,7 +205,19 @@ class DialogManager:
                 self.awaiting_keyword = True
                 self.last_input = input_lower  # <- track last keyword
                 self.user_input = ""
-                self.current_line = self.get_current_line()
+                current_line = self.get_current_line()
+                has_cond = "++" in current_line
+                use_line = True
+                if has_cond:
+                    condition, current_line = current_line.split("++") 
+                    use_line = self._check_condition(condition)
+                if use_line:
+                    is_event = "=" in current_line
+                    if is_event:
+                        self._do_event(current_line)
+                    else:
+                        self.current_line = current_line
+                        self.waiting_for_input = True
                 return
             aliases = config.get("aliases", {})
             # Resolve alias if it exists
@@ -197,7 +227,7 @@ class DialogManager:
                 input_lower = contextual_aliases[self.last_input][input_lower]
             if input_lower in config.get("destinations", {}):
                 response = get_destination_response(config, input_lower, current_map)
-                self.current_lines = response["text"]
+                self.current_lines = response["script"]
                 self.engine.event_manager.pending_events = response.get("events", {})
                 self.awaiting_keyword = True
                 self.waiting_for_input = True
@@ -221,7 +251,7 @@ class DialogManager:
         for entry in responses:
             conditions = entry.get("conditions", [])
             if all(self._check_condition(cond) for cond in conditions):
-                selected = entry["text"]
+                selected = entry["script"]
                 for flag in entry.get("set_flags", []):
                     self.engine.event_manager.flags.add(flag)
                 for event in entry.get("events", []):
@@ -237,7 +267,7 @@ class DialogManager:
             # Find the matching response again and use the english line
             for entry in responses:
                 if all(self._check_condition(cond) for cond in entry.get("conditions", [])):
-                    selected = entry.get("english", entry["text"])
+                    selected = entry.get("english", entry["script"])
                     break
         else:
             selected = [self._translate_line(line) for line in selected]
@@ -337,8 +367,7 @@ class DialogManager:
         self.waiting_for_input = False
         self.awaiting_keyword = False
         self.looking = False
-        for tl in self.engine.event_manager.timer_limits:
-            self.engine.event_manager.timer_limits[tl] = 0
+        self.engine.revert_state()
 
 def merge_dialogs(base: dict, overrides: dict) -> dict:
     """Merge override dialog entries into a base dict, returning new dict."""
@@ -363,7 +392,6 @@ def merge_dialogs(base: dict, overrides: dict) -> dict:
 
         # Default: replace
         result[key] = value
-
     return result
     
     

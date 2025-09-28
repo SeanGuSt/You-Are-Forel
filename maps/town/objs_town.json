@@ -3,7 +3,7 @@
     "object_type": "npc",
     "x": 12,
     "y": 18,
-    "move_interval": 7,
+    "move_interval": 999,
     "args": {
       "name": "Bob",
       "dialog_key": "bob",

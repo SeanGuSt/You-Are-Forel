@@ -1,7 +1,10 @@
 from objects.object_templates import Node
 class NodeGroup:
     def __init__(self, *nodes: Node):
-        self._nodes: set[Node] = set()
+        self._nodes: list[Node] = []
+        self.progress = 0
+        self.name = ""
+        self.checked_movement = False
         if nodes:
             self.add(*nodes)
 
@@ -17,9 +20,13 @@ class NodeGroup:
     def add(self, *nodes: Node):
         """Add one or more Node instances to the group."""
         for node in nodes:
+            if not self.name:
+                self.name = node.group_name
+            elif node.group_name != self.name:
+                raise Exception(f"Cannot add {node.name} to NodeGroup {self.name}. It belongs to {node.group_name}.")
             if not isinstance(node, Node):
                 raise TypeError(f"Only Node instances can be added to NodeGroup, got {type(node).__name__}")
-            self._nodes.add(node)
+            self._nodes.append(node)
 
     def remove(self, *nodes: Node):
         """Remove one or more Node instances from the group."""
@@ -34,16 +41,6 @@ class NodeGroup:
         """Call each node's update method with optional kwargs."""
         for node in list(self._nodes):
             node.update(**kwargs)
-
-    def draw(self, surface):
-        """Draw all nodes to a given surface (if they have an image)."""
-        for node in self._nodes:
-            if node.image and node.position:
-                surface.blit(node.image, node.position)
-
-    def sprites(self) -> list[Node]:
-        """Return a list of all nodes."""
-        return list(self._nodes)
 
     def get_by_name(self, name: str) -> list[Node]:
         """Find nodes by their name."""

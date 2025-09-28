@@ -43,6 +43,12 @@ class Sky(Tile):
 class Stairs(Tile):
     color = BEIGE
 
+class StairsUp(Stairs):
+    pass
+
+class StairsDown(Stairs):
+    pass
+
 class Walkway(Tile):
     pass
 

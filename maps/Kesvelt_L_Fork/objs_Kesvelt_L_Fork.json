@@ -1,0 +1,24 @@
+{
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 5,
+    "y": 5
+  },
+  "map_edge_teleporter": {
+    "object_type": "node",
+    "x": -99,
+    "y": -98,
+    "args": {
+      "adjacent_maps": {
+        "E": {
+          "map": "Forels_Street_B",
+          "offset": "(0, 2)"
+        },
+        "S": {
+          "map": "Kesvelt_Ground",
+          "offset": "(12, 0)"
+        }
+      }
+    }
+  }
+}

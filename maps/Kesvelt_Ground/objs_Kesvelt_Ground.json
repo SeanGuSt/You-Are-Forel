@@ -1,4 +1,13 @@
 {
+  "maddy#phitemos": {
+    "object_type": "node",
+    "x": -99,
+    "y": -97,
+    "args": {
+      "name": "Maddy",
+      "dialog_key": "maddy#phitemos"
+    }
+  },
   "book_spawn_node_0": {
     "object_type": "node",
     "x": 26,
@@ -12,7 +21,20 @@
   "bubba_renald": {
     "object_type": "npc",
     "x": 28,
-    "y": 29
+    "y": 29,
+    "skin_color": 1,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        6
+      ]
+    }
+  },
+  "after_montage_node": {
+    "object_type": "node",
+    "x": 16,
+    "y": 32
   },
   "burn_jin_shi_event": {
     "object_type": "node",
@@ -27,7 +49,7 @@
     "x": -99,
     "y": -99,
     "args": {
-      "event_start": "burning_student_replace"
+      "on_load_event": "burning_student_replace"
     }
   },
   "map_edge_teleporter": {
@@ -38,7 +60,11 @@
       "adjacent_maps": {
         "S": {
           "map": "Kesvelt_Morgue",
-          "offset": "(-8, 0)"
+          "offset": "(-9, 0)"
+        },
+        "N": {
+          "map": "Kesvelt_L_Fork",
+          "offset": "(-12, 0)"
         }
       }
     }
@@ -209,6 +235,21 @@
     "x": 16,
     "y": 34
   },
+  "bob": {
+    "object_type": "npc",
+    "x": -99,
+    "y": 34,
+    "move_interval": 999,
+    "args": {
+      "name": "Bob",
+      "dialog_key": "bob",
+      "allies_in_combat": [
+        "monsterkesveltalleythief",
+        "monsterkesveltalleythief",
+        "monsterkesveltalleythief"
+      ]
+    }
+  },
   "pillar0": {
     "object_type": "pillar",
     "x": 6,
@@ -286,6 +327,7 @@
   },
   "student_2": {
     "object_type": "npcstudent",
+    "skin_color": 8,
     "x": 28,
     "y": 31
   },
@@ -293,6 +335,7 @@
     "object_type": "npcstudent",
     "x": 29,
     "y": 31,
+    "skin_color": 0,
     "args": {
       "name": "Mei-Hua",
       "dialog_key": "student_3"
@@ -300,6 +343,7 @@
   },
   "student_shi": {
     "object_type": "npcstudent",
+    "skin_color": 1,
     "x": 30,
     "y": 31
   },
@@ -372,5 +416,21 @@
     "x": 4,
     "y": 19,
     "args": {}
+  },
+  "respawn_mei_hua_node": {
+    "object_type": "node",
+    "x": 11,
+    "y": 29,
+    "args": {
+      "on_load_event": "respawn_mei_hua"
+    }
+  },
+  "despawn_mei_hua_node": {
+    "object_type": "node",
+    "x": 2,
+    "y": 1,
+    "args": {
+      "on_load_event": "despawn_mei_hua"
+    }
   }
 }

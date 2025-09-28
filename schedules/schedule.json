@@ -8,7 +8,7 @@
   "guard" : {
       "07:20": {"action":"patrol", "patrol_node_template" : "guard_patrol_1", "start_node" : "0", "max_node" : 4}
   },
-  "imedes_laboratory" : {
+  "imedes_torso" : {
       "06:20": {"action":"patrol", "patrol_node_template" : "imedes_patrol_1", "start_node" : "0", "max_node" : 3}
   },
   "crossbower_0" : {

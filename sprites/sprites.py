@@ -13,11 +13,16 @@ class SpriteDatabase:
         self.engine = engine
         self.color_variants = {}
         self.common_skin_colors = [
-            (255, 220, 177),  # Light
-            (241, 194, 125),  # Medium-light
-            (224, 172, 105),  # Medium
-            (198, 134, 66),   # Medium-dark
-            (141, 85, 36),    # Dark
+            (255, 224, 189),  # Northern European (very light / pale)
+            (241, 194, 125),  # Central European (light)
+            (224, 172, 105),  # Mediterranean (light-medium)
+            (198, 134, 66),   # Middle Eastern / North African (medium tan)
+            (141, 85, 36),    # South Asian (medium brown)
+            (120, 73, 32),    # Southeast Asian (medium-deep brown)
+            (105, 63, 35),    # East African (deep brown)
+            (92, 51, 23),     # West African (very deep brown)
+            (79, 48, 20),     # Central African (very deep)
+            (66, 37, 16)      # Southern African (rich dark brown)
         ]
         self.load_from_files()
 
@@ -26,7 +31,7 @@ class SpriteDatabase:
         for file_name in onlyfiles:
             if file_name.endswith(".png"):
                 sheet_name = file_name[:-4]
-                self.sprites[sheet_name] = pygame.transform.scale_by(pygame.image.load(os.path.join(IMAGE_DIR, file_name)).convert_alpha(), 2)
+                self.sprites[sheet_name] = pygame.transform.scale_by(pygame.image.load(os.path.join(IMAGE_DIR, file_name)).convert_alpha(), 1)
                 
                 # Pre-generate color variants for people sprites
                 if sheet_name.startswith("Generic People"):
@@ -35,7 +40,10 @@ class SpriteDatabase:
                         variant_sheet = replace_color_threshold(self.sprites[sheet_name].copy(), GRAY, skin_color)
                         self.color_variants[sheet_name][skin_color] = variant_sheet
                 
-    
+    def get_slide(self, slide_name:str):
+        slide = self.sprites.get(slide_name)
+        if slide:
+            self.engine.cutscene_manager.current_image = slide
     def get_sprite(self, node: Node, new_row: int = None, new_col: int = None, is_delta: bool = False):
         if not "spritesheet" in node.args:
             return
@@ -53,21 +61,22 @@ class SpriteDatabase:
                 node.args["spritesheet"][2] += new_col
             else:
                 node.args["spritesheet"][2] = new_col
-        sprite_row = node.args["spritesheet"][1]
+        sprite_row = node.fixed_spritesheet_row if node.fixed_spritesheet_row else node.args["spritesheet"][1]
         sprite_col = node.args["spritesheet"][2]
+        sprite_width = TILE_WIDTH*node.width_in_tiles
+        sprite_height = TILE_HEIGHT*node.height_in_tiles
         
         # Use pre-generated color variant if available
         if sheet_name.startswith("Generic People") and node.skin_color in self.color_variants.get(sheet_name, {}):
             sheet = self.color_variants[sheet_name][node.skin_color]
-        
             node.image = sheet.subsurface(pygame.Rect(
-                sprite_col * TILE_WIDTH, 
-                sprite_row * TILE_HEIGHT, 
-                TILE_WIDTH*node.width_in_tiles, 
-                TILE_HEIGHT*node.height_in_tiles
+                sprite_col * sprite_width, 
+                sprite_row * sprite_height, 
+                sprite_width, 
+                sprite_height
             ))
         else:
-            node.image = sheet.subsurface(pygame.Rect(sprite_col*TILE_WIDTH, sprite_row*TILE_HEIGHT, TILE_WIDTH*node.width_in_tiles, TILE_HEIGHT*node.height_in_tiles))
+            node.image = sheet.subsurface(pygame.Rect(sprite_col*sprite_width, sprite_row*sprite_height, sprite_width, sprite_height))
 
 def replace_color_threshold(surface, old_color, new_color, threshold=0):
         # Create a mask for the color to replace

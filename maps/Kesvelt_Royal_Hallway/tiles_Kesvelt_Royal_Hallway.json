@@ -1,11 +1,12 @@
 {
-  "#": "wall",
+  "X": "fakeharemwallbrick",
   "_": "floor",
-  ".": "grass",
   "-": "floorcarpetblue",
-  "B": "wallbrick",
-  "~": "sky",
+  ".": "grass",
   "M": "mountain",
   "|": "rail",
-  "X": "fakeharemwallbrick"
+  "~": "sky",
+  "z": "stairs",
+  "#": "wall",
+  "B": "wallbrick"
 }

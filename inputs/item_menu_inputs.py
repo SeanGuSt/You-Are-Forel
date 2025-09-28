@@ -11,7 +11,7 @@ def equipment_menu_inputs(self: 'GameEngine', event):
             self.revert_state()
             self.show_equipment_list = False
         case pygame.K_i:
-            self.state = GameState.MENU_INVENTORY
+            self.replace_state(GameState.MENU_INVENTORY)
             self.show_equipment_list = False
         case pygame.K_UP:
             if self.show_equipment_list:
@@ -39,8 +39,12 @@ def equipment_menu_inputs(self: 'GameEngine', event):
             if self.show_equipment_list:
                 equip_selected_item(self)
             else:
-                self.show_equipment_list = True
-                self.selected_equipment = 0
+                current_slot = list(EquipmentSlot)[self.selected_slot]
+                available_equipment = [eq for eq in self.party.inventory 
+                                    if eq.slot == current_slot]
+                if available_equipment:
+                    self.show_equipment_list = True
+                    self.selected_equipment = 0
         case pygame.K_u:  # Unequip
             if not self.show_equipment_list:
                 unequip_selected_item(self)
@@ -60,7 +64,7 @@ def inventory_menu_inputs(self: 'GameEngine', event):
                 self.show_equipment_list = False
         case pygame.K_e:
             if not self.picking_item_to_show:
-                self.state = GameState.MENU_EQUIPMENT
+                self.replace_state(GameState.MENU_EQUIPMENT)
                 self.show_equipment_list = True
         case pygame.K_UP:
             self.selected_equipment = (self.selected_equipment - 1) % len(inventory)
@@ -68,9 +72,9 @@ def inventory_menu_inputs(self: 'GameEngine', event):
             self.selected_equipment = (self.selected_equipment + 1) % len(inventory)
         case pygame.K_RETURN:
             if self.picking_item_to_show:
-                self.state = GameState.DIALOG
+                self.revert_state()
                 self.picking_item_to_show = False
-                self.dialog_manager.user_input = inventory[self.selected_equipment].name
+                self.dialog_manager.user_input = "show " + inventory[self.selected_equipment].name
 
 def stats_menu_inputs(self: 'GameEngine', event):
     if event.key == pygame.K_ESCAPE:

@@ -3,7 +3,7 @@ B___B__B___B___B__B___B
 B__________B__________B
 B___B__B___B___B__B___B
 BBBBB__BBBBBBBBB__BBBBB
-B___B__B___B___B__B___B
+B_z_B__B___B___B__B___B
 B__________B__________B
 B___B__B___B___B__B___B
 BBBBB__BBBBBBBBB__BBBBB

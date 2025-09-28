@@ -5,3 +5,6 @@
 /slime_split.py
 /objects/characters_rect.py
 /objects/object_templates_rect.py
+/circle_attack_check.py
+/store_test.py
+/render_group_object_test.py

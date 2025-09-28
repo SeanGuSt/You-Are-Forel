@@ -37,11 +37,11 @@ def get_destination_response(elevator_config, keyword, current_map):
     """Return travel lines and event for destination keyword."""
     dest_data = elevator_config["destinations"].get(keyword)
     if not dest_data:
-        return {"text": elevator_config.get("refuse", ["I don't know where that is, kind Faithful."])}
+        return {"script": elevator_config.get("refuse", ["I don't know where that is, kind Faithful."])}
 
     if dest_data["map"] != current_map:
         return {
-            "text": elevator_config.get("confirm", ["Very well. Sit then, and *pray* with me."]),
+            "script": elevator_config.get("confirm", ["Very well. Sit then, and *pray* with me."]),
             "events": {"new_args": {
                                         "target_map": dest_data["map"],
                                         "position": {
@@ -51,5 +51,5 @@ def get_destination_response(elevator_config, keyword, current_map):
         }
     else:
         return {
-            "text": elevator_config.get("already_here", ["We are already there, kind Faithful."])
+            "script": elevator_config.get("already_here", ["We are already there, kind Faithful."])
         }

@@ -1,272 +1,432 @@
 {
-    "eraton_throne" : {
-        "__hi__" : [
-            {
-                "text" : ["Hm? Is something the matter, love? Do you need a reminder on how to *dress* yourself?"],
-                "conditions" : ["!leader_wear=acc_harem_robe|acc_harem_robe_adult", "!have_quest=earn_favor", "attacked_by_eratons_guards"],
-                "events" : ["talked=false"]
-            },
-            {
-                "text" : [
-                    "...Forel? Did you really start stripping right after passing my guards? I'm not complaining, mind you.{leader_naked}{ Believe me, I would never complain about seeing this.} It's just... that's quite bold. Quite unlike you.{leader_naked}{ And given where we are, quite inappropriate.}",
-                    "Are you... trying to seduce me into letting you go off on your quest?"
-                ],
-                "conditions" : ["!leader_wear=acc_harem_robe|acc_harem_robe_adult", "!have_quest=earn_favor", "!attacked_by_eratons_guards"],
-                "events" : ["talked=false"]
-            },
-            {
-                "text" : [
-                    "Ahhh, much better. Far more handsome, and far less likely to get attacked by my guards.",
-                    "Although, that is something we need to discuss. This... this plan of yours. Traveling Sewinso, growing stronger and gaining the favor of the Eight. Alone?",
-                    "You don't need to do that just because a few nobles have more spare time for gossip than they do brain cells. You can just stay here. You have food and luxury even some of them could only dream of.",
-                    "You have friends in the Phitemos. Ginny, Maddy, Chin-Yau, Getro. They'd all miss you. I'd miss you.",
-                    "And if something bad happened... I don't have to tell you this won't be like a carriage ride to the opera. The shades outside Kesvelt's walls are dangerous. Even wizards struggle to defeat spirits or headless.",
-                    "Please don't *leave*. This isn't a journey you have to take. Train all you want, but *stay* here where it's safe."
-                ],
-                "conditions" : ["leader_wear=acc_harem_robe|acc_harem_robe_adult", "!have_quest=earn_favor", "attacked_by_eratons_guards"],
-                "events" : ["talked=true"]
-            },
-            {
-                "text" : [
-                    "Why, hello there, handsome. It's rare for you to come to me during court. I guess... I guess you really are serious about this, huh?. Traveling Sewinso, growing stronger and gaining the favor of the Eight. Alone?",
-                    "You don't need to do that just because a few nobles have more spare time for gossip than they do brain cells. You can just stay here. You have food and luxury even some of them could only dream of.",
-                    "You have friends in the Phitemos. Ginny, Maddy, Chin-Yau, Getro. They'd all miss you. I'd miss you.",
-                    "And if something bad happened... I don't have to tell you this won't be like a carriage ride to the opera. The shades outside Kesvelt's walls are dangerous. Even wizards struggle to defeat spirits or headless.",
-                    "Please don't *leave*. This isn't a journey you have to take. Train all you want, but *stay* here where it's safe."
-                ],
-                "conditions" : ["leader_wear=acc_harem_robe|acc_harem_robe_adult", "!have_quest=earn_favor", "!attacked_by_eratons_guards"],
-                "events" : ["talked=true"]
-            },
-            {
-                "text" : [
-                    "Good {time_of_day}, love. Do you have something to *report*?"
-                ],
-                "conditions" : ["mid_quest=assure_eraton"]
-            }
-
+  "eraton_throne": {
+    "__hi__": [
+      {
+        "script": [
+          "Hm? Is something the matter, love? Do you need a reminder on how to *dress* yourself?"
         ],
-        "leave" : [
-            {
-                "text" : [
-                    "...",
-                    "... ...",
-                    "... ... Heh, still as stubborn as ever, are we?",
-                    "Alright, I won't get in your way. But I can't abide you doing this alone. I've learned the hard way that even a king isn't immortal. Losing you...",
-                    "...No, I'm sorry. I'm not trying to guilt you. I promised to give my blessing and I meant it. But for my peace of mind, please, make certain you're ready for the dangers ahead."
-                ],
-                "conditions" : ["!have_quest=earn_favor", "leader_wear=acc_harem_robe|acc_harem_robe_adult"],
-                "events" : ["give_quest=earn_favor", "complete_quest=get_eratons_blessing"]
-            }
+        "conditions": [
+          "!leader_wear=acc_harem_robe|acc_harem_robe_adult",
+          "!have_quest=earn_favor",
+          "attacked_by_eratons_guards"
         ],
-        "stay" : [
-            {
-                "text" : ["Oh, praise The Eight! And thank you, my treasure."],
-                "conditions" : ["!have_quest=earn_favor", "leader_wear=acc_harem_robe|acc_harem_robe_adult"],
-                "events" : ["cutscene=joke_ending_0"]
-            }
+        "events": [
+          "talked=false"
+        ]
+      },
+      {
+        "script": [
+          "...Forel? Did you really start stripping right after passing my guards? I'm not complaining, mind you.{leader_naked}{ Believe me, I would never complain about seeing this.} It's just... that's quite bold. Quite unlike you.{leader_naked}{ And given where we are, quite inappropriate.}",
+          "Are you... trying to seduce me into letting you go off on your quest?"
         ],
-        "yes" : [
-            {
-                "text" : [
-                    "You can open your Equipment bag by pressing 'E', then head to the Accessory section and press Enter to open your accessory pocket, then Enter again to equip Ronpa tue Phitemos.",
-                    "You'll know you've done it right when its name shows up next to the word 'Accessory'.",
-                    "Come see me again when you're dressed, OK?",
-                    ""
-                ],
-                "conditions" : ["!leader_wear=acc_harem_robe|acc_harem_robe_adult", "!talked=", "last_dialog=__hi__"],
-                "events" : ["force_end="]
-            },
-            {
-                "text" : ["Yes you'll *stay*? Or yes you still plan to *leave*?"],
-                "conditions" : ["!have_quest=earn_favor", "last_dialog=__hi__|no|yes"]
-            },
-            {
-                "text" : ["Yes? Yes to what?"]
-            }
+        "conditions": [
+          "!leader_wear=acc_harem_robe|acc_harem_robe_adult",
+          "!have_quest=earn_favor",
+          "!attacked_by_eratons_guards"
         ],
-        "no" : [
-            {
-                "text" : [
-                    "I'll leave you to it, then.",
-                    ""
-                ],
-                "conditions" : ["!talked="],
-                "events" : ["force_end="]
-            },
-            {
-                "text" : [
-                    "No you won't *leave*, or... no you won't *stay*?"
-                ],
-                "conditions" : ["!have_quest=earn_favor", "last_dialog=__hi__|no|yes"]
-            },
-            {
-                "text" : [
-                    "...OK. Just, remember. This is your home. If you ever decide you want to *stay* after all, just come and tell me. ",
-                    ""
-                ],
-                "conditions" : ["last_dialog=leave", "have_quest=earn_favor"],
-                "events" : ["force_end="]
-            },
-            {
-                "text" : [
-                    "No? No to what?"
-                ]
-            }
+        "events": [
+          "talked=false"
+        ]
+      },
+      {
+        "script": [
+          "Ahhh, much better. Far more handsome, and far less likely to get attacked by my guards.",
+          "Although, that is something we need to discuss. This... this plan of yours. Traveling Sewinso, growing stronger and gaining the favor of the Eight. Alone?",
+          "You don't need to do that just because a few nobles have more spare time for gossip than they do brain cells. You can just stay here. You have food and luxury even some of them could only dream of.",
+          "You have friends in the Phitemos. Ginny, Maddy, Chin-Yau, Getro. They'd all miss you. I'd miss you.",
+          "And if something bad happened... I don't have to tell you this won't be like a carriage ride to the opera. The shades outside Kesvelt's walls are dangerous. Even wizards struggle to defeat spirits or headless.",
+          "Please don't *leave*. This isn't a journey you have to take. Train all you want, but *stay* here where it's safe."
         ],
-        "quest advice" : [
-            {
-                "text" : [
-                    "Thank you, my treasure.",
-                    "Would you like to hear them *all* right now, or come back to me for another after you've completed *one*?"
-                ],
-                "conditions" : ["mid_quest=earn_favor", "last_dialog=leave"]
-            }
+        "conditions": [
+          "leader_wear=acc_harem_robe|acc_harem_robe_adult",
+          "!have_quest=earn_favor",
+          "attacked_by_eratons_guards"
         ],
-        "all" : [
-            {
-                "text" : [
-                    "Thank you, my treasure.",
-                    "leader_wear=armor_none++jump=1",
-                    "To start, make sure you're wearing actual clothes. I'm honestly a little surprised you came out here in your bear pajamas. You know full well how mother gets when she sees you in them.",
-                    "leader_wear=armor_pjs++jump=1",
-                    "To start, make sure you're wearing... anything. Please. I don't even know why we're having this conversation right now. You're an adult, and normally you fret too much about how your actions reflect on me.",
-                    "!leader_wear=armor_pjs|armor_none++jump=1",
-                    "Head to your dresser in the Phitemos and find something a bit more appropriate. You can use containers by bumping into them, the same way you talk to people.",
-                    "Make sure you remember the basics of fighting. Weapons, miracles, the works.",
-                    "Once you've done that, talk to one of your fellow Faithful and see if any of them would be willing to journey with you.",
-                    "They're all of noble lineage, so even in isolated regions of Sewinso where the mark of the Phitemos isn't well-recognized, they might be able to assist you.",
-                    "Lastly, I want you to visit the quartermaster. Have her teach you how to start a campfire, and how to tell what's safe to eat. She'll also get you some coinage and a tiktaalik for the road.",
-                    "Do that, and... well I can't say I won't worry about you, but I'll at least be confident you have what you need to stay safe."
-                ]
-            }
+        "events": [
+          "talked=true"
+        ]
+      },
+      {
+        "script": [
+          "Why, hello there, handsome. It's rare for you to come to me during court. I guess... I guess you really are serious about this, huh?. Traveling Sewinso, growing stronger and gaining the favor of the Eight. Alone?",
+          "You don't need to do that just because a few nobles have more spare time for gossip than they do brain cells. You can just stay here. You have food and luxury even some of them could only dream of.",
+          "You have friends in the Phitemos. Ginny, Maddy, Chin-Yau, Getro. They'd all miss you. I'd miss you.",
+          "And if something bad happened... I don't have to tell you this won't be like a carriage ride to the opera. The shades outside Kesvelt's walls are dangerous. Even wizards struggle to defeat spirits or headless.",
+          "Please don't *leave*. This isn't a journey you have to take. Train all you want, but *stay* here where it's safe."
         ],
-        "one" : [
-            {
-                "text" : [
-                    "Slow and steady, then. Very well.",
-                    "To start, I have something I want to give you.",
-                    "++invisible_leader=true_nf",
-                    "++warp=throne_eraton__event_waiting_node",
-                    "++spawn=animatedforeleratonhug__throne_node--hug_scene",
-                    "++add_item=key_quest_log",
-                    "!leader_wear=armor_none++jump=1",
-                    "(As Eraton's arm wraps around you, you feel him slip a ...book into your underwear. What?)",
-                    "leader_wear=armor_none++jump=1",
-                    "(As Eraton's arm wraps around you, you feel him slip something into your pajama pockets. Something important?)",
-                    "(As his lips meet your forehead, he traces his finger against your leg. You think it's the letter 'Q'?)",
-                    "(Finally, his hand goes to your rear and gives a firm squeeze. There is no deeper meaning to this. He just likes doing that.)",
-                    "Talk to me when you've taken a look at that.",
-                    "++wait=800",
-                    "++warp=throne_eraton__throne_node",
-                    "++destroy=animatedforeleratonhug__throne_node",
-                    "++invisible_leader=false",
-                    ""
-
-                ],
-                "conditions" : ["last_dialog=quest advice", "!have_quest=learn_quest_log"],
-                "events" : ["give_quest=assure_eraton", "give_quest=learn_quest_log", "force_end="]
-            }
+        "conditions": [
+          "leader_wear=acc_harem_robe|acc_harem_robe_adult",
+          "!have_quest=earn_favor",
+          "!attacked_by_eratons_guards"
         ],
-        "__bye_override__" : [
-            {
-                "text" : [
-                    "Until I see you next, my treasure.",
-                    "++invisible_leader=true_nf",
-                    "++warp=throne_eraton__event_waiting_node",
-                    "++spawn=animatedforeleratonhug__throne_node--hug_scene",
-                    "++wait=2000",
-                    "++warp=throne_eraton__throne_node",
-                    "++destroy=animatedforeleratonhug__throne_node",
-                    "++invisible_leader=false",
-                    ""
-                ],
-                "events" : ["force_end="]
-            }
+        "events": [
+          "talked=true"
+        ]
+      },
+      {
+        "script": [
+          "Good {time_of_day}, love. Do you have something to *report*?"
         ],
-        "report" : [
-            {
-                "text" : [
-                    "Glad to see you're still literate, my dear.",
-                    "Now, then, next...",
-                    "leader_wear=armor_none++jump=1",
-                    "Make sure you're wearing actual clothes. I'm honestly a little surprised you came out here in your bear pajamas. You know full well how mother gets when she sees you in them.",
-                    "leader_wear=armor_pjs++jump=1",
-                    "Make sure you're wearing... anything. Please. I don't even know why we're having this conversation right now. You're an adult, and normally you fret too much about how your actions reflect on me.",
-                    "Head to your dresser in the Phitemos and find something a bit more appropriate. You can use containers by bumping into them, the same way you talk to people.",
-                    "Come and talk to me once you've got something more suited, if you'll pardon the pun, to long-distance travel.",
-                    ""
-                ],
-                "conditions" : ["finished_quest=learn_quest_log", "finished_quest_step=assure_eraton__look_at_quest_log", "!have_quest_step=assure_eraton__get_dressed"],
-                "events" : ["give_quest_step=assure_eraton__get_dressed", "give_quest_hint=assure_eraton__fake_harem_wall", "force_end="]
-            },
-            {
-                "text" : [
-                    "Why hello, handsome. Nice to see you in some proper fitting clothes. Proper fitting indeed.",
-                    "Now, then, next...",
-                    "Make sure you remember the basics of fighting. Weapons, miracles, the works."
-                ],
-                "conditions" : ["finished_quest_step=assure_eraton__get_dressed", "!have_quest_step=assure_eraton__train_weapons"],
-                "events" : ["give_quest_step=assure_eraton__train_weapons", "give_quest_step=assure_eraton__train_magic", "give_quest_hint=assure_eraton__train_weapons", "give_quest_hint=assure_eraton__train_magic"]
-            },
-            {
-                "text" : [
-                    "I've heard from Sergeant Caballero and Archmage Imedes.",
-                    "Now, then, next...",
-                    "Talk to one of your fellow faithful and see if any of them would be willing to journey with you.",
-                    "They're all of noble lineage, so even in isolated regions of Sewinso that don't recognize the mark of the Phitemos, they might be able to assist you."
-                ],
-                "conditions" : ["finished_quest_step=assure_eraton__train_weapons", "finished_quest_step=assure_eraton__train_magic", "!have_quest_step=assure_eraton__pick_ally"],
-                "events" : ["give_quest_step=assure_eraton__pick_ally"]
-            },
-            {
-                "text" : [
-                    "I've heard from Sergeant Caballero and Archmage Imedes.",
-                    "Now, then, next...",
-                    "Talk to one of your fellow faithful and see if any of them would be willing to journey with you.",
-                    "They're all of noble lineage, so even in isolated regions of Sewinso that don't recognize the mark of the Phitemos, they might be able to assist you."
-                ],
-                "conditions" : ["finished_quest_step=assure_eraton__train_weapons", "finished_quest_step=assure_eraton__train_magic", "!have_quest_step=assure_eraton__pick_ally"],
-                "events" : ["give_quest_step=assure_eraton__pick_ally"]
-            },
-            {
-                "text" : [
-                    "Oh, this one will be tedious",
-                    "Now, then, next...",
-                    "Talk to one of your fellow faithful and see if any of them would be willing to journey with you.",
-                    "They're all of noble lineage, so even in isolated regions of Sewinso that don't recognize the mark of the Phitemos, they might be able to assist you."
-                ],
-                "conditions" : ["finished_quest_step=assure_eraton__pick_ally", "!have_quest_step=assure_eraton__survival_basics"],
-                "events" : ["give_quest_step=assure_eraton__survival_basics"]
-            },
-            {
-                "text" : [
-                    "I've heard from the quartermaster's apprentice.",
-                    "Now, then, next...",
-                    "...There is no next. Huh. ...Thank you, Forel. I feel, I feel like you can survive this.",
-                    "Just remember, this isn't a banishment. You're free to come and go whenever you like."
-                ],
-                "conditions" : ["finished_quest_step=assure_eraton__survival_basics"],
-                "events" : ["finish_quest=assure_eraton"]
-            },
-            {
-                "text" : [
-                    "You've not finished what I asked of you, Forel. You don't... have to, now that I've given my blessing. But please."
-                ]
-            }
+        "conditions": [
+          "mid_quest=assure_eraton"
         ],
-        "aliases" : {
-            "go" : "leave",
-            "bye" : "__bye_override__"
-        },
-        "contextual_aliases" : {
-            "__hi__" : {
-                "dress" : "yes"
-            },
-            "leave" : {
-                "bye" : "no",
-                "yes" : "quest advice"
-            }
-        }
-        
-    }
+        "events": []
+      },
+      {
+        "script": [
+          "Let me guess, Bahati?"
+        ],
+        "conditions": [
+          "leader_wear=acc_burqa"
+        ],
+        "events": []
+      }
+    ],
+    "leave": [
+      {
+        "script": [
+          "...",
+          "... ...",
+          "... ... Heh, still as stubborn as ever, are we?",
+          "Alright, I won't get in your way. But I can't abide you doing this alone. I've learned the hard way that even a king isn't immortal. Losing you...",
+          "...No, I'm sorry. I'm not trying to guilt you. I promised to give my blessing and I meant it. But for my peace of mind, would you do some things to make certain you're ready for the challenges ahead?"
+        ],
+        "conditions": [
+          "!have_quest=earn_favor",
+          "leader_wear=acc_harem_robe|acc_harem_robe_adult"
+        ],
+        "events": [
+          "give_quest=earn_favor",
+          "complete_quest=get_eratons_blessing"
+        ]
+      }
+    ],
+    "stay": [
+      {
+        "script": [
+          "Oh, praise The Eight! And thank you, my treasure.",
+          "start_cutscene=joke_ending_0"
+        ]
+      }
+    ],
+    "yes": [
+      {
+        "script": [
+          "You can open your Equipment bag by pressing 'E', then head to the Accessory section and press Enter to open your accessory pocket, then Enter again to equip Ronpa tue Phitemos.",
+          "You'll know you've done it right when its name shows up next to the word 'Accessory'.",
+          "Come see me again when you're dressed, OK?",
+          ""
+        ],
+        "conditions": [
+          "!leader_wear=acc_harem_robe|acc_harem_robe_adult",
+          "!talked=",
+          "last_dialog=__hi__"
+        ],
+        "events": [
+          "force_end="
+        ]
+      },
+      {
+        "script": [
+          "Yes you'll *stay*? Or yes you still plan to *leave*?"
+        ],
+        "conditions": [
+          "!have_quest=earn_favor",
+          "last_dialog=__hi__|no|yes"
+        ]
+      },
+      {
+        "script": [
+          "Yes? Yes to what?"
+        ]
+      },
+      {
+        "script": [
+          "I'm amazed she finally managed to break you. Of course, I can't say I dislike it. After all, a burqa is like any other kind of clothing. It just makes you look more like a big present I want to unwrap.",
+          "Well, perhaps not big. --n I tease, my treasure, I tease."
+        ],
+        "conditions": [
+          "leader_wear=acc_burqa",
+          "last_dialog=__hi__"
+        ],
+        "events": []
+      }
+    ],
+    "no": [
+      {
+        "script": [
+          "I'll leave you to it, then.",
+          ""
+        ],
+        "conditions": [
+          "!talked="
+        ],
+        "events": [
+          "force_end="
+        ]
+      },
+      {
+        "script": [
+          "No you won't *leave*, or... no you won't *stay*?"
+        ],
+        "conditions": [
+          "!have_quest=earn_favor",
+          "last_dialog=__hi__|no|yes"
+        ]
+      },
+      {
+        "script": [
+          "...OK. Just, remember. This is your home. If you ever decide you want to *stay* after all, just come and tell me. ",
+          ""
+        ],
+        "conditions": [
+          "last_dialog=leave",
+          "have_quest=earn_favor"
+        ],
+        "events": [
+          "force_end="
+        ]
+      },
+      {
+        "script": [
+          "No? No to what?"
+        ]
+      }
+    ],
+    "quest advice": [
+      {
+        "script": [
+          "Thank you, my treasure.",
+          "Would you like to hear them *all* right now, or come back to me for another after you've completed *one*?"
+        ],
+        "conditions": [
+          "mid_quest=earn_favor",
+          "last_dialog=leave"
+        ],
+        "events": []
+      }
+    ],
+    "all": [
+      {
+        "script": [
+          "Thank you, my treasure.",
+          "leader_wear=armor_none++jump=1",
+          "To start, make sure you're wearing actual clothes. I'm honestly a little surprised you came out here in your bear pajamas. You know full well how mother gets when she sees you in them.",
+          "leader_wear=armor_pjs++jump=1",
+          "To start, make sure you're wearing... anything. Please. I don't even know why we're having this conversation right now. You're an adult, and normally you fret too much about how your actions reflect on me.",
+          "!leader_wear=armor_pjs|armor_none++jump=1",
+          "Head to your dresser in the Phitemos and find something a bit more appropriate. You can use containers by bumping into them, the same way you talk to people.",
+          "Make sure you remember the basics of fighting. Weapons, miracles, the works.",
+          "Once you've done that, talk to one of your fellow Faithful and see if any of them would be willing to journey with you.",
+          "They're all of noble lineage, so even in isolated regions of Sewinso where the mark of the Phitemos isn't well-recognized, they might be able to assist you.",
+          "Lastly, I want you to visit the quartermaster. Have her teach you how to start a campfire, and how to tell what's safe to eat. She'll also get you some coinage and a tiktaalik for the road.",
+          "Do that, and... well I can't say I won't worry about you, but I'll at least be confident you have what you need to stay safe."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "one": [
+      {
+        "script": [
+          "Slow and steady, then. Very well.",
+          "To start, I have something I want to give you.",
+          "invisible_leader=true_nf",
+          "warp=throne_eraton__event_waiting_node",
+          "spawn=animatedforeleratonhug__throne_node--hug_scene",
+          "add_item=key_quest_log",
+          "!leader_wear=armor_none++jump=1",
+          "(As Eraton's arm wraps around you, you feel him slip a ...book into your underwear. What?)",
+          "leader_wear=armor_none++jump=1",
+          "(As Eraton's arm wraps around you, you feel him slip something into your pajama pockets. Something important?)",
+          "(As his lips meet your forehead, he traces his finger against your leg. You think it's the letter 'Q'?)",
+          "(Finally, his hand goes to your rear and gives a firm squeeze. There is no deeper meaning to this. He just likes doing that.)",
+          "Talk to me when you've taken a look at that.",
+          "warp=throne_eraton__throne_node",
+          "destroy=animatedforeleratonhug__throne_node",
+          "invisible_leader=false",
+          ""
+        ],
+        "conditions": [
+          "last_dialog=quest advice",
+          "!have_quest=learn_quest_log"
+        ],
+        "events": [
+          "give_quest=assure_eraton",
+          "give_quest=learn_quest_log",
+          "force_end="
+        ]
+      }
+    ],
+    "__bye_override__": [
+      {
+        "script": [
+          "Until I see you next, my treasure.",
+          "invisible_leader=true_nf",
+          "warp=throne_eraton__event_waiting_node",
+          "spawn=animatedforeleratonhug__throne_node--hug_scene",
+          "wait=2000",
+          "warp=throne_eraton__throne_node",
+          "destroy=animatedforeleratonhug__throne_node",
+          "invisible_leader=false",
+          ""
+        ],
+        "events": [
+          "force_end="
+        ],
+        "conditions": []
+      }
+    ],
+    "report": [
+      {
+        "script": [
+          "Glad to see you're still literate, my dear.",
+          "Now then, next...",
+          "leader_wear=armor_none++jump=1",
+          "Make sure you're wearing actual clothes. I'm honestly a little surprised you came out here in your bear pajamas. You know full well how mother gets when she sees you in them.",
+          "leader_wear=armor_pjs++jump=1",
+          "Make sure you're wearing... anything. Please. I don't even know why we're having this conversation right now. You're an adult, and normally you fret too much about how your actions reflect on me.",
+          "Head to your dresser in the Phitemos and find something a bit more appropriate. You can use containers by bumping into them, the same way you talk to people.",
+          "Come and talk to me once you've got something more suited, if you'll pardon the pun, to long-distance travel.",
+          ""
+        ],
+        "conditions": [
+          "!finished_quest=learn_quest_log",
+          "finished_quest_step=assure_eraton__look_at_quest_log"
+        ],
+        "events": [
+          "finish_quest_step=learn_quest_log__talk_to_eraton",
+          "finish_quest=learn_quest_log",
+          "give_quest_step=assure_eraton__get_dressed",
+          "give_quest_hint=assure_eraton__fake_harem_wall",
+          "force_end="
+        ]
+      },
+      {
+        "script": [
+          "Why hello, handsome. Nice to see you in some proper fitting clothes. Proper fitting indeed.",
+          "Now then, next...",
+          "Make sure you remember the basics of fighting. Weapons, miracles, the works. I'd suggest Sergeant Caballera and Archmage Imedes, respectively. I trust their word."
+        ],
+        "conditions": [
+          "finished_quest_step=assure_eraton__get_dressed",
+          "!have_quest_step=assure_eraton__train_weapons"
+        ],
+        "events": [
+          "give_quest_step=assure_eraton__train_weapons",
+          "give_quest_step=assure_eraton__train_magic",
+          "give_quest_hint=assure_eraton__train_weapons",
+          "give_quest_hint=assure_eraton__train_magic"
+        ]
+      },
+      {
+        "script": [
+          "I've heard from Sergeant Caballero. That was brave of you, Forel. Braver than anyone else who could've taken that assignment.",
+          "completed_quest=kesvelt_fake_books++jump=2",
+          "All you need now is to show your miracle prowess.",
+          "jump=999",
+          "Now then, next...",
+          "complete_quest_step=assure_eraton__train_magic",
+          "give_quest_step=assure_eraton__find_friend",
+          "Talk to one of your fellow faithful and see if any of them would be willing to journey with you.",
+          "They're all of noble lineage, so even in isolated regions of Sewinso that don't recognize the mark of the Phitemos, they might be able to assist you."
+        ],
+        "conditions": [
+          "completed_quest=kesvelt_gang",
+          "!have_quest_step=assure_eraton__find_friend",
+          "!completed_quest_step=assure_eraton__train_weapons"
+        ],
+        "events": [
+          "complete_quest_step=assure_eraton__train_weapons"
+        ]
+      },
+      {
+        "script": [
+          "I've heard from Archmage Imedes. That was noble of you, Forel. Not that I expected less from my favorite softy.",
+          "completed_quest=kesvelt_gang++jump=2",
+          "All you need now is to show your martial prowess.",
+          "jump=999",
+          "Now then, next...",
+          "complete_quest_step=assure_eraton__train_weapons",
+          "give_quest_step=assure_eraton__find_friend",
+          "Talk to one of your fellow faithful and see if any of them would be willing to journey with you.",
+          "They're all of noble lineage, so even in isolated regions of Sewinso that don't recognize the mark of the Phitemos, they might be able to assist you."
+        ],
+        "conditions": [
+          "!finished_quest_step=assure_eraton__train_magic",
+          "!have_quest_step=assure_eraton__find_friend",
+          "completed_quest=kesvelt_fake_books"
+        ],
+        "events": [
+          "finish_quest_step=assure_eraton__train_magic"
+        ]
+      },
+      {
+        "script": [
+          "Oh, this one will be tedious",
+          "Now then, next...",
+          "Make sure you have everything you need. I'll provide a cart and a tiktaalik, but as you were... very insistent on last time, the procurement of goods and funds will be left to you.",
+          "At least... that's what I would say, if Krebons had actually finished this tutorial.",
+          "What a hack, am I right? Writing boss patterns I can understand wanting to skip, but he's not even willing to let you go shopping?",
+          "Ah, well. It's not like anymore of the world exists anyways. Just feel free to talk to anyone you want."
+        ],
+        "conditions": [
+          "!finished_quest_step=assure_eraton__find_friend",
+          "!have_quest_step=assure_eraton__get_equipment",
+          "party_count=2"
+        ],
+        "events": [
+          "give_quest_step=assure_eraton__get_equipment"
+        ]
+      },
+      {
+        "script": [
+          "I've heard from the quartermaster's apprentice.",
+          "Now, then, next...",
+          "...There is no next. Huh. ...Thank you, Forel. I feel, I feel like you can survive this. --n No, not just survive, succeed.",
+          "Just remember, this isn't a banishment. You're free to come and go whenever you like."
+        ],
+        "conditions": [
+          "finished_quest_step=assure_eraton__survival_basics"
+        ],
+        "events": [
+          "complete_quest=assure_eraton"
+        ]
+      },
+      {
+        "script": [
+          "You've not finished what I asked of you, Forel. You don't... have to, now that I've given my blessing. But please."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "aliases": {
+      "bye": "__bye_override__",
+      "google eyes": "yes",
+      "go": "leave",
+      "pickles": "__hi__"
+    },
+    "contextual_aliases": {
+      "leave": {
+        "yes": "quest advice",
+        "bye": "no"
+      },
+      "__hi__": {
+        "dress": "yes"
+      },
+      "one": {
+        "rookie": "yes"
+      }
+    },
+    "show disciple text to spreading miracles of prometus": [
+      {
+        "script": [
+          "Oh, what's this? A book? Oh my, a prayer tome. --n Daw, you want to read this together? Alright then. I've never had a mind for miracles like you, but you make them worth wanting to learn. Tonight. --n You know, assuming you still have the energy."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ]
+  }
 }

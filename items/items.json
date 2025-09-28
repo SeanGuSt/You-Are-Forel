@@ -57,7 +57,7 @@
     },
     "armor_leather" : {
         "name" : "Leather Armor",
-        "description" : "A set of pajamas the queen dowager sewed for you. They're warm and comfy, although you're getting a bit big for them. You hope you can get a pair without cutesy bear heads everywhere.",
+        "description" : "The leather armor you were assigned when you were training with the guard. It's a bit small, but frustratingly, it's ONLY 'a bit small'.",
         "value" : 0,
         "guard" : 1,
         "item_type" : "armor",
@@ -66,12 +66,21 @@
     },
     "acc_harem_robe" : {
         "name" : "Ronpa tue Phitemos",
-        "description" : "The Robe of the Loved's Home. Given to you when you confessed your true feelings to your king. Your most prized possession.",
+        "description" : "The Robe of the Loved's Home in Salin. Given to you when you confessed your true feelings to your Sydan. Your most prized possession.",
         "value" : 10000,
         "is_discardable" : false,
         "effects" : ["passive__change_sprite__+__3"],
         "item_type" : "accessory",
         "uid" : 5001
+    },
+    "acc_burqa" : {
+        "name" : "Kuvunjwa-zuri Designer Burqa",
+        "description" : "It means 'torn-up' or 'broken style' in Edinick. You never really understood fashion trends, but this one especially doesn't make sense. Isn't a burqa supposed to be holy or something to the Alteni? That's why Sewian law requires them to wear one under penalty of death?",
+        "item_type" : "accessory",
+        "is_discardable" : false,
+        "value" : 10000,
+        "effects" : ["passive__change_sprite__0__6"],
+        "uid" : 5002
     },
     "health_pot": {
         "name": "Health Potion",
@@ -191,5 +200,24 @@
         "description" : "",
         "item_type" : "keyitem",
         "uid" : 15
+    },
+    "key_burnt_book" : {
+        "name" : "Burnt Book Cover",
+        "description" : "The leather cover to a textbook of Promenti prayers meant for novices that you found at the Kesvelt morgue.",
+        "item_type" : "keyitem",
+        "uid" : 16
+    },
+    "key_real_fire_book" : {
+        "name" : "A First Year Disciple's Text to Spreading Miracles of Prometus",
+        "value" : 8000,
+        "description" : "A tome of Promenti prayers meant for novices. Funny how that summation was shorter than the title.",
+        "item_type" : "keyitem",
+        "uid" : 17
+    },
+    "key_fake_fire_book" : {
+        "name" : "Disciple Text to Spreading Miracles of Prometus",
+        "description" : "A tome of Promenti prayers meant for novices. You got it cheap from Bubba Renald in the book store's side alley.",
+        "item_type" : "keyitem",
+        "uid" : 18
     }
 }

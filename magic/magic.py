@@ -1,7 +1,6 @@
 from typing import Optional, List, Any, Dict, Type, TYPE_CHECKING
 from dataclasses import dataclass, field
 from constants import GameState, TargetType, EffectType, VirtueType, DamageType, MAGIC_DIR, ExternalBodyStatus, ObjectState
-from magic.virtue import Virtue
 from objects.object_templates import MapObject, Monster, CombatStatsMixin
 import random
 import os, json, ast
@@ -33,6 +32,7 @@ class Spell:
     level: int = 1
     virtue: VirtueType = None
     unlocked: bool = True
+    projectile: str = None
     mp_cost: int = 0
 
     def cast_in_direction(self, caster: 'Character', direction: tuple[int, int]):
@@ -58,13 +58,17 @@ class Spell:
     def cast_on_party_member(self, caster: 'Character', target: 'Character'):
         self.do_effect(target, caster)
     
-    def do_effect(self, target: CombatStatsMixin, caster: CombatStatsMixin):
+    def do_effect(self, target: CombatStatsMixin, caster: 'Character'):
         match self.effect_type:
             case EffectType.HEAL:
                 target.hp = min(target.hp + self.power, target.max_hp)
             case EffectType.DAMAGE:
                 target.hp -= self.power
                 target.attacked(caster, self.power)
+                if self.projectile:
+                    target.engine.event_manager.timer_manager.start_timer("proj_move", 500)
+                    target.engine.map_obj_db.create_obj("proj", self.projectile, {"old_position" : caster.position, "position" : "target.position"})
+                    target.engine.current_map.add_object("proj")
             case EffectType.AREA_DAMAGE:
                 caster.state = ObjectState.STAFF_SLAM
                 print("Debug: Arrived at area damage effect type")

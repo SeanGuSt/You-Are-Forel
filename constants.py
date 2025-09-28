@@ -30,6 +30,16 @@ IMAGE_DIR = "sprites"
 SKEJ_DIR = "schedules"
 MAGIC_DIR = "magic"
 
+class InputValidationType(Enum):
+    REQUIRED_KEY = "required_key"
+    REQUIRED_DIRECTION = "required_direction"
+    FORBIDDEN_KEY = "forbidden_key"
+    FORBIDDEN_DIRECTION = "forbidden_direction"
+    SEQUENCE_STEP = "sequence_step"
+class ValidationAction(Enum):
+    BLOCK = "block"           # Prevent action entirely
+    ALLOW_THEN_UNDO = "undo"  # Allow action, then undo it
+    WARNING_ONLY = "warn"     # Allow action but show warning
 
 GAME_TITLE = "You are Forel"
 NEW_GAME_SPAWNER = "new_game_spawner"
@@ -88,6 +98,13 @@ FLAME = (226, 88, 34)
 ICE = (173, 216, 230)
 ROYAL_BLUE = (65, 105, 225)
 
+GENDEREDWORDS = {
+    "masculine" : ["he", "him", "his"],
+    "feminine" : ["she", "her", "hers"],
+    "enby" : ["they", "them", "theirs"],
+    "nonalive" : ["it", "it", "its"]
+}
+
 class GameState(Enum):
     MAIN_MENU = 0
     OVERWORLD = 1
@@ -96,6 +113,7 @@ class GameState(Enum):
     MENU_STATS = 4
     MENU_INVENTORY = 5
     MENU_EQUIPMENT = 6
+    MENU_SHOPPING = 14
     MENU_OPTIONS = 7
     MENU_SAVE_LOAD = 8
     MENU_QUEST_LOG = 9
@@ -106,19 +124,25 @@ class GameState(Enum):
 
 class ObjectState(Enum):
     WALK = "walk"
-    TALK = "talk"
+    TALK = "talk"   
     WIGGLE = "wiggle"
+    HEAD_TILT = "head_tilt"
     STAND = "stand"
     SELL = "sell"#A state to ensure merchants can't try to sell to you while they want to kill you.
     SLEEP = "sleep"#Disables the ability to talk to the object
+    EVIL = "evil"
+    BLUSHING = "blushing"
     VORTEX = "vortex"
     STAFF_SLAM = "staff_slam"
     PATROL = "patrol"
     PURSUE = "pursue"
     KNOCKBACK = "knockback"
+    COLLISION_KNOCKBACK = "collision_knockback"
+    COLLISION_STAND = "collision_stand"
     ATTACKED = "attacked"
     BURNING = "burning"
     DYING = "dying"
+    DRAMA = "drama"
     DEATH = "death"
     ATTACK_MELEE = "attack_melee"
     ATTACK_RANGE = "attack_range"
@@ -126,6 +150,11 @@ class ObjectState(Enum):
     ATTACHING = "attaching"
     ATTACHED = "attached"
     SLIME_SPLIT = "slime_split"
+    GINNY_FALLING = "ginny_falling"
+    GINNY_FALLEN = "ginny_fallen"
+    POSE = "pose"
+    GINNY_GET_UP = "ginny_get_up"
+    IMEDES_AMBUSH = "imedes_ambush"
 
 class TileType(Enum):
     GRASS = '.'
@@ -155,6 +184,7 @@ class OverusePenalty(Enum):
     ACCURACY_REDUCTION = "accuracy_reduction"
     SPELL_FAILURE = "spell_failure"
     MOVEMENT_REDUCTION = "movement_reduction"
+    CONTROL_RESTRICTION = "control_restriction"
 
 class DamageType(Enum):
     HOLY = "holy"

@@ -75,7 +75,7 @@ class SaveManager:
                         updated_object_data[obj]["position"] = (updated_object_data[obj]["position"][0], updated_object_data[obj]["position"][1])
                 self.engine.load_map(map_name, updated_object_data)
         self.engine.current_map = self.engine.maps[save_data["current_map"]]
-        self.engine.change_state(GameState.TOWN)
+        self.engine.replace_state(GameState.TOWN)
         party_leader = self.engine.party.get_leader()
         party_leader.map = self.engine.current_map
         for i in self.engine.party.members:

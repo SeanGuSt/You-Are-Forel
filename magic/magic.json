@@ -1,5 +1,5 @@
 {
-    "makua fire" : {
+    "kua fire" : {
         "name" : "Fireball",
         "overuse_cost": 1,
         "target_type" : "target",
@@ -8,6 +8,36 @@
         "power" : 4,
         "range" : 3,
         "virtue" : "fire"
+    },
+    "kua stein" : {
+        "name" : "Throw Stone",
+        "overuse_cost": 1,
+        "target_type" : "target",
+        "effect_type" : "damage",
+        "damage_type" : "earth",
+        "power" : 4,
+        "range" : 3,
+        "virtue" : "earth"
+    },
+    "kua agua" : {
+        "name" : "Splash",
+        "overuse_cost": 1,
+        "target_type" : "target",
+        "effect_type" : "damage",
+        "damage_type" : "water",
+        "power" : 4,
+        "range" : 3,
+        "virtue" : "water"
+    },
+    "kua ventus" : {
+        "name" : "Breeze",
+        "overuse_cost": 1,
+        "target_type" : "target",
+        "effect_type" : "damage",
+        "damage_type" : "air",
+        "power" : 1,
+        "range" : 3,
+        "virtue" : "air"
     },
     "palau vital" : {
         "name" : "Healing",

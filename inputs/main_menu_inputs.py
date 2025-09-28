@@ -37,7 +37,7 @@ def options_menu_inputs(self: 'GameEngine', event):
 def save_load_inputs(self: 'GameEngine', event):
     match event.key:
         case pygame.K_ESCAPE:
-            self.state = GameState.MAIN_MENU if self.party is None else self.previous_state
+            self.revert_state()
         case pygame.K_UP | pygame.K_DOWN:
             dx, dy = self.get_direction(event.key).value
             save_files = SaveManager.get_save_files()

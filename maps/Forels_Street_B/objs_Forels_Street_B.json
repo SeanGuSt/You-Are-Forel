@@ -1,0 +1,48 @@
+{
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 5,
+    "y": 8
+  },
+  "map_edge_teleporter": {
+    "object_type": "node",
+    "x": -99,
+    "y": -98,
+    "args": {
+      "adjacent_maps": {
+        "N": {
+          "map": "Forels_Street_A",
+          "offset": "(-7, 0)"
+        },
+        "W": {
+          "map": "Kesvelt_L_Fork",
+          "offset": "(0, -2)"
+        }
+      }
+    }
+  },
+  "thief_encounter_1": {
+    "object_type": "npc",
+    "x": 13,
+    "y": 10,
+    "args": {}
+  },
+  "thief_encounter_0": {
+    "object_type": "npc",
+    "x": 11,
+    "y": 13,
+    "args": {}
+  },
+  "thief_encounter_2": {
+    "object_type": "npc",
+    "x": 11,
+    "y": 1,
+    "args": {}
+  },
+  "thief_encounter_3": {
+    "object_type": "npc",
+    "x": 1,
+    "y": 4,
+    "args": {}
+  }
+}

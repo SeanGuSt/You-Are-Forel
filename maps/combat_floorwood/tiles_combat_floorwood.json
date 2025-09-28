@@ -1,0 +1,7 @@
+{
+  "_": "floor",
+  "w": "floorwood",
+  ".": "grass",
+  "~": "sky",
+  "#": "wall"
+}

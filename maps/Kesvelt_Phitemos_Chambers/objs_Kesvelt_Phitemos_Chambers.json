@@ -25,19 +25,121 @@
     "x": 5,
     "y": 6,
     "args": {
-      "event_start" : "meet_ginny"
+      "event_start": "meet_ginny"
     }
   },
-  "ginny_phitemos": {
-    "object_type": "npc",
+  "maddy_warp_event": {
+    "object_type": "node",
+    "x": -99,
+    "y": -99,
+    "args": {
+      "on_load_event": "activate_maddy"
+    }
+  },
+  "maddy#phitemos": {
+    "object_type": "maddy",
+    "x": -99,
+    "y": -97,
+    "args": {
+      "name": "Maddy",
+      "dialog_key": "maddy#phitemos",
+      "spritesheet": [
+        "Maddy",
+        0,
+        0
+      ]
+    }
+  },
+  "maddy_room_node": {
+    "object_type": "node",
+    "x": 9,
+    "y": 3
+  },
+  "ginny#phitemos": {
+    "object_type": "ginny",
     "x": 5,
     "y": -4,
-    "args": {}
+    "args": {
+      "name": "Ginny",
+      "spritesheet": [
+        "Ginny",
+        0,
+        0
+      ]
+    }
+  },
+  "bahati#phitemos": {
+    "object_type": "bahati",
+    "x": 5,
+    "y": -4,
+    "args": {
+      "name": "Bahati",
+      "dialog_key": "bahati#phitemos",
+      "spritesheet": [
+        "Bahati Uzuri",
+        0,
+        0
+      ]
+    }
   },
   "new_game_spawner": {
     "object_type": "node",
+    "x": 1,
+    "y": 6,
+    "args": {}
+  },
+  "ginny_bed": {
+    "object_type": "bedbasic",
+    "x": 1,
+    "y": 1,
+    "args": {}
+  },
+  "forel_bed": {
+    "object_type": "bedbasic",
+    "x": 10,
+    "y": 5,
+    "args": {}
+  },
+  "maddy_bed": {
+    "object_type": "bedbasic",
+    "x": 10,
+    "y": 1,
+    "args": {}
+  },
+  "maddy_wardrobe": {
+    "object_type": "haremwardrobe",
     "x": 10,
     "y": 2,
+    "args": {}
+  },
+  "ginny_wardrobe": {
+    "object_type": "haremwardrobe",
+    "x": 1,
+    "y": 2,
+    "args": {}
+  },
+  "ginny_patrol_1_0": {
+    "object_type": "node",
+    "x": 2,
+    "y": 1,
+    "args": {}
+  },
+  "ginny_patrol_1_1": {
+    "object_type": "node",
+    "x": 3,
+    "y": 1,
+    "args": {}
+  },
+  "ginny_patrol_1_2": {
+    "object_type": "node",
+    "x": 2,
+    "y": 3,
+    "args": {}
+  },
+  "ginny_patrol_1_3": {
+    "object_type": "node",
+    "x": 3,
+    "y": 3,
     "args": {}
   }
 }

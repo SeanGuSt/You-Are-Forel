@@ -1,10 +1,12 @@
 import os
 import json
 import pygame
+import threading
 from typing import Dict
 from constants import *
 from sprites.sprites import SpriteDatabase
 from combat import CombatManager
+from shops import MerchantStore
 from events.cutscenes import CutsceneManager
 from dialog.dialog import DialogManager
 from events.events import EventManager
@@ -32,15 +34,16 @@ from inputs.travel_ui_inputs import travel_inputs
 from inputs.quest_ui_inputs import quest_log_inputs
 from inputs.events_inputs import events_inputs
 from inputs.debug_inputs import debug_inputs
+from inputs.shop_ui_inputs import shop_inputs
 
 
 # Initialize Pygame
 pygame.init()
 pygame.mixer.init()
 pygame.key.set_repeat(DEFAULT_INPUT_REPEAT_DELAY, DEFAULT_INPUT_REPEAT_INTERVAL)
-init_map = "Battle Test Map"
+init_map = "Kesvelt_Royal_Hallway"
 init_time = 420#in minutes
-init_cutscene = ""
+init_cutscene = "opening"
 
 class GameEngine:
     def __init__(self):
@@ -51,8 +54,7 @@ class GameEngine:
         self.running = True
         self.antialias_text = True
         # Game state
-        self.state = GameState.MAIN_MENU
-        self.previous_state = GameState.MAIN_MENU
+        self.state_stack = [GameState.MAIN_MENU]
 
         self.item_db = ItemDatabase()
         self.map_obj_db = MapObjectDatabase(self)
@@ -76,6 +78,7 @@ class GameEngine:
         self.save_manager = SaveManager(self)
         self.event_manager = EventManager(self)
 
+        self.merchant = MerchantStore(self)
         # Equipment menu state
         self.selected_member = 0
         self.selected_slot = 0
@@ -96,13 +99,14 @@ class GameEngine:
         self.cursor_position = None
         self.oops = False
         
+        self.tile_db = TileDatabase(self)
         self.sprite_db = SpriteDatabase(self)
         # Initialize game objects (will be set when starting/loading game)
         self.party: Party = Party(self)
         self.maps: Dict[str, Map] = {}
         self.visible_tiles: set[tuple[int, int]] = ()
         self.current_map: Map = None
-        self.tile_db = TileDatabase()
+        
 
         self.quest_log = QuestLog(self)
         self.current_quest_focus = 0
@@ -131,20 +135,34 @@ class GameEngine:
                 'S': Direction.SOUTH,
                 'W': Direction.WEST,
                 'E': Direction.EAST,
+                'NW' : Direction.NORTHWEST,
+                'NE' : Direction.NORTHEAST,
+                'SW' : Direction.SOUTHWEST,
+                'SE' : Direction.SOUTHEAST,
                 'X': Direction.WAIT
             }.get(key)
         return direction
-    
+    @property 
+    def state(self):
+        return self.state_stack[-1]
+    def replace_state(self, new_state: GameState):
+        self.state_stack[-1] = new_state
+        self.adjust_repeat_rate()
+        print(self.state_stack)
     def change_state(self, state: GameState):
-        self.previous_state = self.state
-        self.state = state
-        print(f"state is now {self.state}")
-
+        self.state_stack.append(state)
+        self.adjust_repeat_rate()
+        print(self.state_stack)
     def revert_state(self):
-        state_copy = GameState(self.state.value)
-        self.state = self.previous_state
-        self.previous_state = state_copy
-        print(f"state is now {self.state}")
+        if len(self.state_stack) > 1:
+            self.state_stack.pop()
+            self.adjust_repeat_rate()
+            print(self.state_stack)
+    def adjust_repeat_rate(self):
+        if self.state in [GameState.DIALOG, GameState.EVENT, GameState.CUTSCENE]:
+            pygame.key.set_repeat(1000, 1000)
+        else:
+            pygame.key.set_repeat(DEFAULT_INPUT_REPEAT_DELAY, DEFAULT_INPUT_REPEAT_INTERVAL)
         
     def start_new_game(self):
         """Initialize a new game"""
@@ -154,15 +172,16 @@ class GameEngine:
         with open("new_game_party.json", 'r') as f:
             starting_party = json.load(f)
             for name, starting_stats in starting_party.items():
-                self.party.add_member(Character.from_dict(name, starting_stats, self))
+                self.party.add_member(name, starting_stats)
         
         # Add starting items
         with open("new_game_inventory.json", 'r') as f:
             starting_items = json.load(f)
             for name, quantity in starting_items.items():
-                self.party.add_item_by_name(name, quantity)
+                self.party.add_item_by_id(name, quantity)
         
         # Load maps
+        self.maps = {}
         self.load_map("overworld")
         self.load_map(init_map)
         
@@ -174,14 +193,10 @@ class GameEngine:
         party_leader.map = self.current_map
         for i in self.party.members:
             self.current_map.add_object(i)
-        
+        self.change_state(GameState.TOWN)
         if init_cutscene:
             self.cutscene_manager.start_scene(init_cutscene)
-            self.state = GameState.CUTSCENE
-        else:
-            self.state = GameState.TOWN
-        self.previous_state = GameState.TOWN
-        
+
     def load_map(self, map_name: str, updated_objs: dict = {}):
         """Load a map from files"""
         try:
@@ -199,7 +214,7 @@ class GameEngine:
                 return
         target_map = teleporter.args.get("target_map")
         # Load target map if not already loaded
-        if target_map not in self.maps:#self.maps is a dictionary of maps
+        if target_map not in self.maps or "combat" in target_map:#self.maps is a dictionary of maps
             if not self.load_map(target_map):
                 return
         #If the teleport happens mid dialog, be sure the npc being spoken to has a version of itself on the new map.
@@ -207,11 +222,12 @@ class GameEngine:
         talking_to_someone = talker and self.state == GameState.DIALOG
         # Switch to target map
         for i in self.party.members:
-            self.current_map.objects.remove(i)
+            self.current_map.remove_object(i)
         self.current_map = self.maps[target_map]
         npc_move_intervals = {}
-        for obj in self.current_map.get_objects_at((-99, -99)):
-            obj.on_map_load()
+        if not self.state == GameState.EVENT:
+            for obj in self.current_map.objects:
+                obj.on_map_load()
         for obj in self.current_map.get_objects_subset(MapObject):
             npc_move_intervals[obj.name] = obj.move_interval
         results = self.schedule_manager.process_map_load(npc_move_intervals)
@@ -223,7 +239,7 @@ class GameEngine:
                 node = self.current_map.get_object_by_name(position)
                 leader = self.party.get_leader()
                 if node and leader:
-                    self.current_map.objects.append(leader)
+                    self.current_map.add_object(leader)
                     leader.old_position = node.position
                     leader.position = node.position
         elif "positions" in teleporter.args:
@@ -232,23 +248,23 @@ class GameEngine:
             if positions:
                 for i in range(len(self.party.members)):
                     node = self.current_map.get_object_by_name(positions + str(i))
-                    self.current_map.objects.append(self.party.members[i])
+                    self.current_map.add_object(self.party.members[i])
                     if node:
                         self.party.members[i].position = node.position
         # Update game state based on target map
         if talking_to_someone:
             new_talker = self.current_map.get_object_by_name(talker.name)
+            if node and "no_talker" in node.name:#Ignore the fact this map lacks a talker
+                return
             if new_talker:
                 self.dialog_manager.current_speaker = new_talker
                 return
-            else:
-                raise Exception(f"A MapObject with the same name as {talker.name} should be present when warping to {self.current_map.name} during dialog.")
+            raise Exception(f"A MapObject or subclass with the same name as {talker.name} should be present when teleporting to {self.current_map.name} during dialog.")
         elif "combat" in target_map:
             self.combat_manager.enter_combat_mode(teleporter.args.get("allies_in_combat", []))
         else:
             if self.state == GameState.COMBAT:
                 self.combat_manager.exit_combat_mode()
-            self.change_state(GameState.TOWN)
     
     def handle_map_objects(self):
         """Check for and handle map objects at player position"""
@@ -288,7 +304,7 @@ class GameEngine:
                 
             obj.move_one_step()
 
-    #@time_function("Updating camera")
+    
     def get_movement_timer_name(self, entity):
         """Get the correct timer name for an entity's movement"""
         timer_manager = self.event_manager.timer_manager
@@ -296,12 +312,8 @@ class GameEngine:
         # Check in priority order (same as your renderer logic)
         obj_in_walkers = entity in self.event_manager.walkers
         
-        # 1. Knockback has highest priority
-        if obj_in_walkers and timer_manager.is_active(f"{entity.name}_knockback"):
-            return f"{entity.name}_knockback"
-        
         # 2. Player movement
-        elif timer_manager.is_active("player_move"):
+        if timer_manager.is_active("player_move"):
             return "player_move"
         
         # 3. Player bump (only for leader)
@@ -315,6 +327,9 @@ class GameEngine:
         # 5. Combat/enemy movement
         elif entity in self.combat_manager.walkers and timer_manager.is_active("enemy_move"):
             return "enemy_move"
+        
+        if entity in self.combat_manager.walkers and timer_manager.is_active(f"{entity.name}_knockback"):
+            return f"{entity.name}_knockback"
         
         # 6. Fallback - no active movement
         else:
@@ -341,10 +356,11 @@ class GameEngine:
         delta = entity.subtract_tuples(entity.position, entity.old_position)
         return entity.add_tuples(entity.old_position, entity.multiply_tuples(delta, progress))
     
+    #@time_function("Update camera")
     def update_camera(self):
         leader = self.party.get_leader()
         if not leader:
-            if self.state in [GameState.MAIN_MENU]:
+            if self.state in [GameState.MAIN_MENU, GameState.MENU_SAVE_LOAD, GameState.MENU_OPTIONS]:
                 return
             else:
                 raise ValueError
@@ -400,13 +416,13 @@ class GameEngine:
             attacker = self.party.get_leader()
             
             # Get tiles for both attacker and target
-            obj_tile = self.current_map.get_tile_lower(obj.x, obj.y)
-            attacker_tile = self.current_map.get_tile_lower(attacker.x, attacker.y)
+            obj_tile = self.current_map.get_tile_lower(obj.position)
+            attacker_tile = self.current_map.get_tile_lower(attacker.position)
             
             
             # Determine combat map name
             combat_map_name = self.get_combat_map_name(attacker_tile.name, obj_tile.name, direc)
-            
+            print(combat_map_name)
             # Create a temporary teleporter object to handle the transition
             obj.args = obj.args | {
                     'target_map': combat_map_name,
@@ -414,16 +430,65 @@ class GameEngine:
                         "from_any": f"{obj_tile.name}_node_"
                     }
                 }
-            mo = self.map_obj_db.create_obj("return_node", "node", {"x" : obj.x, "y" : obj.y, "args" : {}})
-            self.current_map.add_object(mo)
             # Setup enemy positions based on attack direction
             old_map = self.current_map.name
             # Handle the teleportation to combat map
             self.handle_teleporter(obj)
-            edge_teleporter = self.map_obj_db.create_obj("edge_teleporter", "node", {"x" : -99, "y" : -98, "args" : {}})
-            self.current_map.create_ring_of_return_teleporters(old_map)
+            edge_teleporter = self.map_obj_db.create_obj("map_edge_teleporter", "node", {"x" : -99, "y" : -98, "args" : {"target_map" : old_map, "position" : {"from_any" : obj.name}}})
+            self.current_map.add_object(edge_teleporter)
             return True
         return False
+    
+    def check_control_restriction(self: 'GameEngine', event) -> bool:
+        """Return True if input allowed, False if blocked."""
+
+        if self.event_manager.current_index <= 0:
+            return True
+
+        script = self.event_manager.current_event_queue["script"]
+        current_instruction = script[self.event_manager.current_index+1]
+        print(current_instruction)
+        if current_instruction.startswith("allow_input="):
+            allowed = current_instruction.split("=")[1].split(",")
+            allowed_keys = [getattr(pygame, k) for k in allowed]
+            if event.key not in allowed_keys:
+                self.combat_manager.append_to_combat_log("That's not what I told you to do!")
+                return False
+
+        elif current_instruction.startswith("block_input="):
+            blocked = current_instruction.split("=")[1].split(",")
+            blocked_keys = [getattr(pygame, k) for k in blocked]
+            if event.key in blocked_keys:
+                self.combat_manager.append_to_combat_log("You can't do that right now!")
+                return False
+
+        elif current_instruction.startswith("require_input="):
+            required = current_instruction.split("=")[1].split(",")
+            required_keys = [getattr(pygame, k) for k in required]
+            if event.key in required_keys:
+                # Advance script index automatically if requirement is met
+                self.event_manager.current_index += 1
+                return True
+            else:
+                self.combat_manager.append_to_combat_log("Nope. That’s not it.")
+                return False
+        elif current_instruction.startswith("require_spell="):
+            if self.spell_direction_mode:
+                if event.key == pygame.K_RIGHT:#Hardcoded for now, need to adjust later
+                    return True
+                return False
+            
+            if self.spell_input_mode:
+                if event.key == pygame.K_RETURN:
+                    if self.dialog_manager.user_input != current_instruction.split("=")[1]:
+                        self.dialog_manager.user_input = ""
+                        return False
+                return True
+                    
+            return event.key == pygame.K_c
+                
+
+        return True
     
     #@time_function("Handle Input: ")
     def handle_input(self):
@@ -443,6 +508,8 @@ class GameEngine:
                         equipment_menu_inputs(self, event)
                     case GameState.MENU_STATS:
                         stats_menu_inputs(self, event)
+                    case GameState.MENU_SHOPPING:
+                        shop_inputs(self, event)
                     case GameState.MENU_INVENTORY:
                         inventory_menu_inputs(self, event)
                     case GameState.MENU_QUEST_LOG:
@@ -451,6 +518,8 @@ class GameEngine:
                         debug_inputs(self, event)
                     case GameState.DIALOG:
                         if "teleporter" in self.event_manager.delayed_events or not self.dialog_manager.waiting_for_input:
+                            continue
+                        if not self.check_control_restriction(event):
                             continue
                         dialog_inputs(self, event)
                     case GameState.EVENT:
@@ -469,6 +538,8 @@ class GameEngine:
                                     self.revert_state()
                     case GameState.COMBAT:
                         if self.event_manager.walkers or not self.combat_manager.player_turn or self.combat_manager.attack_frame or self.combat_manager.player_made_move:
+                            continue
+                        if not self.check_control_restriction(event):
                             continue
                         combat_inputs(self, event)
                     case GameState.TOWN:
@@ -527,7 +598,7 @@ class GameEngine:
             if self.selected_save == 0:
                 # New save - prompt for filename (simplified: use timestamp)
                 import time
-                filename = f"save_{int(time.time())}"
+                filename = f"save_{self.current_map.name}_{len(save_files)}"
                 self.save_manager.save_game(filename)
                 print(f"Game saved as {filename}!")
                 self.revert_state()
@@ -560,8 +631,14 @@ class GameEngine:
                 self.renderer.render_main_menu()
             case GameState.MENU_STATS:
                 self.renderer.render_stats_menu()
+            case GameState.MENU_SHOPPING:
+                self.renderer.draw_background()
+                self.renderer.draw_mode_buttons()
+                self.renderer.draw_category_buttons()
+                self.renderer.draw_party_selection()
+                self.renderer.draw_item_list()
+                self.renderer.draw_action_buttons()
             case GameState.MENU_INVENTORY:
-                print("HELLO")
                 self.renderer.render_inventory_menu()
             case GameState.MENU_OPTIONS:
                 self.renderer.render_options_menu()
@@ -574,10 +651,9 @@ class GameEngine:
                 self.renderer.render_quest_log()
             case GameState.DIALOG:
                 # Render game world in background
-                self.screen.fill(BLACK)
                 if self.current_map and self.party:
+                    self.screen.fill(BLACK)
                     self.renderer.render_map()
-                    
                     self.renderer.render_sidebar_stats()
                 # Render dialog on top
                 self.renderer.render_dialog()
@@ -587,10 +663,8 @@ class GameEngine:
                 self.renderer.render_cutscene()
             case GameState.DEBUG:
                 # Render game world in background
-                self.screen.fill(BLACK)
                 if self.current_map and self.party:
                     self.renderer.render_map()
-                    
                     self.renderer.render_sidebar_stats()
                 self.renderer.render_debug()
             case GameState.EVENT:
@@ -598,7 +672,6 @@ class GameEngine:
                 self.screen.fill(BLACK)
                 if self.current_map and self.party:
                     self.renderer.render_map()
-                    
                     self.renderer.render_sidebar_stats()
                 self.renderer.render_event_dialog()
             case _:
@@ -615,15 +688,15 @@ class GameEngine:
                         x, y = self.cursor_position
                         rect = pygame.Rect((x - self.camera[0])*TILE_WIDTH + TILE_WIDTH//2, (y - self.camera[1])*TILE_HEIGHT + TILE_HEIGHT//2, 8, 8)
                         pygame.draw.ellipse(self.screen, GRAY, rect)
-        fps = self.clock.get_fps()
-        fps_text = self.renderer.font.render(f"FPS: {int(fps)}", True, (255, 255, 255))
-        self.renderer.screen.blit(fps_text, (10, 10))
+        self.renderer.fade_render()
         pygame.display.flip()
     
-    #@time_function("This frame")
+    #@time_function("This Frame: ")
     def while_running(self):
         if self.current_map:
-            self.update_camera()
+            for group in self.current_map.groups.values():
+                group.checked_movement = False
+                group.progress = 0
             if not self.event_manager.timer_manager.is_active("player_move"):
                 for obj in self.current_map.get_objects_subset(Missile):
                     if obj.destroy_after_use:
@@ -646,9 +719,9 @@ class GameEngine:
         input_results_for_updates = self.handle_input()
         self.update(input_results_for_updates)
         any_active = self.event_manager.timer_manager.any_active()
-        if self.dialog_manager.current_lines:
+        if self.dialog_manager.current_lines and not self.renderer.fading:
             self.dialog_manager.advance_dialog()
-        if self.event_manager.current_event_queue:
+        if self.event_manager.current_event_queue and not self.renderer.fading and not self.state in [GameState.COMBAT, GameState.CUTSCENE]:
             self.event_manager.advance_queue()
         if self.event_manager.walkers:
             self.event_manager.continue_walk()

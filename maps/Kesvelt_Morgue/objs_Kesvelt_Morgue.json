@@ -12,7 +12,7 @@
       "adjacent_maps": {
         "N": {
           "map": "Kesvelt_Ground",
-          "offset": "(8, 0)"
+          "offset": "(9, 0)"
         }
       }
     }
@@ -23,17 +23,20 @@
     "y": 2,
     "args": {}
   },
-  "bookseller_renald": {
-    "object_type": "npc",
-    "x": 1,
-    "y": 4,
+  "renald_hiding_spot": {
+    "object_type": "node",
+    "x": 4,
+    "y": 5,
     "args": {}
   },
   "bookstore_kesvelt": {
-    "object_type": "npc",
+    "object_type": "merchant",
     "x": 2,
     "y": 2,
-    "args": {}
+    "args": {
+      "name": "Book Merchant",
+      "dialog_key": "merchant#book"
+    }
   },
   "bookstore_sign": {
     "object_type": "mapobject",
@@ -185,19 +188,21 @@
       ]
     }
   },
-  "trashbin" : {
-    "object_type" : "mapobject",
-    "x" : 13,
-    "y" : 14,
-    "args" : {
+  "trashbin": {
+    "object_type": "chest",
+    "x": 13,
+    "y": 14,
+    "args": {
+      "no_open_sprite": true,
       "spritesheet": [
         "Static Objects",
         3,
         5
-      ]
+      ],
+      "items": {
+        "key_burnt_book": 1
+      }
     }
-    
-
   },
   "corpse3": {
     "object_type": "mapobject",
@@ -207,7 +212,7 @@
       "spritesheet": [
         "Static Objects",
         3,
-        2
+        4
       ]
     }
   },
@@ -216,13 +221,63 @@
     "x": 13,
     "y": 15,
     "args": {
-      "name" : "Mordenia",
-      "dialog_key" : "morgue_lady",
+      "name": "Mordenia",
+      "dialog_key": "morgue_lady",
       "spritesheet": [
         "Static Objects",
         3,
         6
       ]
+    }
+  },
+  "mei_hua_confrontation_node": {
+    "object_type": "node",
+    "x": 9,
+    "y": 14,
+    "args": {
+      "event_start": "confronted_by_mei_hua"
+    }
+  },
+  "mei_hua_hiding_spot": {
+    "object_type": "node",
+    "x": 11,
+    "y": 17,
+    "args": {}
+  },
+  "student_3": {
+    "object_type": "npcstudent",
+    "x": -99,
+    "y": -97,
+    "skin_color": 5,
+    "args": {}
+  },
+  "bubba_renald": {
+    "object_type": "npc",
+    "x": -99,
+    "y": -97,
+    "skin_color": 1,
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        6
+      ]
+    }
+  },
+  "meet_renald_event": {
+    "object_type": "node",
+    "x": 4,
+    "y": 2,
+    "args": {
+      "event_start": "meet_renald_at_bookstore"
+    }
+  },
+  "test_temple_cutscene": {
+    "object_type": "node",
+    "x": 4,
+    "y": 8,
+    "args": {
+      "event_start": "confronting_renald"
     }
   }
 }

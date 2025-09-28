@@ -2,7 +2,7 @@
   "maddy": {
     "__hi__": [
       {
-        "text": [
+        "script": [
           "Oh, Forel! Uh, good-- good {time_of_day}."
         ],
         "conditions": [],
@@ -11,8 +11,12 @@
     ],
     "job": [
       {
-        "text": [
-          "My job is talking to you."
+        "script": [
+          "My job? Well, you know I'm faithful, so my job is... um, with the Sydan... And sometimes Bahati... E-especially when the Sydan asks to... But the best part is--",
+          "change_object_state=maddy#phitemos__blushing",
+          "!told_maddy_about_accident++H-hey, I saw some *smoke* outside while I was in the rafters, let's talk about that instead!",
+          "!finished_quest=kesvelt_fake_books++S-s-so did you find out who killed that disciple?",
+          "S-s-s-so, how's your quest going?"
         ],
         "conditions": [],
         "events": []
@@ -20,11 +24,11 @@
     ],
     "king": [
       {
-        "text": [
+        "script": [
           "His Majesty?",
           "...",
           "...Honestly? Eraton is wonderful. I always had trouble saying no to people, even before my parents gave me away. --n When I learned what was expected of me as faithful, I...",
-          "But it hasn't been like I feared. Not at all. Eraton, it's like he has a sixth sense for how I feel. I've never had to say no to him because he just... well, knows."
+          "But it hasn't been like I feared. Not at all. Eraton, it's like he has a *sixth* *sense* for how I feel. I've never had to say no to him because he just... well, knows."
         ],
         "conditions": [],
         "events": []
@@ -32,42 +36,324 @@
     ],
     "sixth sense": [
       {
-        "text": [
+        "script": [
           "You've never noticed? The way Eraton can sometimes tell what you're thinking or feeling?",
           "I'd read the stories of Queen Felt, but just thought that's all they were, stories. It makes me wonder what other kinds of abilities His Majesty is hiding.",
-          "...That didn't sound dirty, did it? I'm sorry if it did! I don't-- well, I mean I do... sometimes... uh um I-I-I-I-- So, anything *interesting* happen today?"
+          "...That didn't sound dirty, did it? I'm sorry if it did! I don't-- well, I mean I do... sometimes... uh um I-I-I-I--",
+          "change_object_state=maddy#phitemos__blushing",
+          "!told_maddy_about_accident|showed_maddy_textbook++So, I saw some *smoke* outside while I was in the rafters! I wonder what that's about.",
+          "told_maddy_about_accident|showed_maddy_textbook++So, how goes everything? Good? Good!"
         ],
         "conditions": [],
         "events": []
       }
     ],
-    "interesting": [
+    "smoke": [
       {
-        "text": [
-          "There was an accident outside? Someone was burned alive? Oh. Oh, gods. --n Y-you're going to help them, right, Forel? I-I know it's too late, but, you can at least find out what happened, can't you?"
+        "script": [
+          "There was an accident outside? Someone was burned alive!? Oh. Oh, gods. --n Y-you're going to help them, right, Forel? I-I know it's too late, but, you can at least find out what happened, can't you?"
         ],
         "conditions": [
-          "saw_jin_shi_die|updated_burning student"
+          "saw_jin_shi_die|saw_jin_shi_taken_away"
         ],
+        "events": [
+          "set_flag=told_maddy_about_accident"
+        ]
+      },
+      {
+        "script": [
+          "A whole bunch of it to the south."
+        ],
+        "conditions": [],
         "events": []
       }
     ],
     "yes": [
       {
-        "text": [
+        "script": [
           "Oh, Forel, you're wonderful! If you need any help, anything at all, just tell me. --n I mean... I'm only really good with *book*s, but..."
+        ],
+        "conditions": [
+          "last_dialog=smoke"
+        ],
+        "events": [
+          "set_flag=told_maddy_you_would_help"
+        ]
+      },
+      {
+        "script": [
+          "Alright then!",
+          "__(Maddy joined the party!)"
+        ],
+        "conditions": [
+          "last_dialog=join"
+        ],
+        "events": [
+          "add_party_member=Maddy"
+        ]
+      }
+    ],
+    "no": [
+      {
+        "script": [
+          "Oh. Ok. I guess... you have your whole quest thing to worry about don't you?"
+        ],
+        "conditions": [],
+        "events": [
+          "set_flag=told_maddy_you_would_not_help"
+        ]
+      },
+      {
+        "script": [
+          "Y-yeah... I don't blame you."
+        ],
+        "conditions": [
+          "last_dialog=join"
+        ],
+        "events": []
+      }
+    ],
+    "show burnt book cover": [
+      {
+        "script": [
+          "Hm? What's this?",
+          "!told_maddy_about_accident++...A Promenti prayer tome cover? Forel, are you sure about that?",
+          "!told_maddy_about_accident++...A Promenti prayer tome cover? This was what that disciple had? Forel, are you sure about that?",
+          "I'm not saying that you're lying! It's just... this cover is made of cowskin *leather*."
+        ],
+        "conditions": [],
+        "events": [
+          "set_flag=showed_maddy_textbook"
+        ]
+      },
+      {
+        "script": [
+          ""
         ],
         "conditions": [],
         "events": []
       }
     ],
-    "no": [],
-    "show burnt book cover": [
+    "leather": [
       {
-        "text": [
+        "script": [
+          "Eraton once let me join him on a visit to Keswa, where a lot of these kinds of texts used to teach prayers are bound. I think this was back when you were training with soldiers, because I don't remember you being there.",
+          "It was incredible. I got to learn all about how the books were made, I got to see books that hadn't even been published yet. I got to ask the transcribers so many questions--",
+          "Ahem. I learned that Promenti tomes aren't made in the same way normal books are. Their paper is made from popelm wood, and bound in silverfish scales. I can tell you the *story* of why later, but those are the only two things Prometus swore He would never burn.",
+          "They're made this way because, well, these tomes are made for inexperienced disciples learning prayers for flame and heat, after all. Although they told me those precautions make the tomes much more expensive to scribe.",
+          "My point is, a *legitimate* tome should be impossible to burn."
+        ],
+        "conditions": [
+          "showed_maddy_textbook"
+        ],
+        "events": []
+      }
+    ],
+    "luchadores": [
+      {
+        "script": [
+          "...Yeah, Ginny tried to get me to play wrestler with her. I really tried to say no, but... well you saw how well that went.",
+          "I don't get where she finds all that energy. I know we don't exactly have much to do all day, but I thought she was from the *Icelands*. --n Oh gosh, was that mean to say?"
+        ],
+        "conditions": [],
+        "events": []
+      },
+      {
+        "script": [
           ""
         ],
         "conditions": [],
+        "events": []
+      }
+    ],
+    "icelands": [
+      {
+        "script": [
+          "Nono, it just slipped out! I promise I don't think Icelanders are slothy, please don't tell Ginny I said that!"
+        ],
+        "conditions": [
+          "last_dialog=luchadores"
+        ],
+        "events": []
+      }
+    ],
+    "legitimate": [
+      {
+        "script": [
+          "It might be fake. Do you how the victim got ahold of of this?",
+          "Oh gosh, 'the victim'. I feel like *Terio* *Resuleto*."
+        ],
+        "conditions": [
+          "last_dialog=leather",
+          "showed_maddy_textbook"
+        ],
+        "events": []
+      }
+    ],
+    "terio resuleto": [
+      {
+        "script": [
+          "Focus, Forel! Autor del crimen? Oh gosh, I got to say her catch phrase!"
+        ],
+        "conditions": [
+          "last_dialog=legitimate",
+          "!finished_quest=kesvelt_burnt_books"
+        ],
+        "events": []
+      }
+    ],
+    "shady guy": [
+      {
+        "script": [
+          "You found him! That's-- oh. The Archmage burned him alive? That's... that's not quite what Terio Resuleto would do..."
+        ],
+        "conditions": [
+          "finished_quest=kesvelt_burnt_books"
+        ],
+        "events": []
+      }
+    ],
+    "story": [
+      {
+        "script": [
+          "last_dialog=leather++Oh, you want to hear the story now? I-- OK!",
+          "A long time ago, before even the ancient race had been created, humanity existed ignorant of the Gods' existence. We were miserable creatures back then. We didn't trust each other, didn't even know the Gods existed. But that was OK, because the world was how the Gods wanted it to be.",
+          "At least, until it wasn't. We don't know why, but Prometus wanted to create a new form of life. He succeeded, but not in the way He wanted. What he created became known as the Gods' only Mistake.",
+          "The only thing more powerful than the Gods.",
+          "The Mistake was a destructive force able to wound even Aeolus, Father of Gods. Out of fear for Their safety, the Gods did everything They could to imprison it.",
+          "In the end, only one thing kept The Mistake docile. Human souls. Why isn't for us to know, but so long as The Mistake regularly received our souls, it wouldn't rampage.",
+          "And so the Gods... let it have us. For a time, any human that died would be sent to The Mistake. And... and the wizards teach that this was... good.",
+          "But Prometus took pity on us. Surely we didn't deserve this fate, not all of us. But the other Gods did not care about individual humans. And so, He came up with a plan.",
+          "He visited His sisters, Salacius and Edinkira, the only Gods to interact with humans directly at the time, and begged Them for Their help. They knew it was dangerous. The Mistake would rampage again if it lost its supply of new human souls. But They couldn't sit by and watch.",
+          "And so, together, They created what we call the ancient race. I guess that means they're not very ancient then, huh? But whatever we call them, they had one purpose: to teach us, humanity, to have faith.",
+          "We learned to trust in each other and the Gods. We learned to worship Them, and learned miracles so They could work through us. And because of that, They grew fonder of us.",
+          "Now, we humans dedicate our lives to worshipping the Gods. So long as at least one of Them is fond of you, you'll go to Their Meadow when you pass on. But if none of Them are...",
+          "S-sorry, I got sidetracked. This is supposed to be about the silverfish and the popelm trees, wasn't it? See, Salacius and Edinkira helped, but not for nothing.  They both wanted Prometus to promise to not burn that which came from the one gift left to Them by mortal lovers past.",
+          "For Salacius, it was the silverfish that were hatched from the Leviathan's eggs. For Edinkira, the popelm trees that grew from acorns of the Mpenzi Tree found at the center of Her grove.",
+          "I guess... I guess I could've just said that last part, huh?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "aliases": {
+      "pez": "pez espada",
+      "espada": "pez espada"
+    },
+    "contextual_aliases": {
+      "rencid": {
+        "sarge": "sergeant caballera",
+        "caballera": "sergeant caballera",
+        "sergeant": "sergeant caballera"
+      }
+    },
+    "name": [
+      {
+        "script": [
+          "My name is Madison Amarillo Pez Espada. But that's a bit of a mouthful, so people just call me Maddy."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "pez espada": [
+      {
+        "script": [
+          "My family name? It's Salin. It means 'swordfish', but... my mother's name wasn't 'Pez'...",
+          "...Can we talk about something else?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "rencid": [
+      {
+        "script": [
+          "What... where did you hear that name?"
+        ],
+        "conditions": [],
+        "events": []
+      },
+      {
+        "script": [
+          ""
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "bahati": [
+      {
+        "script": [
+          "She's a wonderful woman, isn't she? She can go out and talk to people in the court. She spends her free time running a boutique. She's an incredible fencer.",
+          "Some of the others say they can't believe she comes from a village lord's family. And... in a way I get it. She carries herself like she's been a city girl her whole life, and not just five years.",
+          "But it's not like there's nothing there. She's more willing to show she's excited about things. There are jokes the court tells she won't laugh at.",
+          "She just feels more... real. Like she acts the way she does because she wants to.",
+          "I wish I could be as brave as her."
+        ],
+        "conditions": [
+          "!in_party=Bahati"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "Um... she's right behind you.",
+          "Bahati__Indeed I am, dear!",
+          "Bahati__I can understand wanting to hear all about me, but there's an ettiquete to gossip. Rule one, don't gossip about someone within earshot unless you're trying to play coy."
+        ],
+        "conditions": [
+          "in_party=Bahati"
+        ],
+        "events": []
+      }
+    ],
+    "brave": [
+      {
+        "script": [
+          "You know, not so scared to join in when everyone else is having fun. Speak my mind whenever I want to.",
+          "finished_quest=assure_eraton++I guess that's why I came along with you."
+        ],
+        "conditions": [
+          "last_dialog=bahati"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "Huh?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "join": [
+      {
+        "script": [
+          "Join you? On your quest?",
+          "...It was fun to solve that mystery together. We'll get to do more stuff like that, right?",
+          "But... me? I'm not as social as Bahati or Ginny. Not even Kubrick. And I really don't know how to fight. I'm OK with a greatshield, but that's about it.",
+          "Are you sure I won't be a burden?"
+        ],
+        "conditions": [
+          "completed_quest=kesvelt_fake_books",
+          "!told_maddy_you_would_not_help",
+          "clothing_montage",
+          "showed_maddy_textbook",
+          "have_quest_step=assure_eraton__find_friend"
+        ],
+        "events": []
+      }
+    ],
+    "sergeant caballera": [
+      {
+        "script": [
+          "A sergeant? A drill sergeant called a recruit that? You mean...",
+          "Oh, shades. Oh, shades oh shades oh shades oh shades."
+        ],
+        "conditions": [
+          "last_dialog=rencid"
+        ],
         "events": []
       }
     ]
@@ -75,7 +361,7 @@
   "maddy#phitemos": {
     "__hi__": [
       {
-        "text": [
+        "script": [
           "Oh, Forel! Uh, good-- good {time_of_day}."
         ],
         "conditions": [],
@@ -84,18 +370,37 @@
     ],
     "job": [
       {
-        "text": [
+        "script": [
           "My job is"
         ],
         "conditions": [],
         "events": []
       }
-    ]
+    ],
+    "shady guy": [
+      {
+        "script": [
+          "A shady guy in the book store's alleyway sold it to him because he couldn't afford the real thing? Woah, that's--",
+          "start_event=clothing_montage"
+        ],
+        "conditions": [
+          "last_dialog=legitimate|terio resuleto",
+          "have_item=key_burnt_book",
+          "showed_maddy_textbook",
+          "!clothing_montage"
+        ],
+        "events": [
+          "set_flag=clothing_montage"
+        ]
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {}
   },
   "maddy#bookstore": {
     "__hi__": [
       {
-        "text": [
+        "script": [
           "Oh, Forel! Uh, good-- good {time_of_day}."
         ],
         "conditions": [],
@@ -104,12 +409,14 @@
     ],
     "job": [
       {
-        "text": [
+        "script": [
           "My job is"
         ],
         "conditions": [],
         "events": []
       }
-    ]
+    ],
+    "aliases": {},
+    "contextual_aliases": {}
   }
 }

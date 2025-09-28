@@ -10,8 +10,10 @@ import copy
 from objects.characters import Character
 from objects.object_templates import Node, Monster, MapObject, Teleporter, Chest, NPC, ItemHolder, NODE_REGISTRY
 from objects.object_basics import BedBasic, BedRoyal, DoorBasic
+from objects.nodegroup import NodeGroup
 import objects.monsters
 import objects.projectiles
+import objects.npcs
 #from map_objects import MapObject  # for circular dep. resolution if needed
 if TYPE_CHECKING:
     from ultimalike import GameEngine
@@ -43,6 +45,8 @@ class Map:
         self.tiles_default = [[None for _ in range(width)] for _ in range(height)]
         self.tiles_high = [[None for _ in range(width)] for _ in range(height)]
         self.objects: List[Node] = []
+        self.objects_by_layer: dict[int, list[Node]] = {}
+        self.groups: dict[str, NodeGroup] = {}
         self.adjacent_maps: Dict[str, str] = {}
         self.enemy_positions = {}
         
@@ -76,11 +80,11 @@ class Map:
     def revert_map_tiles(self):
         self.tiles = copy.deepcopy(self.tiles_default)
             
-    def is_passable(self, pos: tuple[int, int]) -> bool:
+    def is_passable(self, pos: tuple[int, int], old_tile: Tile = None) -> bool:
         tile = self.get_tile_lower(pos)
         if not tile:
             return False
-        terrain_check = tile.is_passable
+        terrain_check = tile.can_pass_thru(old_tile)
         if not terrain_check:
             return False
         return self.can_pass_objects_at(pos)
@@ -122,10 +126,22 @@ class Map:
     
     def add_object(self, map_object: Node):
         self.objects.append(map_object)
+        if map_object.layer not in self.objects_by_layer:
+            self.objects_by_layer[map_object.layer] = []
+        self.objects_by_layer[map_object.layer].append(map_object)
+        if map_object.group_name:
+            if map_object.group_name not in self.groups:
+                self.groups[map_object.group_name] = NodeGroup(map_object)
+            else:
+                self.groups[map_object.group_name].add(map_object)
+            map_object.group = self.groups[map_object.group_name]
+            
+        map_object.map = self
     
     def remove_object(self, map_object: Node):
         if map_object in self.objects:
             self.objects.remove(map_object)
+            self.objects_by_layer[map_object.layer].remove(map_object)
     
     @classmethod
     def load_from_files(cls, map_name: str, map_obj_db: MapObjectDatabase, tile_db: TileDatabase, engine: 'GameEngine', objects_data: dict = None):
@@ -177,26 +193,11 @@ class Map:
                     for dir, map in obj_data["args"].items():
                         game_map.adjacent_maps[dir] = map
                 map_object = map_obj_db.create_obj(obj_name, obj_data["object_type"], obj_data)
-                map_object.map = game_map
                 game_map.add_object(map_object)
         return game_map
     
     def in_map_range(self, pos: tuple[int, int]):
         return pos[0] in range(self.width) and pos[1] in range(self.height)
-    
-    def create_ring_of_return_teleporters(self, old_map: str, map_obj_db: MapObjectDatabase):
-        map_x = len(self.tiles)
-        map_y = len(self.tiles[0])
-        for i in range(map_x):
-            mo = map_obj_db.create_obj("return_teleporter", "teleporter", {"x" : i, "y" : 0, "args": {"target_map" : old_map, "position" : {"from_any" : "return_node"}}})
-            self.add_object(mo)
-            mo = map_obj_db.create_obj("return_teleporter", "teleporter", {"x" : i, "y" : map_y-1, "args": {"target_map" : old_map, "position" : {"from_any" : "return_node"}}})
-            self.add_object(mo)
-        for i in range(map_y):
-            mo = map_obj_db.create_obj("return_teleporter", "teleporter", {"x" : 0, "y" : i, "args": {"target_map" : old_map, "position" : {"from_any" : "return_node"}}})
-            self.add_object(mo)
-            mo = map_obj_db.create_obj("return_teleporter", "teleporter", {"x" : map_x-1, "y" : i, "args": {"target_map" : old_map, "position" : {"from_any" : "return_node"}}})
-            self.add_object(mo)
     
     def to_dict(self):
         return {obj.name : obj.to_dict() for obj in self.objects if not obj.__is__(Character)}

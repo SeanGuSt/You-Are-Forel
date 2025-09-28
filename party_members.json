@@ -1,0 +1,31 @@
+{
+    "Forel" :
+    {
+        "x" : 0,
+        "y" : 0,
+        "strength" : 1,
+        "dexterity" : 2,
+        "faith" : 5,
+        "max_hp" : 10,
+        "args" : {
+            "equipped" : {
+                "armor" : "armor_pjs"
+            },
+            "spritesheet" : ["Forel", 0, 0],
+            "gendered_words" : "masculine"
+        }
+    },
+    "Maddy" :
+    {
+        "x" : 0,
+        "y" : 0,
+        "strength" : 1,
+        "dexterity" : 2,
+        "faith" : 1,
+        "max_hp" : 10,
+        "args" : {
+            "spritesheet" : ["Maddy", 0, 0],
+            "gendered_words" : "feminine"
+        }
+    }
+}

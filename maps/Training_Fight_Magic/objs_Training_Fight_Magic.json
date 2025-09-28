@@ -1,0 +1,99 @@
+{
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 3,
+    "y": 5
+  },
+  "imedes_in_bed_0": {
+    "object_type": "imedesinbed",
+    "x": 1,
+    "y": 6,
+    "args": {
+      "spritesheet": [
+        "Imedes In Bed",
+        0,
+        1
+      ]
+    }
+  },
+  "imedes_in_bed1": {
+    "object_type": "imedesinbed",
+    "x": 1,
+    "y": 7,
+    "args": {
+      "spritesheet": [
+        "Imedes In Bed",
+        1,
+        1
+      ]
+    }
+  },
+  "monsterscienceskeleton": {
+    "object_type": "monster",
+    "x": 4,
+    "y": 7,
+    "args": {
+      "spritesheet": [
+        "Science Skeleton",
+        0,
+        0
+      ]
+    }
+  },
+  "special_0": {
+    "object_type": "node",
+    "x": 2,
+    "y": 7,
+    "args": {}
+  },
+  "special_1": {
+    "object_type": "node",
+    "x": 2,
+    "y": 6,
+    "args": {}
+  },
+  "special_2": {
+    "object_type": "node",
+    "x": 2,
+    "y": 5,
+    "args": {}
+  },
+  "special_3": {
+    "object_type": "node",
+    "x": 1,
+    "y": 5,
+    "args": {}
+  },
+  "special_4": {
+    "object_type": "node",
+    "x": 1,
+    "y": 4,
+    "args": {}
+  },
+  "special_5": {
+    "object_type": "node",
+    "x": 2,
+    "y": 4,
+    "args": {}
+  },
+  "special_6": {
+    "object_type": "node",
+    "x": 2,
+    "y": 3,
+    "args": {}
+  },
+  "special_7": {
+    "object_type": "node",
+    "x": 1,
+    "y": 3,
+    "args": {}
+  },
+  "event_at_combat_start": {
+    "object_type": "monstereventtrigger",
+    "x": 0,
+    "y": 2,
+    "args": {
+      "round_timer": 1
+    }
+  }
+}

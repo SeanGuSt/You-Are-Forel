@@ -42,7 +42,7 @@ def input_new_tile_inputs(self: 'MapEditor', event):
             self.input1 = self.tile_types[self.all_tiles_index]
         case pygame.K_BACKSPACE:
             if self.input0 and self.input_field == 0:
-                input0 = input0[:-1]
+                self.input0 = self.input0[:-1]
         case _:
             if self.input_field == 0 and len(self.input0) < 1:
                 self.input0 += event.unicode

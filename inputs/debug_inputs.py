@@ -26,11 +26,10 @@ def debug_inputs(self: 'GameEngine', event):
         try:
             self.event_manager._do_event(self.dialog_manager.user_input)
             self.dialog_manager.user_input = ""
-            self.change_state(GameState.TOWN)
         except Exception as e:
             self.append_to_message_log(f"{self.dialog_manager.user_input} is not a valid event because {e}.")
             self.dialog_manager.user_input = ""
-            self.change_state(GameState.TOWN)
+        self.revert_state()
 
     elif event.unicode.isprintable() and len(self.dialog_manager.user_input) < 50:
         self.dialog_manager.user_input += event.unicode 

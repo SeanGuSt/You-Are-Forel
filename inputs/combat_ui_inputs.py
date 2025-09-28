@@ -11,7 +11,11 @@ def combat_inputs(self: 'GameEngine', event):
     if not current_unit:
         return
     match event.key:
+        #Movement/Direction selection
         case pygame.K_UP | pygame.K_DOWN | pygame.K_LEFT | pygame.K_RIGHT:
+            if current_unit.virtue_manager.is_overuse_blocking_movement(current_unit):
+                self.combat_manager.append_to_combat_log("You can't move!")
+                return
             direc = self.get_direction(event.key).value
             tpos = current_unit.add_tuples(current_unit.position, direc)
             messages = []
@@ -40,13 +44,26 @@ def combat_inputs(self: 'GameEngine', event):
                     current_unit.position = tpos
                     self.event_manager.timer_manager.start_timer("player_move", 180)
                     self.combat_manager.conclude_current_player_turn()
+                    return
                 
+                warp_node = self.current_map.get_object_by_name("map_edge_teleporter")
+                if warp_node and (tpos[0] < 0 or tpos[0] >= self.current_map.width or tpos[1] < 0 or tpos[1] >= self.current_map.height):
+                    current_unit.old_position = current_unit.position
+                    current_unit.position = tpos
+                    self.event_manager.timer_manager.start_timer("player_move", 180)
+                    self.combat_manager.conclude_current_player_turn()
+                    self.current_map.remove_object(current_unit)
+                    if all([party_member not in self.current_map.objects for party_member in self.party.members]):
+                        self.handle_teleporter(warp_node)
+                        return_node = self.current_map.get_object_by_name("return_node")
+                        self.current_map.remove_object(return_node)     
             for message in messages:
                 self.combat_manager.append_to_combat_log(message)
             self.handle_map_objects()
         case pygame.K_a:
-            self.attack_mode = True
-            self.combat_manager.append_to_combat_log(f"{current_unit.name} readies {current_unit.possessive} weapon.")
+            if not self.attack_mode:
+                self.attack_mode = True
+                self.combat_manager.append_to_combat_log(f"{current_unit.name} readies {current_unit.possessive} weapon.")
         case pygame.K_s:
             current_unit.special = True
             self.combat_manager.append_to_combat_log(f"{current_unit.name} prepares to use a special ability.")

@@ -3,9 +3,8 @@
         "trigger" : "after_step",
         "conditions" : ["!have_quest=earn_favor"],
         "script" : [
-            "wait=3000",
             "walk=corner_guard__W1&&leader__S1",
-            "text=???__I apologize, kind faithful, but your status has its restrictions. Without the Sydan's blessings, you may not leave the castle. But surely that won't be difficult, will it? The king has been... generous to his faithful. Even moreso than his father to his.",
+            "???__I apologize, kind faithful, but your status has its restrictions. Without the Sydan's blessings, you may not leave the castle. But surely that won't be difficult, will it? The king has been... generous to his faithful. Even moreso than his father to his.",
             "walk=corner_guard__E1"
         ]
     },
@@ -14,7 +13,7 @@
         "conditions" : ["!have_quest=earn_favor"],
         "script" : [
             "walk=corner_guard_2__W1&&leader__N1",
-            "text=???__I apologize, kind faithful, but your status has its restrictions. Without the Sydan's blessings, you may not leave the castle. But surely that won't be difficult, will it? The king has been... generous to his faithful. Even moreso than his father to his.",
+            "???__I apologize, kind faithful, but your status has its restrictions. Without the Sydan's blessings, you may not leave the castle. But surely that won't be difficult, will it? The king has been... generous to his faithful. Even moreso than his father to his.",
             "walk=corner_guard_2__E1"
         ]
     }

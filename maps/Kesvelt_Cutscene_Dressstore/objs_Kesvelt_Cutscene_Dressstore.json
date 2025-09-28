@@ -1,0 +1,16 @@
+{
+  "new_game_spawner": {
+    "object_type": "node",
+    "x": 6,
+    "y": 4
+  },
+  "maddy#phitemos": {
+    "object_type": "node",
+    "x": -99,
+    "y": -97,
+    "args": {
+      "name": "Maddy",
+      "dialog_key": "maddy#phitemos"
+    }
+  }
+}

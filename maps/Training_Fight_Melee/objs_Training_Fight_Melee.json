@@ -10,11 +10,11 @@
     "y": 7,
     "args": {}
   },
-  "guard_2": {
+  "training_guard_1": {
     "object_type": "monsterguardrookie",
     "x": 4,
     "y": 9,
-    "args": {}
+    "args": {"pause_round" : 3}
   },
   "guard_sergeant": {
     "object_type": "monstereventtrigger",

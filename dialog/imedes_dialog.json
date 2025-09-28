@@ -1,46 +1,71 @@
 {
-    "imedes_laboratory" : {
-    "__hi__" : [
-
+  "imedes_laboratory": {
+    "__hi__": [
       {
-        "text" : [
+        "script": [
           "Hm? What? What is it this time? I swear, if another shade-humping disciple set themselves on fire *again*, I am going to-- --n Oh, young Forel. Hmph. What brings you to my laboratory?"
         ],
-        "conditions" : []
-      }
-    ],
-    "again" : [
-      {
-        "text" : [
-          "Yes, yes. Some of the fresh disciples have been praying for *self-immolation*. Ostensibly by practicing lowering their body heat. Nonsense, I say. What fool would possibly mistake 'alem heat' for 'maniret fire'? --n Not you, I should hope, young Forel."
+        "conditions": [
+          "!barked_at_imedes",
+          "!have_quest=kesvelt_fake_books"
         ],
-        "conditions" : ["!have_quest=kesvelt_fake_books", "!have_quest=kesvelt_jin_shi_dies"],
-        "events" : ["give_quest=kesvelt_fake_books"]
+        "events": []
       },
       {
-        "text" : [
+        "script": [
+          "I believe I told you to leave."
+        ],
+        "conditions": [
+          "barked_at_imedes"
+        ],
+        "events": []
+      }
+    ],
+    "again": [
+      {
+        "script": [
+          "Yes, yes. Some of the fresh disciples have been praying for *self-immolation*. Ostensibly by practicing lowering their body heat. Nonsense, I say. What fool would possibly mistake 'alem heat' for 'maniret fire'? --n  Not you, I should hope, young Forel."
+        ],
+        "conditions": [
+          "!have_quest=kesvelt_fake_books",
+          "!have_quest=kesvelt_jin_shi_dies"
+        ],
+        "events": [
+          "give_quest=kesvelt_fake_books"
+        ]
+      },
+      {
+        "script": [
           "...",
           "... SIGH, so it really has. Let me guess, another *pauper* from outside the city?"
         ],
-        "conditions" : ["!have_quest=kesvelt_fake_books", "have_quest=kesvelt_jin_shi_dies"],
-        "events" : ["give_quest=kesvelt_fake_books"]
-      }
-    ],
-    "self-immolation" : [
-      {
-        "text" : [
-          "Burning yourself alive. A nasty way to die. Normally, I would quill this as incompetence. You'd probably be amazed at the number of people who get hurt or killed while training just because they don't read two sentences ahead.",
-          "But something smells wrong here. I can't simply abandon my research to chase ghosts on an empty hunch, but...",
-          "*Pauper*s like you may be 'unrefined', but you at least know better than to disregard what a grown-up says. Can't say the same for spoiled *brat*s like the king."
+        "conditions": [
+          "!have_quest=kesvelt_fake_books",
+          "have_quest=kesvelt_jin_shi_dies"
         ],
-        "conditions" : ["mid_quest=kesvelt_fake_books"],
-        "events" : ["set_flag=imedes_insults_eraton"]
-
+        "events": [
+          "give_quest=kesvelt_fake_books"
+        ]
       }
     ],
-    "pauper" : [
+    "self-immolation": [
       {
-        "text" : [
+        "script": [
+          "Burning yourself alive. A nasty way to die. Normally, I would quill this as incompetence. You'd be amazed at the number of people who get hurt or killed while training just because they don't read two sentences ahead.",
+          "But something smells wrong here. I can't simply abandon my research to chase ghosts on an empty hunch, but...",
+          "*Pauper*s like you may be 'unrefined', but you at least know better than to disregard what a grown-up says. Can't say the same for spoiled *brat*s like the Sydan."
+        ],
+        "conditions": [
+          "mid_quest=kesvelt_fake_books"
+        ],
+        "events": [
+          "set_flag=imedes_insults_eraton"
+        ]
+      }
+    ],
+    "pauper": [
+      {
+        "script": [
           "I didn't mention? Only the poor disciples have been burning themselves alive.",
           "...Say, children your age find burnt corpses fascinating, don't they?",
           "You can see for yourself, if you wish. They'll be in the morgue. You would expect the corpses to be done by now, but... well you'll see.",
@@ -49,18 +74,188 @@
           "If you find anything of note, tell me. If not, this isn't the first time I've been wrong, and really all the better for it.",
           "If those disciples really were so foolish, better they die now, before they get someone else killed."
         ],
-        "conditions" : ["mid_quest=kesvelt_fake_books"],
-        "event" : ["give_quest_hint=kesvelt_fake_books__visit_morgue"]
+        "conditions": [
+          "mid_quest=kesvelt_fake_books"
+        ],
+        "event": [
+          "give_quest_hint=kesvelt_fake_books__visit_morgue"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "Yes, so far only poorer disciples from outside the city have been bursting into flames. Some of the wizards in the temple quill it up to incompetence. Normally, I would agree.",
+          "But something smells wrong here. I can't simply abandon my research to chase ghosts on an empty hunch, but...",
+          "Something feels off here. I've mentored paupers in the past. They can be many, many things, but rarely are they stupid enough to disregard when someone warns them of danger.",
+          "However, I cannot simply abandon my research to play detective on a hunch. --n ...But you could.",
+          "Children your age find burnt corpses fascinating, don't they? Perhaps you could investigate for me. They'll be in the morgue. You would expect the corpses to be done by now, but... well you'll see.",
+          "If you find anything of note, tell me. If not, this isn't the first time I've been wrong, and really all the better for it.",
+          "If those disciples really were so foolish, better they die now, before they get someone else killed.",
+          "leader_wear=armor_pjs++...And for the love of all that's bright and beautiful, would you PLEASE not wear bear pajamas around corpses? Go to the Phitemos and change into some proper clothes."
+        ],
+        "conditions": [
+          "mid_quest=kesvelt_fake_books"
+        ],
+        "events": []
       }
     ],
-    "brat" : [
+    "brat": [
       {
-        "text" : [
-          "Oh, what? That's hardly the worst thing I've said to the king's face, let alone behind his back.",
+        "script": [
+          "Oh, what? That's hardly the worst thing I've said to the Sydan's face, let alone behind his back.",
           "Are you really going to start acting like the lapdog people say you are? Barking ineffectually anytime someone steps too close to your master?"
         ],
-        "conditions" : ["imedes_insults_eraton"],
-        "events" : ["set_flag=imedes_doubles_down"]
+        "conditions": [
+          "imedes_insults_eraton"
+        ],
+        "events": [
+          "set_flag=imedes_doubles_down"
+        ]
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {},
+    "yes": [
+      {
+        "script": [
+          "Very well then, I'll indulge you. Yes, the Sydan is a brat. A child who, were it not for the *Blue* *Moon* *Tragedy*, would've never known a day of hardship in his life. Even with it, he spends his days in court flirting with anything that can breathe.",
+          "I cannot fault him for keeping things in stasis, but unstable as the kingdom is, stasis is hardly sufficient. Especially as he's yet to choose a woman to produce an heir despite having every disturbed teenager's fantasy just four flights of stairs from his bed.",
+          "About the only time he takes things seriously is when it comes to upholding the prior Sydan's decrees.",
+          "If he does not stop trying to be a friend or bedfellow to every delegate who comes our way, the nobles of the kingdom may become disillusioned or worse!",
+          "...Thank you, young Forel, that was... actually quite cathartic."
+        ],
+        "conditions": [
+          "last_dialog=brat"
+        ],
+        "events": [
+          "set_flag=imedes_triples_down"
+        ]
+      }
+    ],
+    "gods": [
+      {
+        "script": [
+          "Have you ever heard of these fascinating inventions called books? They're quite wonderful things that allow you to learn anything you need to know without annoying the most important wizard in Sewinso."
+        ],
+        "conditions": [
+          "!finished_quest=kesvelt_fake_books"
+        ],
+        "events": []
+      }
+    ],
+    "blue moon tragedy": [
+      {
+        "script": [
+          "...I apologize, that... that was uncalled for. Because you were present, to be sure, but even if not it was a tasteless remark. --n I am... distracted by this incident.",
+          "Please make no mistake, boy. My grievances exist solely because I believe the Sydan could make a great ruler. If he could direct a little more energy to asserting authority, the kingdom would be in a much better shape.",
+          "completed_quest_step=assure_eraton__train_magic++Perhaps on your quest you'll see what I mean, and can inform the Sydan. He's likely to listen to you."
+        ],
+        "conditions": [
+          "imedes_triples_down"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "...That is hardly a topic I am willing to discuss, young Forel."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "show disciples": [
+      {
+        "script": [
+          "Hm? What's this? --n ...This book isn't bound with silverfish scales. The handwriting is proper, but--",
+          "...Young Forel. Did you find this tome, or was it given to you? If so, by whom?"
+        ],
+        "conditions": [
+          "mid_quest=kesvelt_fake_books"
+        ],
+        "events": []
+      }
+    ],
+    "prometus": [
+      {
+        "script": [
+          "Have you ever heard of these fascinating inventions called books? They're quite wonderful things that allow you to learn anything you need to know without annoying the most important wizard in Sewinso."
+        ],
+        "conditions": [
+          "!finished_quest=kesvelt_fake_books"
+        ],
+        "events": []
+      }
+    ],
+    "show burnt book cover": [
+      {
+        "script": [
+          "Hm? You got this off the latest cases from the morgue? --n Setting aside the fact you robbed a corpse, you think this is from the prayer tomes of the victims of spontaneous combustion? Impossible.",
+          "Promentian prayer tomes are written on paper made from popelm trees and bound in silverfish scales. They are, without hyperbole, impossible to burn. So unless black marketeers have been painstakingly rewriting tomes by hand, I fear you are mistaken.",
+          "mid_quest_step=assure_eraton__train_magic++Your adamance in this matter is appreciated, Forel. However I cannot waste my time on false leads. I will try to find time to assess your competence in miracles in... four months or so.",
+          "mid_quest_step=assure_eraton__train_magic++I assume that's why you're bothering me, yes? To show the Sydan you won't get yourself killed on your little quest? --n Good {time_of_day}, young Forel.",
+          ""
+        ],
+        "conditions": [
+          "mid_quest=kesvelt_fake_books"
+        ],
+        "events": [
+          "force_end="
+        ]
+      }
+    ]
+  },
+  "imedes_in_bed": {
+    "__hi__": [
+      {
+        "script": [
+          "Ah, there you are, boy. Ready and eager, are we? --n Well, before we begin I must ask of you something important.",
+          "Earlier, I told that girl not to resent herself for being unwilling to take a life. And I meant it. However, if you go on this little quest of yours that is not a luxury you will have.",
+          "There will be times you must take a life, perhaps many, in self-defense. Are you willing to do that?"
+        ],
+        "conditions": [
+          "!talked="
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "__(He's asleep. Or at least, pretending to be.)"
+        ],
+        "conditions": [
+          "talked="
+        ],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "script": [
+          "Later, boy, later."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {},
+    "yes": [
+      {
+        "script": [
+          "And why, if I may ask, are you willing to kill?",
+          "Is it simply because your enemy intends to *kill* you, and you'd rather they didn't? Or is it, by attacking you, a faithful, they attempt to *destroy* that which belongs to the Sydan?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "destroy": [
+      {
+        "script": [
+          "Very well then.",
+          "start_event=magic_lesson"
+        ],
+        "conditions": [],
+        "events": []
       }
     ]
   }

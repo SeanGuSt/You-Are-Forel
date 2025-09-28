@@ -24,6 +24,7 @@ class CombatManager:
         self.combat_log = ["" for _ in range(5)]
         self.combat_scroll_index = 0
         self.current_enemy_index = 0
+        self.round_counter = 1
         self.walkers = []
         self.enemy_turn_in_progress = False
         self.enemy_move_duration = self.engine.FPS//6  # frames for enemy move animation
@@ -34,28 +35,33 @@ class CombatManager:
         self.active_combat = True
         self.current_unit_index = 0
         self.player_turn = True
-        self.engine.change_state(GameState.COMBAT)
+        self.player_made_move = False
+        self.engine.replace_state(GameState.COMBAT)
         can_spawn_monsters = len(allies_in_combat) > 0
         monster_node_index = -1
         while can_spawn_monsters:
             monster_node_index += 1
-            node = self.engine.current_map.get_object_by_name("monster_node" + str(monster_node_index))
+            node = self.engine.current_map.get_object_by_name("monster_node_" + str(monster_node_index))
             if node:
                 name = allies_in_combat[monster_node_index]
-                monster_dict = {"object_type": "monster", "x" : node.position[0], "y" : node.position[1], "args" : {}}
-                monster = self.engine.map_obj_db.create_obj(name, "monster", monster_dict)
-                monster.map = self.engine.current_map
+                monster_dict = {"object_type": name, "x" : node.position[0], "y" : node.position[1], "args" : {}}
+                monster = self.engine.map_obj_db.create_obj(name+str(monster_node_index), name, monster_dict)
                 self.engine.current_map.add_object(monster)
             else:
                 can_spawn_monsters = False
 
-    def exit_combat_mode(self):
+    def exit_combat_mode(self, reset_round_counter: bool = True):
+        if reset_round_counter:
+            self.round_counter = 1
+            self.combat_log = ["", "", "", "", ""]
+            self.combat_scroll_index = 0
+        else:
+            self.round_counter += 1
         self.active_combat = False
         self.selected_spell = None
         self.spell_input_mode = False
         self.cursor_position = None
-        self.combat_log = ["", "", "", "", ""]
-        self.combat_scroll_index = 0
+        
         self.engine.revert_state()
 
     def is_in_combat(self):
@@ -79,7 +85,6 @@ class CombatManager:
         self.append_to_combat_log(f"{attacker.name} hits {target.name} for {damage} damage!")
         target.attacked(attacker, damage)
         if target.hp <= 0:
-            self.engine.current_map.remove_object(target)
             self.append_to_combat_log(f"{target.name} was defeated!")
         
         return []
@@ -103,6 +108,12 @@ class CombatManager:
         self.player_made_move = True
 
     def advance_turn(self):
+        if all([obj.hp <= 0 or not obj.is_hostile for obj in self.engine.current_map.get_objects_subset(Monster)]):
+            warp_node = self.engine.current_map.get_object_by_name("map_edge_teleporter")
+            self.engine.handle_teleporter(warp_node)
+            return_node = self.engine.current_map.get_object_by_name("return_node")
+            self.engine.current_map.remove_object(return_node)
+            self.engine.append_to_message_log(f"{self.engine.party.get_leader().name} won!")
         if self.player_turn and self.player_made_move:
             print("Made a move")
             self.finish_current_player_turn()
@@ -112,7 +123,7 @@ class CombatManager:
     def finish_current_player_turn(self):
         self.player_made_move = False
         member = self.engine.party.members[self.current_unit_index]
-        messages = member.virtue_manager.apply_turn_end_penalties(member)
+        messages = member.virtue_manager.process_turn_end(member)
         message = ""
         if member.body_status_ex == ExternalBodyStatus.ON_FIRE:
             member.hp -= member.body_status_ex_counter
@@ -133,7 +144,10 @@ class CombatManager:
         for message in messages:
             if message:
                 self.append_to_combat_log(message)
-        self.current_unit_index += 1
+        while self.current_unit_index < len(self.engine.party.members):
+            self.current_unit_index += 1
+            if self.get_current_unit() in self.engine.current_map.objects:
+                return
 
         if self.current_unit_index >= len(self.engine.party.members):
             self.current_unit_index = 0
@@ -202,7 +216,7 @@ class CombatManager:
         
         # Clear any remaining timers
         self.engine.event_manager.timer_manager.cancel_timer("enemy_move")
-        
+        self.round_counter += 1
         self.player_turn = True
 
     def update_special(self):
@@ -217,22 +231,11 @@ class CombatManager:
             print(self.attack_frame, attack_direction)
             for obj in self.engine.current_map.get_objects_at(player.add_tuples(player.position, attack_direction.value), CombatStatsMixin):
                 if obj.can_be_pushed and not obj.flying:
-                    self.append_to_combat_log(f"{player.name} sent {obj.name} flying back 2 spaces!")
-                    obj.push(attack_direction, 2)#apply knockback, if possible (object is added to event_manager.walkers here)
+                    obj.push(player, attack_direction, 2)#apply knockback, if possible (object is added to event_manager.walkers here)
                     break
         if self.attack_frame > 21:# We've hit all eight adjacent squares
-            if not self.engine.event_manager.walkers:#Don't proceed to the next turn until all animations are finished
-                self.attack_frame = 0
-                player.special = False
-                self.conclude_current_player_turn()
-            else:
-                self.attack_frame = 22
+            self.attack_frame = 0
+            player.special = False
+            self.conclude_current_player_turn()
         
-
-    def end_push(self):
-        for obj in self.engine.event_manager.walkers:
-            if obj.state == ObjectState.KNOCKBACK:
-                if not self.engine.event_manager.timer_manager.is_active(f"{obj.name}_knockback"):
-                    obj.state = ObjectState.STAND
-                    self.engine.event_manager.walkers.remove(obj)
     

@@ -15,9 +15,9 @@ from Map_Editor.inputs.text_inputs import input_new_tile_inputs, input_new_objec
 from Map_Editor.inputs.mouse_inputs import place_or_move_object, place_tile, move_ghost, drag_paint_tiles
 
 pygame.init()
-map_name = "Battle Test Map"
+map_name = "Kesvelt_Phitemos_Chambers"
 FONT = pygame.font.SysFont(None, 18)
-pygame.key.set_repeat(600, 200)
+pygame.key.set_repeat(600, 300)
 
 class MapEditor:
     def __init__(self, map_name: str):
@@ -34,7 +34,7 @@ class MapEditor:
 
         #Databases
         self.odb = MapObjectDatabase(GameEngine)
-        self.tdb = TileDatabase()
+        self.tdb = TileDatabase(GameEngine)
         self.renderer = Renderer(self, FONT)
 
         #file directories
@@ -134,7 +134,7 @@ class MapEditor:
         ensure_file_exists(self.ascii_path, ascii_default)
         tile_default = {"#" : "wall", "_" : "floor", "." : "grass", "~" : "sky"}
         ensure_file_exists(self.tiles_path, tile_default)
-        obj_default = {"new_game_spawner" : {"object_type" : "node", "x" : 10, "y" : 10}}
+        obj_default = {"new_game_spawner" : {"object_type" : "node", "x" : 5, "y" : 5}}
         ensure_file_exists(self.objects_path, obj_default)
     
     def change_state(self, state: EditState):

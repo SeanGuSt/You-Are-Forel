@@ -76,14 +76,19 @@ class QuestLog:
     def start_quest(self, quest: str):
         if quest in self.quests:
             self.quests[quest].started = True
+            if self.quests["learn_quest_log"].completed:
+                self.engine.append_to_message_log(f"Forel wrote down {self.quests[quest].name} in his journal.")
         return quest
 
     def finish_quest(self, quest_name: str, did_succeed: bool = True):
         if quest_name in self.quests:
             quest = self.quests[quest_name]
             if did_succeed:
+                if self.quests["learn_quest_log"].completed:
+                    self.engine.append_to_message_log(f"{quest.name} completed!")
                 quest.started = True #This way players can finish a quest without even having it yet.
                 quest.completed = True
+
             else:
                 quest.failed = True #But if they fail a quest before starting it, they don't get to know :P
             return quest
@@ -91,6 +96,7 @@ class QuestLog:
     def reveal_quest_step(self, quest_step: str):
         if "__" in quest_step:
             quest_name, step_name = quest_step.split("__")
+            print(quest_name, step_name)
             if quest_name in self.quests:
                 quest = self.quests[quest_name]
                 if step_name in quest.steps:
@@ -120,6 +126,8 @@ class QuestLog:
                 if hint_name in quest.hints:
                     hint = quest.hints[hint_name]
                     hint.started = True
+                    if self.quests["learn_quest_log"].completed:
+                        self.engine.append_to_message_log(f"Forel wrote down {hint.name} in his notes for {quest.name}.")
     
     def save_quests(self):
         q_dict = {}

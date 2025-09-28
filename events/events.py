@@ -1,7 +1,7 @@
 import pygame
 import os
 import json
-from constants import EVENT_DIR, GameState, Direction
+from constants import EVENT_DIR, GameState, Direction, ObjectState
 import events.condition_helpers as ch
 from typing import TYPE_CHECKING
 from objects.map_objects import Node, Map, MapObject, Teleporter
@@ -38,6 +38,9 @@ class TimerManager:
         if name not in self.timers:
             return False
         return self.timers[name]['active']
+    
+    def get_active_timers(self):
+        return [tname for tname, timer in self.timers.items() if timer['active']]
 
     def any_active(self):
         """Check if any timer is currently running"""
@@ -128,10 +131,19 @@ class EventManager:
                     if event_scripts:
                         for key, value in event_scripts.items():
                             self.events[key] = value
-                            
     @evention("start_event")
-    def start_event(self, key: str, event_master: Node, force_start: bool = False, treat_as_event: bool = True):
+    def start_event(self, key: str, event_master: Node = None, force_start: bool = False, treat_as_event: bool = True):
         if key in self.events:
+            if self.engine.state == GameState.DIALOG:
+                #If the dialog has lines left when the event is started, only start an event, don't end the dialog.
+                if self.engine.dialog_manager.current_line_index >= len(self.engine.dialog_manager.current_lines) - 1:
+                    if not event_master:
+                        event_master = self.engine.dialog_manager.current_speaker
+                    self.engine.dialog_manager.end_dialog()
+            elif self.engine.state == GameState.CUTSCENE:
+                #If the cutscene has lines left, don't end the cutscene.
+                if self.engine.cutscene_manager.current_line_index >= len(self.engine.dialog_manager.current_lines) - 1:
+                    self.engine.cutscene_manager.end_scene()
             my_queue = self.events[key]
             conditions = my_queue.get("conditions", [])
             conditions_met = all(self._check_condition(condition) for condition in conditions)
@@ -150,6 +162,8 @@ class EventManager:
                         if treat_as_event:
                             print(f"{key} is an event")
                             self.engine.change_state(GameState.EVENT)
+                        else:
+                            self.engine.change_state(self.engine.state)
                         if force_start:
                             my_queue["trigger"] = "after_step"
                     case "after_step":
@@ -206,6 +220,12 @@ class EventManager:
         self.current_line = ""
         self.waiting_for_input = False
 
+    @evention("take_gold")
+    def take_gold(self, gold: int):
+        self.engine.party.gold -= gold
+        if self.engine.party.gold < 0:
+            self.engine.party.gold = 0
+        return True
     @evention("give_gold")
     def give_gold(self, gold: int):
         self.engine.party.gold += gold
@@ -225,6 +245,10 @@ class EventManager:
     def start_cutscene(self, line: str):
         self.engine.cutscene_manager.start_scene(line)
     
+    @evention("end_cutscene")
+    def end_cutscene(self):
+        self.engine.cutscene_manager.end_scene()
+    
     @evention("move_object_to")
     def move_object_to(self, obj: Node, new_pos: tuple[int, int] = (0, 0), new_map: Map = None):
         if new_map:
@@ -238,7 +262,7 @@ class EventManager:
         return True
     
     def initialize_walk(self, instructions: str):
-        instruction_set = re.split(r'(alternate|N|E|S|W)', instructions)
+        instruction_set = re.split(r'(alternate|N|E|S|W|X)', instructions)
         if instruction_set[1] == "alternate":
             #Ex. "alternateNE3": move north then east, three times
             count = int(instruction_set[-1])
@@ -306,7 +330,29 @@ class EventManager:
         quantity = 1
         if "__" in line:
             line, quantity = line.split("__")
-        self.engine.party.add_item_by_name(line, quantity)
+        self.engine.party.add_item_by_id(line, quantity)
+
+    @evention("screen_fade_out")
+    def screen_fade_out(self):
+        self.engine.renderer.fading = True
+        self.engine.renderer.alpha_change_rate = 5
+
+    @evention("screen_fade_in")
+    def screen_fade_in(self):
+        self.engine.renderer.fading = True
+        self.engine.renderer.alpha_change_rate = -5
+    
+    @evention("add_party_member")
+    def add_party_member(self, name: str):
+        with open("party_members.json", 'r') as f:
+            party_members = json.load(f)
+            if party_members and name in party_members:
+                self.engine.party.add_member(name, party_members["name"])
+    
+    @evention("restor_hp")
+    def restore_hp(self):
+        for party_member in self.engine.party.members:
+            party_member.hp = party_member.max_hp
 
     @evention("jump")
     def jump(self, num: int):
@@ -315,9 +361,17 @@ class EventManager:
         elif self.engine.state == GameState.DIALOG:
             self.engine.dialog_manager.current_line_index += num
 
+    def unjump(self, num: int):
+        if self.engine.state == GameState.EVENT:
+            self.current_index -= num
+        elif self.engine.state == GameState.DIALOG:
+            self.engine.dialog_manager.current_line_index -= num
+
     @evention("text")
     def text(self, line: str):
-        speaker, line = line.split("__")
+        speaker = ""
+        if "__" in line:
+            speaker, line = line.split("__")
         self.waiting_for_input = True
         if "--dai" in line:#shorthand for don't await input
             self.waiting_for_input = False
@@ -341,7 +395,7 @@ class EventManager:
         quantity = 1
         if "__" in line:
             line, quantity = line.split("__")
-        self.engine.party.remove_item_by_name(line, quantity)
+        self.engine.party.remove_item_by_id(line, quantity)
 
     @evention("talked")
     def talked(self, line: str):
@@ -352,10 +406,25 @@ class EventManager:
                 self.talked_to_npcs.remove(self.engine.dialog_manager.dialog_key)
             except KeyError:
                 pass
+    
+    @evention("reset_round_counter")
+    def reset_round_counter(self):
+        self.engine.combat_manager.round_counter = 1
 
-    @evention("forceend")
+    @evention("force_end")
     def forceend(self):
         self.force_end = True
+
+    @evention("force_equip")
+    def forceequip(self, item_id: str, equip_to: str):
+        if equip_to == "leader":
+            character = self.engine.party.get_leader()
+            item = self.engine.item_db.create_item(item_id, 1)
+            if item:
+                previously_equipped = character.equip_item(item)
+                # Add previously equipped item back to inventory
+                if previously_equipped:
+                    self.party.add_item(previously_equipped)
 
     @evention("give_quest")
     def give_quest(self, quest_name: str):
@@ -372,10 +441,26 @@ class EventManager:
     @evention("finish_quest")
     def finish_quest(self, quest_name: str, succeed: bool = True):
         self.engine.quest_log.finish_quest(quest_name, succeed)
+
+    @evention("complete_quest")
+    def complete_quest(self, quest_name: str):
+        self.engine.quest_log.finish_quest(quest_name, True)
+    
+    @evention("fail_quest")
+    def fail_quest(self, quest_name: str):
+        self.engine.quest_log.finish_quest(quest_name, False)
     
     @evention("finish_quest_step")
     def finish_quest_step(self, quest_and_quest_step: str, succeed: bool = True):
         self.engine.quest_log.finish_quest_step(quest_and_quest_step, succeed)
+
+    @evention("complete_quest_step")
+    def complete_quest_step(self, quest_and_quest_step: str):
+        self.engine.quest_log.finish_quest_step(quest_and_quest_step, True)
+    
+    @evention("fail_quest_step")
+    def fail_quest_step(self, quest_and_quest_step: str):
+        self.engine.quest_log.finish_quest_step(quest_and_quest_step, False)
 
     @evention("change_event_key")
     def change_event_key(self, line: str):
@@ -385,6 +470,43 @@ class EventManager:
             obj.args["event_start"] = new_event
         except:
             raise Exception(f"{obj_name} could not be found on {self.engine.current_map.name}")
+        
+    @evention("change_object_state")
+    def change_object_state(self, line: str):
+        obj_name, new_state = line.split("__")
+        obj = self.engine.current_map.get_object_by_name(obj_name)
+        try:
+            if "--" in new_state:
+                new_state, state_time = new_state.split("--")
+                self.engine.event_manager.timer_manager.start_timer(f"event_play_{obj.name}", int(state_time))
+            obj.state = ObjectState(new_state)
+        except:
+            raise Exception(f"{obj_name} could not be found on {self.engine.current_map.name}")
+
+    @evention("change_object_sprite")
+    def change_object_sprite(self, line: str):
+        obj_name, spritesheet, row, col = line.split("__")
+        obj = self.engine.current_map.get_object_by_name(obj_name)
+        try:
+            obj.args["spritesheet"] = [spritesheet, int(row), int(col)]
+            obj.engine.sprite_db.get_sprite(obj)
+        except:
+            raise Exception(f"{obj_name} could not be found on {self.engine.current_map.name}")
+        
+    @evention("change_object_arg")
+    def change_object_arg(self, obj_name: str, arg_name: str, new_val: str):
+        obj = self.engine.current_map.get_object_by_name(obj_name)
+        if obj:
+            if "+" in new_val:
+                if new_val.startswith("now"):
+                    obj.args[arg_name] = self.engine.combat_manager.round_counter
+                    new_val = new_val[3:]
+                new_val = int(new_val[1:])
+                obj.args[arg_name] += new_val
+                return
+            try: new_val = int(new_val)
+            except: pass
+            obj.args[arg_name] = new_val
     
     @evention("walk")
     def walk(self, line: str):
@@ -436,16 +558,20 @@ class EventManager:
                 pos = obj.position
                 new_obj = self.engine.map_obj_db.create_obj(name + "0", line_bits[0], {"x" : pos[0], "y" : pos[1]})
                 print(new_obj)
-                self.engine.current_map.objects.append(new_obj)
-                new_obj.map = self.engine.current_map
+                self.engine.current_map.add_object(new_obj)
                 if len(line_bits) >= 4:
                     direction = Direction(self.engine.get_direction(line_bits[2]))
                     repeat_count = int(line_bits[3])
                     for i in range(repeat_count):
                         new_pos = obj.add_tuples(new_obj.position, direction.value)
                         new_obj = self.engine.map_obj_db.create_obj(f"{name}{i+1}", line_bits[0], {"x" : new_pos[0], "y" : new_pos[1]})
-                        self.engine.current_map.objects.append(new_obj)
-                        new_obj.map = self.engine.current_map
+                        self.engine.current_map.add_object(new_obj)
+
+    @evention("start_dialog")
+    def start_dialog(self, line: str):
+        obj = self.event_master if line == "event_master" else self.engine.current_map.get_object_by_name(line)
+        if obj:
+            self.engine.dialog_manager.start_dialog(obj)
 
     @evention("destroy")
     def destroy(self, line: str):
@@ -458,8 +584,7 @@ class EventManager:
                     pos = obj.position
                     for old_obj in self.engine.current_map.get_objects_at(pos):
                         if old_obj.object_type == line_bits[0]:
-                            self.engine.current_map.objects.remove(old_obj)
-                            del old_obj
+                            old_obj.destroy()
                     if len(line_bits) >= 4:
                         direction = Direction(self.engine.get_direction(line_bits[2]))
                         repeat_count = int(line_bits[3])
@@ -467,8 +592,7 @@ class EventManager:
                             pos = obj.add_tuples(pos, direction.value)
                             for old_obj in self.engine.current_map.get_objects_at(pos):
                                 if old_obj.object_type == line_bits[0]:
-                                    self.engine.current_map.objects.remove(old_obj)
-                                    del old_obj
+                                    old_obj.destroy()
 
     @evention("wait")
     def wait(self, line: str):
@@ -486,21 +610,16 @@ class EventManager:
             fake_leader.image = leader.image
             leader.children.append(fake_leader)
         else:
-            for child in leader.children:
-                if child.name == "fake_leader":
-                    self.engine.current_map.remove_object(child)
-                    leader.children.remove(child)
-                    del child
-                    break
+            fake_leader = self.engine.current_map.get_object_by_name("fake_leader")
+            if fake_leader:
+                fake_leader.destroy()
 
     @evention("teleport")
     def teleport(self, line: str):
         map, node = line.split("__")
+
         temp_tele = Teleporter.from_dict({"name" : "", "x" : -1, "y" : -1, "args" : {"target_map" : map, "position" : {"from_any" : node}}}, self.engine)
         self.engine.handle_teleporter(temp_tele, True)
-        if not self.current_index >= len(self.current_event_queue["script"]):
-            self.engine.change_state(GameState.EVENT)
-        del temp_tele
 
     @evention("force_combat")
     def force_combat(self, line: str):
@@ -511,8 +630,11 @@ class EventManager:
         self.engine.combat_manager.enter_combat_mode()
         for obj in self.engine.current_map.objects:
             if obj.name == "event_at_combat_start":
-                self.engine.change_state(GameState.EVENT)
+                self.engine.replace_state(GameState.EVENT)
                 break
+    @evention("reforce_combat")
+    def reforce_combat(self):
+        self.engine.combat_manager.enter_combat_mode()
 
     def _check_condition(self, condition: str):
         if not condition:
@@ -536,12 +658,25 @@ class EventManager:
                 return ch.mid_quest(self.engine.quest_log.quests.get(line, None), true_if)
             case "finished_quest":
                 return ch.finished_quest(self.engine.quest_log.quests.get(line, None), true_if)
+            case "completed_quest":
+                return ch.completed_quest(self.engine.quest_log.quests.get(line, None), true_if)
+            case "failed_quest":
+                return ch.failed_quest(self.engine.quest_log.quests.get(line, None), true_if)
             case "have_quest_step":
                 line, quest_step_name = line.split("__")
                 return ch.have_quest_step(self.engine.quest_log.quests.get(line, None), quest_step_name, true_if)
+            case "mid_quest_step":
+                line, quest_step_name = line.split("__")
+                return ch.mid_quest_step(self.engine.quest_log.quests.get(line, None), quest_step_name, true_if)
             case "finished_quest_step":
                 line, quest_step_name = line.split("__")
                 return ch.finished_quest_step(self.engine.quest_log.quests.get(line, None), quest_step_name, true_if)
+            case "completed_quest_step":
+                line, quest_step_name = line.split("__")
+                return ch.completed_quest_step(self.engine.quest_log.quests.get(line, None), quest_step_name, true_if)
+            case "failed_quest_step":
+                line, quest_step_name = line.split("__")
+                return ch.failed_quest_step(self.engine.quest_log.quests.get(line, None), quest_step_name, true_if)
             case "leader_wear":
                 leader = self.engine.party.get_leader()
                 return ch.leader_wear(leader, line, true_if)
@@ -553,6 +688,10 @@ class EventManager:
                     reference = self.event_master
                 direction = self.engine.get_direction(line)
                 return ch.leader_direction(leader, reference, direction, true_if)
+            case "in_party":
+                return ch.in_party(self.engine.party, line, true_if)
+            case "party_count":
+                return ch.party_count(self.engine.party, int(line), true_if)
         if condition[0] == "!":
             return condition[1:] not in self.flags
         return condition in self.flags
@@ -560,7 +699,9 @@ class EventManager:
         
 
     def _do_event(self, line: str):
-        event, line = line.split("=")
+        event = "text"
+        if "=" in line:
+            event, line = line.split("=")
         match event:
             case "reset_map":
                 for obj in self.engine.current_map.objects:
@@ -576,18 +717,33 @@ class EventManager:
                 self.add_item(line)
             case "jump":
                 self.jump(int(line))
+            case "unjump":
+                self.unjump(int(line))
             case "add_schedule":
                 self.add_schedule(line)
+            case "take_gold":
+                self.take_gold(int(line))
             case "give_gold":
                 self.give_gold(int(line))
             case "remove_item":
                 self.remove_item(line)
-            case "cutscene":
-                self.start_cutscene()
+            case "start_cutscene":
+                self.start_cutscene(line)
+            case "start_event":
+                self.start_event(line)
             case "talked":
                 self.talked(line)
+            case "reset_round_counter":
+                self.reset_round_counter()
             case "force_end":
                 self.forceend()
+            case "force_equip":
+                equip_to, item_id = line.split("__")
+                self.forceequip(item_id, equip_to)
+            case "add_party_member":
+                self.add_party_member(line)
+            case "restore_hp":
+                self.restore_hp()
             case "delayed_event_start":
                 if line in self.events:
                     self.delayed_events["event_start"] = line
@@ -596,15 +752,30 @@ class EventManager:
             case "give_quest":
                 self.give_quest(line)
             case "give_quest_step":
+                print(line)
                 self.give_quest_step(line)
             case "give_quest_hint":
                 self.give_quest_hint(line)
             case "finish_quest":
-                quest_name, succeed = line.split("--")
+                quest_name = line
+                succeed = "true"
+                if "--" in line:
+                    quest_name, succeed = line.split("--")
                 self.finish_quest(quest_name, succeed == "true")
+            case "complete_quest":
+                self.complete_quest(line)
+            case "fail_quest":
+                self.fail_quest(line)
             case "finish_quest_step":
-                quest_step, succeed = line.split("--")
+                quest_step = line
+                succeed = "true"
+                if "--" in line:
+                    quest_step, succeed = line.split("--")
                 self.finish_quest_step(quest_step, succeed == "true")
+            case "complete_quest_step":
+                self.complete_quest_step(line)
+            case "fail_quest_step":
+                self.fail_quest_step(line)
             case "text":
                 self.text(line)     
             case "walk":
@@ -613,10 +784,17 @@ class EventManager:
                 self.warp(line)
             case "change_event_key":
                 self.change_event_key(line)
+            case "change_object_state":
+                self.change_object_state(line)
+            case "change_object_sprite":
+                self.change_object_sprite(line)
+            case "change_object_arg":
+                obj_name, arg_name, new_val = line.split("__")
+                self.change_object_arg(obj_name, arg_name, new_val)
             case "force_combat":
                 self.force_combat(line)
             case "reforce_combat":
-                self.engine.combat_manager.enter_combat_mode()
+                self.reforce_combat()
             case "spawn":
                 self.spawn(line)
             case "destroy":
@@ -627,6 +805,10 @@ class EventManager:
                 self.invisible_leader(line)
             case "teleport":
                 self.teleport(line)
+            case "screen_fade_out":
+                self.screen_fade_out()
+            case "screen_fade_in":
+                self.screen_fade_in()
     
     def to_dict(self):
         return {

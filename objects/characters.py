@@ -15,15 +15,14 @@ if TYPE_CHECKING:
 @dataclass
 class Character(CombatStatsMixin, Node):
     level: int = 1
-    hp: int = 100
-    max_hp: int = 100
+    hp: int = 10
+    max_hp: int = 10
     mp: int = 50#Ignore
     max_mp: int = 50#Ignore
-    strength: int = 10
-    dexterity: int = 10
-    faith: int = 10
+    strength: int = 1
+    dexterity: int = 1
+    faith: int = 1
     experience: int = 0
-    gold: int = 100
     last_move_direction: tuple[int, int] = (0, 0)
 
     special: bool = False
@@ -49,7 +48,11 @@ class Character(CombatStatsMixin, Node):
         
         # Unequip previous item
         if previously_equipped:
+            print("Started Unequipping")
+            print(self.args["spritesheet"])
             self.apply_equipment_effects(previously_equipped, unequip=True)
+            print("Finished Unequipping")
+            print(self.args["spritesheet"])
         
         # Equip new item
         self.equipped[slot_key] = equipment
@@ -89,7 +92,13 @@ class Character(CombatStatsMixin, Node):
                         self.mp += evalue * multiplier
                 elif etype == EffectType.CHANGE_SPRITE:
                     is_delta = False
-                    if (not unequip and estat == "+") or (unequip and estat == "-"):
+                    if estat == "0":
+                        self.fixed_spritesheet_row = 0 if unequip else evalue
+                        if not self.fixed_spritesheet_row:
+                            evalue = self.args["spritesheet"][1]
+                        else:
+                            evalue = None
+                    elif (not unequip and estat == "+") or (unequip and estat == "-"):
                         is_delta = True
                     elif (not unequip and estat == "-") or (unequip and estat == "+"):
                         is_delta = True
@@ -206,7 +215,7 @@ class Character(CombatStatsMixin, Node):
         if spell.virtue not in self.virtue_manager.virtues:
             print("Sorry, that class doesn't exist.")
             return False
-        if spell.level < self.virtue_manager.virtues[spell.virtue].level:
+        if spell.level < self.virtue_manager.virtues[spell.virtue]["level"]:
             print("I'm not pious engough")
             return False
         return True
@@ -303,13 +312,13 @@ class Character(CombatStatsMixin, Node):
         
         virtue = spell.virtue
         # Check for spell failure penalty
-        failure_chance = self.virtue_manager._get_spell_failure_chance(virtue)
+        failure_chance = 0#self.virtue_manager._get_spell_failure_chance(virtue)
         if failure_chance > 0:
             import random
             if random.randint(1, 100) <= failure_chance:
                 result['message'] = f"Spell failed due to {virtue.value} overuse!"
                 # Casting the spell at all still gives you overuse points, whether it works or not.
-                self.virtue_manager.add_overuse_points(virtue, spell.overuse_cost)
+                self.virtue_manager.add_overuse(virtue, spell.overuse_cost)
                 return result
         
         
@@ -327,7 +336,7 @@ class Character(CombatStatsMixin, Node):
             self.engine.combat_manager.append_to_combat_log("I don't know how to cast this spell")
             return
         # Cast spell successfully
-        overuse_exceeded = self.virtue_manager.add_overuse_points(virtue, spell.overuse_cost)
+        overuse_exceeded = self.virtue_manager.add_overuse(virtue, spell.overuse_cost)
         self.virtue_used_this_turn = virtue
         
         result['success'] = True
@@ -344,7 +353,7 @@ class Character(CombatStatsMixin, Node):
         self.engine.combat_manager.append_to_combat_log(f"{attacker.name} hit {self.name} for {damage} damage!")
     
     def to_dict(self):
-        data = {"hp" : self.hp, "mp" : self.mp, "x" : self.x,  "y" : self.y, "position" : self.position, "old_position" : self.old_position, "experience" : self.experience, "args" : copy.deepcopy(self.args)}
+        data = {"hp" : self.hp, "max_hp" : self.max_hp, "x" : self.x,  "y" : self.y, "position" : self.position, "old_position" : self.old_position, "fixed_spritesheet_row": self.fixed_spritesheet_row, "experience" : self.experience, "args" : copy.deepcopy(self.args)}
         # Convert equipped items to dict format
         equipped_dict = {}
         for slot, equipment in self.equipped.items():
@@ -388,6 +397,7 @@ class Character(CombatStatsMixin, Node):
         
         # Set up the bump timer (shorter than normal movement)
         self.engine.event_manager.timer_manager.start_timer("player_bump", 170)
+
         
 
 # Modified Party Class
@@ -404,8 +414,9 @@ class Party:
     def empty_party(self):
         self.members = []
         self.inventory = []
-    def add_member(self, character: Character):
+    def add_member(self, name: str, data: dict):
         if len(self.members) < 7:  # Ultima 4 party limit
+            character = Character.from_dict(name, data, self.engine)
             self.members.append(character)
             
     def get_leader(self) -> Optional[Character]:
@@ -435,10 +446,9 @@ class Party:
             return True, movement_penalty
         if 0 <= new_pos[0] < self.engine.current_map.width and 0 <= new_pos[1] < self.engine.current_map.height:
             return False, 0 
-        warp_map_objs = self.engine.current_map.get_objects_at((-99, -98))
-        if not warp_map_objs:
+        warp_map_obj = self.engine.current_map.get_object_by_name("map_edge_teleporter")
+        if not warp_map_obj:
             return False, 0
-        warp_map_obj = warp_map_objs[0]
         new_map_instructions = warp_map_obj.args.get("adjacent_maps")
         if not new_map_instructions:
             return False, 0
@@ -451,13 +461,11 @@ class Party:
                     
                     for d in new_map_direction:
                         if key in ["E", "W"] and d["range"][0] <= new_pos[0] <= d["range"][1]:
-                            self.edge_teleport(d, leader)
-                            return True, DEFAULT_MOVEMENT_PENALTY
+                            return self.edge_teleport(d, leader)
                         elif key in ["N", "S"] and d["range"][0] <= new_pos[1] <= d["range"][1]:
-                            self.edge_teleport(d, leader)
-                            return True, DEFAULT_MOVEMENT_PENALTY
-                self.edge_teleport(new_map_direction, leader)
-                return True, DEFAULT_MOVEMENT_PENALTY
+                            return self.edge_teleport(d, leader)
+                            
+                return self.edge_teleport(new_map_direction, leader)
         return False, 0
 
                     
@@ -467,7 +475,7 @@ class Party:
         if new_map not in self.engine.maps:
             if not self.engine.load_map(new_map):
                 self.engine.append_to_message_log(f"Error: Could not find map {new_map}")
-        print(leader.position)
+                return False, 0
         pos = new_map_instructions.get("position", None)
         if pos:
             leader.position = ast.literal_eval(pos)
@@ -476,14 +484,17 @@ class Party:
             print(self.last_move_direction, Direction(self.last_move_direction))
             match Direction(self.last_move_direction):
                 case Direction.SOUTH:
-                    leader.position = (leader.position[0], 0)
+                    new_pos = (leader.position[0], 0)
                 case Direction.NORTH:
-                    leader.position = (leader.position[0], self.engine.maps[new_map].height-1)
+                    new_pos = (leader.position[0], self.engine.maps[new_map].height-1)
                 case Direction.EAST:
-                    leader.position = (0, leader.position[1])
+                    new_pos = (0, leader.position[1])
                 case Direction.WEST:
-                    leader.position = (self.engine.maps[new_map].width-1, leader.position[1])
-            leader.position = leader.add_tuples(leader.position, ast.literal_eval(offset))
+                    new_pos = (self.engine.maps[new_map].width-1, leader.position[1])
+            new_pos = leader.add_tuples(new_pos, ast.literal_eval(offset))
+            if not self.engine.maps[new_map].is_passable(new_pos):
+                return False, 0
+            leader.position = new_pos
         if pos or offset:
             print(leader.position)
             for i in self.members:
@@ -492,12 +503,13 @@ class Party:
             self.current_map = new_map
             for i in self.members:
                 self.engine.current_map.add_object(i)
-        for obj in self.engine.current_map.get_objects_at((-99, -99)):
+        for obj in self.engine.current_map.objects:
             obj.on_map_load()
         npc_move_intervals = {}
         for obj in self.engine.current_map.get_objects_subset(MapObject):
             npc_move_intervals[obj.name] = obj.move_interval
         results = self.engine.schedule_manager.process_map_load(npc_move_intervals)
+        return True, DEFAULT_MOVEMENT_PENALTY
         
     
     def get_party_member_position(self, member_index: int):
@@ -530,8 +542,21 @@ class Party:
         self.inventory.append(item)
         return item
     
-    def add_item_by_name(self, item_name: str, quantity: int = 1):
-        return self.add_item(self.engine.item_db.create_item(item_name, quantity))
+    def add_item_by_id(self, item_id: str, quantity: int = 1):
+        return self.add_item(self.engine.item_db.create_item(item_id, quantity))
+    
+    def check_for_item_by_id(self, item_id: str):
+        for item in self.inventory:
+            if item_id == item.item_id:#Lowercase so the user's input isn't invalid if they missed a case.
+                return item
+        return False
+    
+    def check_for_item_by_name(self, item_name: str):
+        item_name_lower = item_name.lower()
+        for item in self.inventory:
+            if item_name_lower == item.name.lower():#Lowercase so the user's input isn't invalid if they missed a case.
+                return True
+        return False
     
     def remove_item(self, item: Item, quantity: int = 1, allow_failure: bool = False):
         """Remove item from party inventory"""
@@ -544,10 +569,10 @@ class Party:
                 return True
         return False
     
-    def remove_item_by_name(self, item_name: str, quantity: int = 1, allow_failure: bool = False):
+    def remove_item_by_id(self, item_id: str, quantity: int = 1, allow_failure: bool = False):
         """Remove equipment from party inventory"""
         for item in self.inventory:
-            if item.name == item_name:
+            if item.item_id == item_id:
                return self.remove_item(item, quantity, allow_failure)
         return False
         
@@ -564,6 +589,6 @@ class Party:
         party = cls(engine)
         party.members = [Character.from_dict(name, member_data, engine) for name, member_data in data.get("members", {}).items()]
         for item_id, quantity in data.get("inventory", {}).items():
-            party.add_item_by_name(item_id, quantity)
+            party.add_item_by_id(item_id, quantity)
         party.gold = data.get("gold", 100)
         return party

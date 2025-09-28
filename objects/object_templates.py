@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from objects.characters import Character
     from ultimalike import GameEngine
     from objects.map_objects import Map
+    from objects.nodegroup import NodeGroup
 NODE_REGISTRY: Dict[str, Type['Node']] = {}
 
 def register_node_type(name: str):
@@ -23,6 +24,7 @@ class Node:
     x: int
     y: int
     args: dict[str, Any] = field(default_factory=lambda: {})
+    layer: int = 1
     width_in_tiles = 1
     height_in_tiles = 1
     can_bump: bool = True
@@ -36,6 +38,8 @@ class Node:
     after_state: ObjectState = ObjectState.STAND
     parent: 'Node' = None
     children: list['Node'] = field(default_factory=lambda: [])
+    group_name: str = ""
+    group: 'NodeGroup' = None
     pronoun: str = "it"
     prepositional: str = "it"
     possessive: str = "its"
@@ -45,15 +49,16 @@ class Node:
     activate_by_stepping_on = True
     color = RED
     image = None
+    fixed_spritesheet_row: int = 0
     node_id = 0
     map: 'Map' = None
-    is_passable = True
+    is_passable: bool = True
     can_see_thru = True
     destroy_after_use: bool = False
     def __is__(self, cls):
         return isinstance(self, cls)
     def to_dict(self):
-        return {"object_type" : self.object_type, "x" : self.position[0], "y" : self.position[1], "args" : self.args, "position" : self.position, "old_position" : self.old_position, "skin_color" : self.skin_color}
+        return {"object_type" : self.object_type, "x" : self.position[0], "y" : self.position[1], "args" : self.args, "position" : self.position, "old_position" : self.old_position, "skin_color" : self.skin_color, "group_name" : self.group_name}
     @staticmethod
     def from_dict(data: dict, engine: 'GameEngine') -> 'Node':
         node_type = data.get("object_type")
@@ -76,7 +81,13 @@ class Node:
                         new_node.skin_color = new_node.engine.sprite_db.common_skin_colors[randint(0, len(new_node.engine.sprite_db.common_skin_colors) - 1)]
             new_node.engine.sprite_db.get_sprite(new_node)
         except:
-            print(f"could not load sprite for {new_node.name}")
+            print(f"Could not load sprite for {new_node.name}")
+        gendered_key = new_node.args.get("gendered_words", "")
+        if gendered_key:
+            gendered_words = GENDEREDWORDS[gendered_key]
+            new_node.pronoun = gendered_words[0]
+            new_node.prepositional = gendered_words[1]
+            new_node.possessive = gendered_words[2]
         new_node.init_position = (new_node.x, new_node.y)
         new_node.old_position = (new_node.x, new_node.y)
         new_node.position = (new_node.x, new_node.y)
@@ -137,11 +148,11 @@ class Node:
             raise ValueError
         return tuple(a * b for a, b in zip(tuple1, tuple2))
     
-    def distance(self, obj: 'Node', can_move_diagonally: bool = True):
-        diff = self.subtract_tuples(self.position, obj.position)
+    def distance(self, obj: 'Node', can_move_diagonally: bool = True) -> tuple[int, tuple[int, int]]:
+        diff = self.subtract_tuples(obj.position, self.position)
         if can_move_diagonally:
-            return max(abs(diff[0]), abs(diff[1]))
-        return abs(diff[0]) + abs(diff[1])
+            return max(abs(diff[0]), abs(diff[1])), diff
+        return abs(diff[0]) + abs(diff[1]), diff
     
     def update(self, **args):
         pass
@@ -150,16 +161,14 @@ class Node:
         pass
 
     def on_map_load(self):
-        if "event_start" in self.args:
-            self.engine.event_manager.start_event(self.args["event_start"], self, treat_as_event=False)
-
-    
+        if "on_load_event" in self.args:
+            self.engine.event_manager.start_event(self.args["on_load_event"], self, treat_as_event=False)
 
     def destroy(self):
         if self.parent:
             self.parent.children.remove(self)
         if self.map:
-            self.map.objects.remove(self)
+            self.map.remove_object(self)
         if self in self.engine.combat_manager.enemy_turn_queue:
             self.engine.combat_manager.enemy_turn_queue.remove(self)
         del self
@@ -178,7 +187,7 @@ class MapObject(Node):
     node_id = 1
     look_text: str = None
     is_hostile = False
-    is_passable = False
+    is_passable: bool = False
     last_move_direction: tuple[int, int] = None
     allies_in_combat: List[str] = None
     ally_positions: str = None  # Added to dataclass fields
@@ -191,6 +200,8 @@ class MapObject(Node):
         my_dict = super().to_dict()
         my_dict["move_interval"] = self.move_interval
         my_dict["state"] = self.state.value
+        if self.look_text:
+            my_dict["look_text"] = self.look_text
         return my_dict
 
     @staticmethod
@@ -254,11 +265,29 @@ class MapObject(Node):
         if self.state in [ObjectState.WALK, ObjectState.PATROL] and self.current_target:
             me = self.position
             my_target = self.current_target.position
-            # Calculate direction (you'll need to implement these helper methods)
             self.last_move_direction = Direction(self.get_sign(self.subtract_tuples(my_target, me)))
             self.old_position = me
-            if self.map.is_passable(self.add_tuples(me, self.last_move_direction.value)):
-                self.position = self.add_tuples(me, self.last_move_direction.value)
+            
+            if self.group:
+                if not self.group.checked_movement: #No point going through this for every node
+                    can_move = True
+                    for obj in self.group._nodes:
+                        if obj.is_passable: #Don't bother with calculations if this can pass through anything.
+                            continue
+                        new_position = self.add_tuples(obj.position, self.last_move_direction.value)
+                        if not self.map.is_passable(new_position):
+                            can_move = False#Even one failure means no moving
+                            break
+                    if can_move:
+                        for obj in self.group._nodes:
+                            obj.old_position = obj.position
+                            obj.last_move_direction = self.last_move_direction
+                            obj.position = self.add_tuples(obj.position, self.last_move_direction.value)
+                    self.group.checked_movement = True
+            else:
+                new_position = self.add_tuples(me, self.last_move_direction.value)
+                if self.is_passable or self.map.is_passable(new_position):
+                    self.position = new_position
             
             # Check if we reached our target
             if self.position == my_target:
@@ -293,6 +322,7 @@ class MapObject(Node):
                 # We should move this turn
                 self.move_one_step_immediate()
                 self.moves_completed_this_action += 1
+
     
     def execute_action(self, action: ScheduleEvent):
         """Execute a scheduled action - updated for new schedule manager."""
@@ -338,11 +368,11 @@ class Chest(MapObject):
     color = DARK_GRAY
     node_id = 2
     def interact(self):
-        if "spritesheet" in self.args:
+        if "spritesheet" in self.args and "no_open_sprite" not in self.args:
             self.engine.sprite_db.get_sprite(self, new_col=1 - self.args["spritesheet"][2])
         items = self.args.get("items", {})
         for item_name, quantity in items.items():
-            item = self.engine.party.add_item_by_name(item_name, quantity)
+            item = self.engine.party.add_item_by_id(item_name, quantity)
             if quantity > 1:
                 message = f"You got {item.plural} x{quantity}"
             else:
@@ -351,6 +381,11 @@ class Chest(MapObject):
                     article = "the " if "special" in item_name else ("an " if any([item_name.startswith(vowel) for vowel in 'aeiou']) else "a ")
                 message = f"You got {article}{item.name}!"
             self.engine.append_to_message_log(message)
+            if item.name == "Burnt Book Cover":
+                message = "(You can show items to people in dialog by typing #show#, then selecting the item.)"
+                self.engine.append_to_message_log(message)
+                message = "(Try it with the coroner to the south.)"
+                self.engine.append_to_message_log(message)
         self.args["items"] = {}
         return True
 
@@ -430,7 +465,7 @@ class CombatStatsMixin:
     def get_faith(self):
         return max(self.faith + self.faith_delta, self.min_faith)
     
-    def get_closest_enemy(self, obj_list: List = None):
+    def get_closest_obj(self, obj_list: List = None):
         closest_obj = None
         min_dist = 999999
         if not obj_list:
@@ -476,7 +511,7 @@ class CombatStatsMixin:
 
 
     def death(self):
-        pass
+        self.state = ObjectState.DYING
     
     def my_battle_tactics(self):
         if self.hp <= 0:
@@ -492,29 +527,64 @@ class Monster(CombatStatsMixin, Node):
     flying = False  # If True, this monster cannot be knocked back
     can_be_attacked = True
     node_id = 6
+    is_vengeful: bool = True
+    is_honorable: bool = False
+    is_breakable: bool = False
     is_passable: bool = False
     is_hostile: bool = True
     move_tiles_per_turn: int = 1
     current_target: 'Character' = None
-    def push(self, direction: Direction, count: int = 1):
+    def update(self, **args):
+        super().update(**args)
+        match self.state:
+            case ObjectState.KNOCKBACK:
+                if self.engine.event_manager.timer_manager.get_progress(f"{self.name}_knockback") >= 1.0:
+                    self.old_position = self.position
+                    self.state = self.after_state
+            case ObjectState.COLLISION_KNOCKBACK:
+                self.hp -= 5
+                self.state = ObjectState.STAND if self.hp > 0 else ObjectState.DYING
+            case ObjectState.COLLISION_STAND:
+                self.hp -=50
+                self.state = ObjectState.STAND if self.hp > 0 else ObjectState.DYING
+            case ObjectState.DYING:
+                self.is_passable = True
+                self.engine.sprite_db.get_sprite(self, 0, 0)
+                self.state = ObjectState.DEATH
+            case ObjectState.DEATH:
+                pass
+    
+    @classmethod
+    def from_dict(cls, data, engine: 'GameEngine'):
+        cls = super().from_dict(data, engine)
+        cls.hp = cls.max_hp
+        return cls
+
+
+    def push(self, attacker: CombatStatsMixin, direction: Direction, count: int = 1):
         """
         Push this object back in the specified direction.
         Used for knockback effects.
         Return the duration of the knockback effect.
         """
-        duration = 0
+        tiles_back = 0
         if self.can_be_pushed and not self.flying:
             self.old_position = self.position
             for i in range(count):
                 new_position = self.add_tuples(self.position, direction.value)
                 if not self.map.is_passable(new_position):
+                    self.after_state = ObjectState.COLLISION_KNOCKBACK
                     break  # Stop if we hit a wall or another unit
                 self.position = new_position
-                duration += 150
-            if duration:
+                tiles_back += 1
+            
+            if tiles_back:
                 self.state = ObjectState.KNOCKBACK
-                self.engine.event_manager.timer_manager.start_timer(f"{self.name}_knockback", duration)
-                self.engine.event_manager.walkers.append(self)
+                self.engine.event_manager.timer_manager.start_timer(f"{self.name}_knockback", tiles_back*150)
+                self.engine.combat_manager.walkers.append(self)
+                self.engine.combat_manager.append_to_combat_log(f"{attacker.name} sent {self.name} flying back {tiles_back} spaces!")
+            else:
+                self.engine.combat_manager.append_to_combat_log(f"{attacker.name} failed to send {self.name} flying!")
 
 
 @register_node_type("missile")
@@ -560,6 +630,5 @@ class Spawner:
         if obj:
             obj.parent = self
             self.children.append(obj)
-            self.map.objects.append(obj)
-            obj.map = self.map
+            self.map.add_object(self.children[-1])
         return obj

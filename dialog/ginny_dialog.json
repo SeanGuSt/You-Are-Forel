@@ -1,0 +1,172 @@
+{
+  "ginny": {
+    "__hi__": [
+      {
+        "script": [
+          "Well, hey there, Forel! Top of the {time_of_day} to ya!"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "script": [
+          "My job? I mean, normally a *faithful* is meant to... well, sleep with the Sydan. But I don't really do that?",
+          "So Eraton lets me be the less-sexy-time *event* *planner*! It goes... well, it definitely goes."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {},
+    "event planner": [
+      {
+        "script": [
+          "Yeah, we didn't have any *parents* around to give us normal group *activities*. So I've taken up the position of fun mom!",
+          "last_dialog=job++And if dealing with these guys is what being a mom is like, I'm glad Eraton said I don't have to have kids."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "name": [
+      {
+        "script": [
+          "Pakuk Qanitaq, at your service!",
+          "Hm? Where did 'Ginny' come from, then? I'm not just gonna tell you that, silly!"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "sent": [
+      {
+        "script": [
+          "Huh? Yeah, didn't you know? Most of us were sent here by our parents when we were really little. We're gifts to the Sydan to strengthen relations between the throne and our families!",
+          "I think the oldest to get here was Bahati when she was thirteen? She's also the recentest. I came here when I was four, after-- wait!",
+          "I just remembered, it's a Qanitaq family *secret*! Qani-top secret. I'm not supposed to tell you."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "activities": [
+      {
+        "script": [
+          "I've had a bunch of ideas, but none of them seem to really catch on.",
+          "We tried baking, which went well at first. But then some of the others got it in their heads to use... ingredients they made.",
+          "I can never hear 'cream-filling' or 'bun in the oven' normally ever again.",
+          "Bahati was supportive of my costumes idea, but everyone else just wanted to make theirs as revealing as possible. Same with acting. I'd learned by then not to say 'performing'.",
+          "Wrestling... I probably should've seen the direction that went in.",
+          "At this point I'm scared to suggest going to the petting zoo, if only because I know one of them is going to try 'stroking pussy' and Eraton does NOT need that kind of controversy right now.",
+          "It's just so frustrating. I'm glad everyone likes being... with each other. I just want there to be a way for us all to hang out again.",
+          "Sigh. Maybe my *luchadores* idea will work better."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "secret": [
+      {
+        "script": [
+          "Nope! Ataata said no telling allowed.",
+          "Oh! Ataata means my *father*."
+        ],
+        "conditions": [
+          "last_dialog=sent"
+        ],
+        "events": []
+      }
+    ],
+    "parents": [
+      {
+        "script": [
+          "I mean, we HAVE parents, duh! Everyone... has... ahem.",
+          "It's just that they *sent* us here all here. They probably wanted Eraton to have friends to stand by him after the Blue Moon tragedy."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "luchadores": [
+      {
+        "script": [
+          "It's an idea I had for a new kind of wrestling I had!",
+          "Instead of just being a bunch of grappling, the wrestlers are super-powered and fight with honor and tradition to defeat evil wrestlers in awesome ways.",
+          "I called it 'luchadores' since Maddy was helping me out! Or... she tried to. --n Anyways, the word comes from the Salin 'luchar' which means 'struggle'.",
+          "That's right, I pulled out a dictionary for this, baby!",
+          "I'm still working on how to justify costumes staying on as a win condition, though.",
+          "The mask I decided is because of secret identity, but for the actual costume... 'no one wants to see that' doesn't really work when the others do, in fact, want to see that."
+        ],
+        "conditions": [],
+        "events": [
+          "set_flag=learned_luchadores_etymology"
+        ]
+      }
+    ],
+    "join": [
+      {
+        "script": [
+          "Wait, you actually want me to come along with you? Heck yeah! Exploring Sewinso, punching shades and bad guys!",
+          "I know a few Icelandic prayers, too! Ataata taught me to respect Agloolik.",
+          "Hm? What do you mean I asked-- oh! No, no, it wasn't me who asked me to join you. You're thinking of PhiteQanitaq.",
+          "She wears a cape while I wear a robe, see? Totally different people.",
+          "__(...It's easier to just nod.)",
+          "So, we gonna go tell Eraton we're heading out?"
+        ],
+        "conditions": [
+          "have_quest_step=assure_eraton__find_friend",
+          "!in_party=Ginny"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "Silly, I already agreed to come with you, remember?"
+        ],
+        "conditions": [
+          "in_party=Ginny"
+        ],
+        "events": []
+      }
+    ],
+    "yes": [
+      {
+        "script": [
+          "Sweet!",
+          "I'll meet up with you when it's time to leave! Lemme just make sure my room is all tidy and I got enough stuff packed up!",
+          "force_end="
+        ],
+        "conditions": [
+          "last_dialog=join",
+          "!in_party=Ginny"
+        ],
+        "events": [
+          "add_party_member=Ginny"
+        ]
+      }
+    ],
+    "no": [
+      {
+        "script": [
+          "Awww, come on! Don't get my hopes up like that."
+        ],
+        "conditions": [
+          "last_dialog=join"
+        ],
+        "events": []
+      }
+    ],
+    "father": [
+      {
+        "script": [
+          "He's the highlord of the Icelands! He oversees all the tribes there and makes sure they stay united. It was also his idea that I become faithful!"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ]
+  }
+}

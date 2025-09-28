@@ -1,41 +1,320 @@
 {
-    "student_3" : {
-        "__hi__" : [
-            {
-                "text" : [
-                    "Didi? Didi! Xingxing didi, xinglai!!",
-                    "leader_direction=S++walk=student_2__E2",
-                    "leader_direction=N++walk=student_2__S2E2&&bubba_renald__W1E1",
-                    "Aiyanna__Mei-Hua, I don't think--",
-                    "leader_direction=S++walk=student_2__N1",
-                    "leader_direction=N++walk=student_2__S1",
-                    "Shut up! Didi, Xinglai, xinglai, XINGLAI!",
-                    "Bubba Renald__Mei-Hua. ...I'm sorry.",
-                    "Jin-Shi...",
-                    "leader_direction=S++walk=student_2__S1",
-                    "leader_direction=N++walk=student_2__N1",
-                    "Bubba Renald__...I'll fetch a monk to handle the body.",
-                    "leader_direction=S++walk=bubba_renald__S2",
-                    "Bubba Renald__Kind faithful. If it pleases you, I'd ask you not to bother her right now. As you can see, something traumatic has happened here.",
-                    "Bubba Renald__Perhaps Bubba Dmitri, or Archmage Imedes, could entertain you if you wish to see miracles at work more properly.",
-                    "walk=bubba_renald__S5",
-                    "(She doesn't seem to notice you.)",
-                    ""
-                ],
-                "conditions" : ["!talked=", "saw_jin_shi_die"],
-                "events" : [
-                    "force_end=", "talked=true", "give_quest=kesvelt_jin_shi_dies", "give_quest_step=kesvelt_jin_shi_dies__visit_imedes"
-                ]
-            },
-            {
-                "text" : [
-                    "(She doesn't seem to notice you.)",
-                    ""
-                ],
-                "conditions" : ["talked="],
-                "events" : ["force_end="]
-
-            }
+  "student_3": {
+    "__hi__": [
+      {
+        "script": [
+          "Didi? Didi! Xingxing didi, xinglai!!",
+          "leader_direction=S++walk=student_2__E2",
+          "leader_direction=N++walk=student_2__S2E2",
+          "Aiyanna__Mei-Hua, I don't think--",
+          "leader_direction=S++walk=student_2__N1",
+          "leader_direction=N++walk=student_2__S1",
+          "Shut up! Didi, Xinglai, xinglai, XINGLAI!",
+          "Bubba Renald__Mei-Hua. ...I'm sorry.",
+          "Jin-Shi...",
+          "leader_direction=S++walk=student_2__S1",
+          "leader_direction=N++walk=student_2__N1",
+          "Bubba Renald__...I'll fetch a monk to handle the body.",
+          "leader_direction=S++walk=bubba_renald__S2",
+          "Bubba Renald__Kind faithful. If it pleases you, I'd ask you not to bother her right now. As you can see, something traumatic has happened here.",
+          "Bubba Renald__Perhaps Bubba Dmitri, or Archmage Imedes, could entertain you if you wish to see miracles at work more properly.",
+          "walk=bubba_renald__S5",
+          "(She doesn't seem to notice you.)",
+          ""
+        ],
+        "conditions": [
+          "!talked=",
+          "saw_jin_shi_die",
+          "!finished_quest=kesvelt_fake_books"
+        ],
+        "events": [
+          "force_end=",
+          "talked=true",
+          "give_quest_step=kesvelt_jin_shi_dies__visit_imedes"
         ]
-    }
+      },
+      {
+        "script": [
+          "(She doesn't seem to notice you.)",
+          ""
+        ],
+        "conditions": [
+          "talked=",
+          "!confronted_by_mei_hua",
+          "!finished_quest=kesvelt_fake_books"
+        ],
+        "events": [
+          "force_end="
+        ]
+      },
+      {
+        "script": [
+          "Um... hello? Uh, no habla Alteni? --n Wait a second. That height. That grumpy stare. You're that faithful! Just where have you been? I've been working by myself the past four days!",
+          "And why are you dressed like that? This is no time for joking around! Now did you find anything on the *shady* *guy* or didn't you!?"
+        ],
+        "conditions": [
+          "!finished_quest=kesvelt_fake_books",
+          "clothing_montage",
+          "leader_wear=acc_burqa"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "There you are! Where you been these four days!? I work all alone and find nothing! Did you find *shady* *guy*?"
+        ],
+        "conditions": [
+          "!finished_quest=kesvelt_fake_books",
+          "clothing_montage",
+          "!leader_wear=acc_burqa"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "You ready now? We go *face* Bubba Renald?"
+        ],
+        "conditions": [
+          "mid_quest_step=kesvelt_fake_books__confront_renald"
+        ],
+        "events": []
+      }
+    ],
+    "aliases": {
+      "bubba renald": "renald"
+    },
+    "contextual_aliases": {
+      "renald": {
+        "face": "yes"
+      },
+      "show disciple text to spreading miracles of prometus": {
+        "face": "yes"
+      }
+    },
+    "shady guy": [
+      {
+        "script": [
+          "Wait, you did? Do we know where he is? Do we know who he is? Tell me his name! *Show* me how!"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "script": [
+          "I am disciple of *Prometus*. I learn prayers and miracles, and live my life the way He believes is best. Once I become a *wizard*, I"
+        ],
+        "conditions": [
+          "finished_quest=kesvelt_fake_books"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "FOCUS!"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "renald": [
+      {
+        "script": [
+          "Bubba... Bubba Renald? --n Please, please kind faithful, tell me this is joke. Jin-Shi was not best student, but he was not slacking or rude. Bubba Renald only show up recently. He would have no reason to hate him.",
+          "But then... you really mean it, yes?",
+          "...",
+          "clothing_montage++Yesterday, he see me crying during grammar lecture. He... he tell everyone else to leave. He hug me...",
+          "I will be OK. Once he pays. --n We go now? We go and *face* him?"
+        ],
+        "conditions": [
+          "showed_mei_hua_fake_book",
+          "!told_mei_hua_about_renald",
+          "!completed_quest_step=kesvelt_fake_books__tell_mei_hua"
+        ],
+        "events": [
+          "complete_quest_step=kesvelt_fake_books__tell_mei_hua",
+          "set_flag=told_mei_hua_about_renald",
+          "give_quest_step=kesvelt_fake_books__confront_renald"
+        ]
+      },
+      {
+        "script": [
+          "Bubba... Bubba Renald? --n ...No. No, you lie. Bubba Renald is kind. He treats me and other disciples well. And Jin-Shi, he--",
+          "...",
+          "...Proof.",
+          "You show proof! Why you think Bubba Renald would kill my brother?"
+        ],
+        "conditions": [
+          "!showed_mei_hua_fake_book",
+          "!completed_quest_step=kesvelt_fake_books__tell_mei_hua"
+        ],
+        "events": [
+          "set_flag=told_mei_hua_about_renald"
+
+        ]
+      },
+      {
+        "script": [
+          "I know. He gave my brother the book. We go to *face* him?"
+        ],
+        "conditions": [
+          "completed_quest_step=kesvelt_fake_books__tell_mei_hua"
+        ],
+        "events": []
+      }
+    ],
+    "show disciple text to spreading miracles of prometus": [
+      {
+        "script": [
+          "What is this? A prayer tome? --n ...Dan biaoti cuole... Didi na benshu biaoti ye cuole ma? Shuli de wenzi kanqilai--",
+          "!",
+          "Jiu shizhege! Qingkan zheli! Di shiqi yeshang xiedao--",
+          "...Sorry. Look at page seventeen! It does not say alem heat, it says maniret fire! Wear Fire! Faithful, you did it! You really did it! You find... --n ...You find why my brother die. Someone sell him book with wrong prayer.",
+          "Who, kind faithful. Who kill my brother?"
+        ],
+        "conditions": [
+          "!told_mei_hua_about_renald",
+          "!completed_quest_step=kesvelt_fake_books__tell_mei_hua"
+        ],
+        "events": [
+          "set_flag=showed_mei_hua_fake_book"
+        ]
+      },
+      {
+        "script": [
+          "A... a prayer tome? Zheyu renheshi... --n ...Bu.",
+          "...",
+          "...You lie.",
+          "Please, please kind faithful. Say you lie.",
+          "This book. Page seventeen, alem heat replaced with maniret fire. Wear Fire prayer. This book was made to kill whoever try to use it.",
+          "...",
+          "clothing_montage++Yesterday, he see me crying during grammar lecture. He... he tell everyone else to leave. He hug me...",
+          "I will be OK. Once he pays. --n We go now? We go and *face* him?"
+        ],
+        "conditions": [
+          "told_mei_hua_about_renald",
+          "!completed_quest_step=kesvelt_fake_books__tell_mei_hua",
+          "!showed_mei_hua_fake_book"
+        ],
+        "events": [
+          "give_quest_step=kesvelt_fake_books__confront_renald",
+          "complete_quest_step=kesvelt_fake_books__tell_mei_hua",
+          "set_flag=showed_mei_hua_fake_book"
+        ]
+      },
+      {
+        "script": [
+          "I know. Bubba Renald gave it to you. We go to *face* him?"
+        ],
+        "conditions": [
+          "completed_quest_step=kesvelt_fake_books__tell_mei_hua",
+          "mid_quest_step=kesvelt_fake_books__confront_renald"
+        ],
+        "events": []
+      }
+    ],
+    "yes": [
+      {
+        "script": [
+          "Thank you, kind faithful.",
+          "start_event=confronting_renald"
+        ],
+        "conditions": [
+          "mid_quest_step=kesvelt_fake_books__confront_renald"
+        ],
+        "events": []
+      }
+    ],
+    "no": [
+      {
+        "script": [
+          "You need to prepare? You believe things will be that bad?",
+          "...OK. But please, hurry."
+        ],
+        "conditions": [
+          "mid_quest_step=kesvelt_fake_books__confront_renald",
+          "last_dialog=renald|show disciple text to spreading miracles of prometus"
+        ],
+        "events": []
+      }
+    ]
+  },
+  "student_3#after_fight": {
+    "__hi__": [
+      {
+        "script": [
+          "Oh, Forel, thank you so much for what you did! My brother is avenged!",
+          "And don't worry, I don't believe a word of what he says. I don't care if you are a bastard, and a man as nice as you cannot be *picky*."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "script": [
+          "My job is talking to you."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "picky": [
+      {
+        "script": [
+          "Do you not know that word? Faithful really are kept sheltered. --n Um, well, I am not so good at Promen, but I try to explain.",
+          "Picky means... you only like man or woman. It is a man or woman who only ever cares about one.",
+          "They do not care about family or xingge, ah, personality, only sex. They would spit in the Sydan's face if not picky for him.",
+          "They say you cannot keep children around them, even their own. If they are what they are picky for, they take them. If not, they kill them.",
+          "But again, I know you are not picky. Only loving the Sydan just means you are loyal, yes?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "yes": [
+      {
+        "script": [
+          "I... what? You... you are picky?"
+        ],
+        "conditions": [
+          "last_dialog=picky"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          "I...",
+          "change_object_state=student_3#after_fight__mei_hua_scared",
+          "I need to go...",
+          "walk=student_3#after_fight__N7--30"
+        ],
+        "conditions": [
+          "last_dialog=yes"
+        ],
+        "events": []
+      }
+    ],
+    "no": [
+      {
+        "script": [
+          "Exactly!"
+        ],
+        "conditions": [
+          "last_dialog=picky"
+        ],
+        "events": []
+      },
+      {
+        "script": [
+          ""
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {}
+  }
 }

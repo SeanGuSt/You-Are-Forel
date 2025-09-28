@@ -5,6 +5,19 @@
     "y": 10,
     "args": {}
   },
+  "map_edge_teleporter": {
+    "object_type": "node",
+    "x": -99,
+    "y": -98,
+    "args": {
+      "adjacent_maps": {
+        "S": {
+          "map": "Forels_Street_B",
+          "offset": "(7, 0)"
+        }
+      }
+    }
+  },
   "fdjlsh": {
     "object_type": "node",
     "x": 15,

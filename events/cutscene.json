@@ -17,7 +17,7 @@
         "Yet not all was well. Visiting nobles had learned of their king's urchin companion.",
         "It was disgusting. The king had several companions within the Phitemos of noble lineage. Yet he played with an insect like a boy in the streets.",
         "Eraton assured you, told you to ignore their words.",
-        "Yet you could not bring yourself to disagree. Eraton had given you much, but you? You a burden in your current state.",
+        "Yet you could not bring yourself to disagree. Eraton had given you much, but you? You were a burden in your current state.",
         "And so, you had vowed to become worthy of your king. You would protect him as he protected you.",
 
         "And so, you would train.",
@@ -26,7 +26,44 @@
         "And today, young Forel, you have chosen to begin your quest. You shall journey the kingdom of Sewinso," 
     ],
     "joke_ending_0" : [
-        "And lo, rather than journeying out to prove your worth, you have chosen to be a little baby and just stay here in the castle.",
+        "And lo, rather than journeying out to become worthy, you have chosen to be a little bitch and just stay here in the castle.",
         "back_to_main_menu"
+    ],
+    "joke_ending_1" : [
+        "Whether through malice or incompetence, you attacked the archmage. His retaliation, even in his weakened state, was swift and fatal.",
+        "However, even he was no match for the Sydan's wrath.",
+        "Without his most trusted advisor in the archmage, and without his beloved in you, Eraton fell into a despair from which he was unable to recover.",
+        "The kingdom of Sewinso fell even sooner than it was meant to.",
+        "back_to_main_menu"
+    ],
+    "imedes_lesson" : [
+        "Do you remember the words young Bubba Dmitri speaks whenever he moves the elevator? I'd be shocked if they weren't burned into your memory by this point.",
+        "Kua Stein, Kua Stein, Alkua Stein, Kua Stein.",
+        "new_slide=elevator0",
+        "I'll show you now what they mean. Imagine this to be the elevator.",
+        "new_slide=elevator1",
+        "Kua Stein.",
+        "new_slide=elevator2",
+        "Again, kua Stein.",
+        "new_slide=elevator3",
+        "Alkua Stein.",
+        "new_slide=elevator4",
+        "Kua Stein.",
+        "All miraculous prayers are composed of two words. The first, no matter to Whom, is an Aeolian word. As Aeolus came before His children, so too do His words come before prayers, even to Them.",
+        "The second word depends on the god to Whom you are praying. Nertus is the god of stone, metal, smithery, too many things to list in my condition.",
+        "But the important one is stone, and so we say the next word in Nertitian.",
+        "'Kua' is the Aeolian word for 'move'.",
+        "'Alkua' is 'cease movement', or more simply 'stop'.",
+        "And 'stein' is the Nertitian word for 'stone'.",
+        "Understand?",
+        "new_slide=elevator3",
+        "'Kua stein', 'move stone', is prayed to move the supports that keep the elevator in place.",
+        "new_slide=elevator2",
+        "'Kua stein' again to move the elevator itself, whether up or down, at a safe pace.",
+        "new_slide=elevator1",
+        "'Alkua stein', 'stop stone', is prayed to keep the elevator in place briefly once it has reached its destination.",
+        "new_slide=elevator0",
+        "Before 'kua stein' is prayed once more to move the supports back into place."
+        
     ]
 }

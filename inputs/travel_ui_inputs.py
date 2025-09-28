@@ -91,11 +91,6 @@ def travel_inputs(self: 'GameEngine', event) -> dict | None:
             self.change_state(GameState.MENU_QUEST_LOG)
             self.current_quest_focus = 0
             self.selected_quest_indices = [0, 0, 0]
-        case pygame.K_1 | pygame.K_2 | pygame.K_3 | pygame.K_4 | pygame.K_5 | pygame.K_6 | pygame.K_7 | pygame.K_8 | pygame.K_9:
-            member_index = event.key - pygame.K_1
-            party_member = self.party.members[member_index]
-            caster = self.party.get_leader()
-            caster.cast_spell(party_member = party_member)
         case pygame.K_z:
             self.change_state(GameState.MENU_STATS)
         case pygame.K_i:
@@ -103,18 +98,18 @@ def travel_inputs(self: 'GameEngine', event) -> dict | None:
         case pygame.K_o:
             self.change_state(GameState.MENU_OPTIONS)
             self.selected_option = 0
-        case pygame.K_F5:  # Quick save
-            if self.options.auto_save:
-                self.save_manager.save_game("quicksave", self.party, self.options)
-                print("Game saved!")
-        case pygame.K_F9:  # Quick load
-            try:
-                self.save_manager.load_game("quicksave")
-                print("Game loaded!")
-            except FileNotFoundError:
-                print("No quicksave found!")
-        case pygame.K_F1:  # Save menu
+        case pygame.K_1:  # Save menu
             self.change_state(GameState.MENU_SAVE_LOAD)
             self.is_save_mode = True
             self.selected_save = 0
+        case pygame.K_2:  # Load menu
+            self.change_state(GameState.MENU_SAVE_LOAD)
+            self.selected_save = 0
     return {}
+
+#Re add later:
+"""case pygame.K_1 | pygame.K_2 | pygame.K_3 | pygame.K_4 | pygame.K_5 | pygame.K_6 | pygame.K_7 | pygame.K_8 | pygame.K_9:
+            member_index = event.key - pygame.K_1
+            party_member = self.party.members[member_index]
+            caster = self.party.get_leader()
+            caster.cast_spell(party_member = party_member)"""

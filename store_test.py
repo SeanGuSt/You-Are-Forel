@@ -225,11 +225,11 @@ class Renderer:
             can_afford = self.engine.party.gold >= self.engine.merchant.selected_item.value
             buy_color = GREEN if can_afford else GRAY
             
-            buy_rect = pygame.Rect(50, button_y, 120, 40)
+            buy_rect = pygame.Rect(50, button_y, 300, 40)
             pygame.draw.rect(self.screen, buy_color, buy_rect)
             pygame.draw.rect(self.screen, BLACK, buy_rect, 2)
             
-            buy_text = self.get_cached_text("BUY ITEM", self.side_font, BLACK)
+            buy_text = self.get_cached_text("Press Enter to Buy Item", self.side_font, BLACK)
             buy_text_rect = buy_text.get_rect(center=buy_rect.center)
             self.screen.blit(buy_text, buy_text_rect)
             
@@ -319,7 +319,7 @@ class MerchantStore:
         
         # Deduct gold
         self.engine.party.gold -= self.selected_item.value
-        self.engine.party.add_item_by_name(self.selected_item.name, 1)
+        self.engine.party.add_item_by_id(self.selected_item.name, 1)
         # Reduce store quantity
         if self.selected_item.quantity > 1:
             self.selected_item.quantity -= 1

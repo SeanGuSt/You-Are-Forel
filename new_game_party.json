@@ -11,7 +11,8 @@
             "equipped" : {
                 "armor" : "armor_pjs"
             },
-            "spritesheet" : ["Forel", 0, 0]
+            "spritesheet" : ["Forel", 0, 0],
+            "gendered_words" : "masculine"
         }
     }
 }
