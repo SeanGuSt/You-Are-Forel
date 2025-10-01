@@ -1,6 +1,6 @@
 How to play:
 1. Have python and pip installed
-2. Navigate to wasteoftime-main
+2. Navigate to directory
 3. Run 'pip install -r requirements.txt'
 4. Run 'python ultimalike.py'
 5. Enjoy and/or cry
