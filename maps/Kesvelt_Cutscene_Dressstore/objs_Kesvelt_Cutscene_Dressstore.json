@@ -1,28 +1,34 @@
 {
   "new_game_spawner": {
     "object_type": "node",
-    "x": 6,
-    "y": 4
+    "position": [
+      6,
+      4
+    ]
   },
   "maddy#phitemos": {
     "object_type": "node",
-    "x": -99,
-    "y": -97,
     "args": {
       "name": "Maddy",
       "dialog_key": "maddy#phitemos"
-    }
+    },
+    "position": [
+      -99,
+      -97
+    ]
   },
   "bahati#phitemos": {
     "object_type": "bahati",
-    "x": 7,
-    "y": 4,
     "args": {
       "spritesheet": [
         "Bahati Uzuri",
         0,
         0
       ]
-    }
+    },
+    "position": [
+      7,
+      4
+    ]
   }
 }

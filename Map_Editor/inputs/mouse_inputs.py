@@ -19,7 +19,7 @@ def place_tile(self: 'MapEditor', event, tx, ty, keys_at_tile, mods):
         for i in tx_range:
             for j in ty_range:
                 if not self.tdb.tiles[self.tile_map[self.char_list[self.tile_index]]].is_passable:
-                    keys_at_this_tile = [k for k,v in self.objects_data.items() if v["x"] == i and v["y"] == j]
+                    keys_at_this_tile = [k for k,v in self.objects_data.items() if v["position"] == (i, j)]
                     if keys_at_this_tile:
                         continue
                 self.ascii_map[j][i] = self.char_list[self.tile_index]
@@ -51,8 +51,7 @@ def place_or_move_object(self: 'MapEditor', event, tx, ty, keys_at_tile, mods):
     if not_already_occupied:
         self.pending_object = {
             "object_type": self.selected_object_type,
-            "x": tx,
-            "y": ty,
+            "position" : (tx, ty),
             "args": {}
         }
         self.change_state(EditState.INPUT)
@@ -74,5 +73,4 @@ def move_ghost(self: 'MapEditor', tx, ty, keys_at_tile):
         if not self.odb.obj_templates[self.objects_data[self.dragged_object_key]["object_type"]].is_passable:
             if keys_at_tile or not self.tdb.tiles[self.tile_map[self.ascii_map[ty][tx]]].is_passable:
                     return
-        self.ghost_object["x"] = tx
-        self.ghost_object["y"] = ty
+        self.ghost_object["position"] = [tx, ty]

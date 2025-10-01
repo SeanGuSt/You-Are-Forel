@@ -1,8 +1,6 @@
 {
   "bob": {
     "object_type": "npc",
-    "x": 12,
-    "y": 18,
     "move_interval": 999,
     "args": {
       "name": "Bob",
@@ -12,77 +10,105 @@
         "mook",
         "mook"
       ]
-    }
+    },
+    "position": [
+      12,
+      18
+    ]
   },
   "bob_node_0": {
     "object_type": "node",
-    "x": 12,
-    "y": 18
+    "position": [
+      12,
+      18
+    ]
   },
   "bob_node_1": {
     "object_type": "node",
-    "x": 2,
-    "y": 2
+    "position": [
+      2,
+      2
+    ]
   },
   "bob_node_2": {
     "object_type": "node",
-    "x": 1,
-    "y": 8
+    "position": [
+      1,
+      8
+    ]
   },
   "bob_node_3": {
     "object_type": "node",
-    "x": 3,
-    "y": 7
+    "position": [
+      3,
+      7
+    ]
   },
   "guard": {
     "object_type": "npc",
-    "x": 16,
-    "y": 15,
     "move_interval": 1,
     "args": {
       "name": "Guard",
       "dialog_key": "jack_knight"
-    }
+    },
+    "position": [
+      16,
+      15
+    ]
   },
   "guard_patrol_1_0": {
     "object_type": "node",
-    "x": 15,
-    "y": 15
+    "position": [
+      15,
+      15
+    ]
   },
   "guard_patrol_1_1": {
     "object_type": "node",
-    "x": 12,
-    "y": 12
+    "position": [
+      12,
+      12
+    ]
   },
   "guard_patrol_1_2": {
     "object_type": "node",
-    "x": 15,
-    "y": 9
+    "position": [
+      15,
+      9
+    ]
   },
   "guard_patrol_1_3": {
     "object_type": "node",
-    "x": 18,
-    "y": 12
+    "position": [
+      18,
+      12
+    ]
   },
   "town_2_overworld": {
     "object_type": "teleporter",
-    "x": 10,
-    "y": 19,
     "args": {
       "target_map": "overworld",
       "position": {
         "from_any": "overworld_2_town"
       }
-    }
+    },
+    "position": [
+      10,
+      19
+    ]
   },
   "new_game_spawner": {
     "object_type": "node",
-    "x": 10,
-    "y": 19
+    "position": [
+      10,
+      19
+    ]
   },
   "town_south_node": {
     "object_type": "node",
-    "x": 10,
-    "y": 18
+    "position": [
+      10,
+      18
+    ]
   }
 }

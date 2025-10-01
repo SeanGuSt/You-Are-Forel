@@ -43,7 +43,6 @@ class Map:
         self.engine = engine
         self.tiles = [[None for _ in range(width)] for _ in range(height)]
         self.tiles_default = [[None for _ in range(width)] for _ in range(height)]
-        self.tiles_high = [[None for _ in range(width)] for _ in range(height)]
         self.objects: List[Node] = []
         self.objects_by_layer: dict[int, list[Node]] = {}
         self.groups: dict[str, NodeGroup] = {}
@@ -54,12 +53,6 @@ class Map:
         x, y = pos
         if 0 <= x < self.width and 0 <= y < self.height:
             return self.tiles[y][x]
-        return False  # Default impassable boundary
-    
-    def get_tile_upper(self, pos: tuple[int, int]) -> Optional[Tile]:
-        x, y = pos
-        if 0 <= x < self.width and 0 <= y < self.height:
-            return self.tiles_high[y][x]
         return False  # Default impassable boundary
         
     def set_tile(self, pos: tuple[int, int], tile: Tile, and_default: bool = False):
@@ -80,10 +73,12 @@ class Map:
     def revert_map_tiles(self):
         self.tiles = copy.deepcopy(self.tiles_default)
             
-    def is_passable(self, pos: tuple[int, int], old_tile: Tile = None) -> bool:
+    def is_passable(self, pos: tuple[int, int], old_tile: Tile | tuple[int, int] = None) -> bool:
         tile = self.get_tile_lower(pos)
         if not tile:
             return False
+        if old_tile and old_tile is not Tile:
+            old_tile = self.get_tile_lower(old_tile)
         terrain_check = tile.can_pass_thru(old_tile)
         if not terrain_check:
             return False
@@ -151,6 +146,7 @@ class Map:
         map_file = os.path.join(map_folder, f"map_{map_name}.txt")
         mapping_file = os.path.join(map_folder, f"tiles_{map_name}.json")
         objects_file = os.path.join(map_folder, f"objs_{map_name}.json")
+        levels_file = os.path.join(map_folder, f"levels_{map_name}.txt")
         
         if not os.path.exists(map_file):
             raise FileNotFoundError(f"Map file not found: {map_file}")
@@ -168,7 +164,12 @@ class Map:
         # Load character to tile name mapping
         with open(mapping_file, 'r', encoding='utf-8') as f:
             char_to_tile = json.load(f)
-        
+        tile_levels = []
+        if os.path.exists(levels_file):
+            with open(levels_file, 'r', encoding='utf-8') as f:
+                tile_levels = [line.rstrip() for line in f.readlines()]
+            
+            
         height = len(lines)
         width = max(len(line) for line in lines) if lines else 0
         game_map = cls(width, height, engine, map_name)
@@ -179,6 +180,7 @@ class Map:
                 if char in char_to_tile:
                     tile_name = char_to_tile[char]
                     game_map.set_tile_by_name(pos, tile_name, tile_db, True)
+                    game_map.tiles[y][x].level = 1 if not tile_levels else int(tile_levels[y][x])
                 else:
                     # Default to grass if character not found in mapping
                     game_map.set_tile_by_name(pos, "grass", tile_db, True)

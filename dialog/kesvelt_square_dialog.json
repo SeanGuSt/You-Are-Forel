@@ -1,0 +1,158 @@
+{
+  "old_lady": {
+    "__hi__": [
+      {
+        "script": [
+          "Isn't this lovely? Families enjoying the great outdoors again?",
+          "It's been a long wait, but it was worth it.",
+          ""
+        ],
+        "conditions": [
+          "!talked="
+        ],
+        "events": [
+          "force_end="
+        ]
+      },
+      {
+        "script": [
+          "My husband Herbert and I would come out here every Sunday after mass just to see people together. Every Sunday, without fail, for forty-eight years.",
+          "Then... well, you know what happened. People were too scared to go outside unless they had to. A whole generation of children, raised to play indoors all day.",
+          "Children need room to grow, you know. I don't know how they didn't shrink being so confined.",
+          "__(You spent more time outside over four years than some people do their entire lives, and it didn't do much to help your growth.)",
+          "But, it looks like people are finally coming out again. It's not nearly as many as before, but it's getting there.",
+          "Maybe once the Sydan sires an heir, you'll get to see what this spot was like at its prime. I know I'd like to see that one last time.",
+          "leader_wear=acc_harem_robe++So would you please tell the Sydan to get on that, kind faithful?",
+          "That'd be nice.",
+          ""
+        ],
+        "conditions": [
+          "talked="
+        ],
+        "events": [
+          "force_end="
+        ]
+      },
+      {
+        "script": [
+          "Sand-humpers..."
+        ],
+        "conditions": [
+          "leader_wear=acc_burqa"
+        ],
+        "events": []
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {}
+  },
+  "family_1": {
+    "__hi__": [
+      {
+        "script": [
+          "Loud Girl__Daddy! Papa! Bubby's trying to pull my hair again!",
+          "Lying Boy__Am not!",
+          "Bald Man__Hun, your spawn are fighting again, could you make them stop? It's hard to nap.",
+          "Bearded Man__What do you mean, MY spawn? You're the one who made them!",
+          "Bald Man__And you're the one who stays home with them.",
+          "Bearded Man__Also your choice!",
+          "Loud Girl__Daddy!",
+          "Bearded Man__Boy, you leave your sister's tails alone or I'm shaving your head!",
+          "Lying Boy__...OK, Daddy.",
+          "Bald Man__Very efficient, 'daddy'.",
+          "Bearded Man__Don't you start.",
+          ""
+        ],
+        "conditions": [
+          "!talked="
+        ],
+        "events": [
+          "force_end="
+        ]
+      },
+      {
+        "script": [
+          "Bearded Man__Don't even think about trying to pull her hair again, boy.",
+          "Lying Boy__I ain't, Daddy!",
+          ""
+        ],
+        "conditions": [
+          "talked="
+        ],
+        "events": [
+          "force_end="
+        ]
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {}
+  },
+  "family_0": {
+    "__hi__": [
+      {
+        "script": [
+          "Loud Boy__Mama! There's a weird guy staring at us! Make him go away!",
+          ""
+        ],
+        "conditions": [],
+        "events": [
+          "force_end="
+        ]
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {}
+  },
+  "fetch_quest_guy": {
+    "__hi__": [
+      {
+        "script": [
+          "Oh, oh, oh dear.",
+          "Excuse me, you haven't seen my coin purse around here anywhere, have you?"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "job": [
+      {
+        "script": [
+          "My job is talking to you."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "aliases": {},
+    "contextual_aliases": {},
+    "yes": [
+      {
+        "script": [
+          "Wait, you have? Please, please *give* it to me!"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "no": [
+      {
+        "script": [
+          "Oh, oh shades, my wife is going to KILL me if she finds out I lost it. Please, help me look for it. I must've lost somewhere between here and my home to the west."
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ],
+    "give small wallet": [
+      {
+        "script": [
+          "Oh, Ohhhhh!!! That's it! You found it! Where was it!?",
+          "At... back at my house? This entire time?",
+          "...Well, either way, you're a hero! Here, it's not much, but take this!"
+        ],
+        "conditions": [],
+        "events": []
+      }
+    ]
+  }
+}

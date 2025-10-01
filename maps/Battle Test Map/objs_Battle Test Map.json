@@ -1,67 +1,89 @@
 {
   "new_game_spawner": {
     "object_type": "node",
-    "x": 11,
-    "y": 10
+    "position": [
+      11,
+      10
+    ]
   },
   "Slime 1": {
     "object_type": "monsterkesveltalleythief",
-    "x": 11,
-    "y": 9,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      9
+    ]
   },
   "Slime 2": {
     "object_type": "monsterkesveltalleythief",
-    "x": 13,
-    "y": 8,
-    "args": {}
+    "args": {},
+    "position": [
+      13,
+      8
+    ]
   },
   "Slime 3": {
     "object_type": "monsterkesveltalleythief",
-    "x": 11,
-    "y": 7,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      7
+    ]
   },
   "Slime 4": {
     "object_type": "monsterkesveltalleythief",
-    "x": 14,
-    "y": 7,
-    "args": {}
+    "args": {},
+    "position": [
+      14,
+      7
+    ]
   },
   "Slime 5": {
     "object_type": "monsterkesveltalleythief",
-    "x": 14,
-    "y": 10,
-    "args": {}
+    "args": {},
+    "position": [
+      14,
+      10
+    ]
   },
   "Slime 6": {
     "object_type": "monsterkesveltalleythief",
-    "x": 14,
-    "y": 13,
-    "args": {}
+    "args": {},
+    "position": [
+      14,
+      13
+    ]
   },
   "Slime 7": {
     "object_type": "monsterkesveltalleythief",
-    "x": 11,
-    "y": 13,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      13
+    ]
   },
   "Slime 8": {
     "object_type": "monsterkesveltalleythief",
-    "x": 8,
-    "y": 13,
-    "args": {}
+    "args": {},
+    "position": [
+      8,
+      13
+    ]
   },
   "Slime 9": {
     "object_type": "monsterkesveltalleythief",
-    "x": 8,
-    "y": 10,
-    "args": {}
+    "args": {},
+    "position": [
+      8,
+      10
+    ]
   },
   "Slime 10": {
     "object_type": "monsterkesveltalleythief",
-    "x": 8,
-    "y": 7,
-    "args": {}
+    "args": {},
+    "position": [
+      8,
+      7
+    ]
   }
 }

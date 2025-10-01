@@ -128,30 +128,6 @@ class KeyItem(Item):
 @dataclass
 class Equipment(Item):
     special_attacks = []
-    def circle_sweep(self, master: 'Character', radius: int = 1, include_self: bool = False, hit_allies: bool = True, edge_only: bool = True):
-        """Perform a circle sweep attack around the character."""
-        radius_plus_one = radius + 1
-        for dx in range(radius_plus_one):
-            for dy in range(radius_plus_one):
-                if not include_self and not (dx or dy):
-                    continue
-                if edge_only:
-                    if dx + dy != radius_plus_one:
-                        continue
-                if dx + dy <= radius_plus_one:
-                    # Calculate the position relative to the master character
-                    pos = (master.x + dx, master.y + dy)
-                    self.perform_special_attack(master, pos, hit_allies)
-                    if dx:
-                        pos = (master.x - dx, master.y + dy)
-                        self.perform_special_attack(master, pos, hit_allies)
-                    if dy:
-                        pos = (master.x + dx, master.y - dy)
-                        self.perform_special_attack(master, pos, hit_allies)
-
-                        if dx and dy:#Don't bother with this one if not dy.
-                            pos = (master.x - dx, master.y - dy)
-                            self.perform_special_attack(master, pos, hit_allies)
 
     def perform_special_attack(self, master: 'Character', pos: tuple[int, int], hit_allies: bool = True):
         for obj in master.engine.current_map.get_objects_at(pos):

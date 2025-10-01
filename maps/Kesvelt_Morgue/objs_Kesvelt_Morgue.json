@@ -1,13 +1,13 @@
 {
   "new_game_spawner": {
     "object_type": "node",
-    "x": 5,
-    "y": 8
+    "position": [
+      5,
+      8
+    ]
   },
   "map_edge_teleporter": {
     "object_type": "node",
-    "x": -99,
-    "y": -98,
     "args": {
       "adjacent_maps": {
         "N": {
@@ -15,33 +15,41 @@
           "offset": "(9, 0)"
         }
       }
-    }
+    },
+    "position": [
+      -99,
+      -98
+    ]
   },
   "book_merchant": {
     "object_type": "npc",
-    "x": 1,
-    "y": 2,
-    "args": {}
+    "args": {},
+    "position": [
+      1,
+      2
+    ]
   },
   "renald_hiding_spot": {
     "object_type": "node",
-    "x": 4,
-    "y": 5,
-    "args": {}
+    "args": {},
+    "position": [
+      4,
+      5
+    ]
   },
   "bookstore_kesvelt": {
     "object_type": "merchant",
-    "x": 2,
-    "y": 2,
     "args": {
       "name": "Book Merchant",
       "dialog_key": "merchant#book"
-    }
+    },
+    "position": [
+      2,
+      2
+    ]
   },
   "bookstore_sign": {
     "object_type": "mapobject",
-    "x": 5,
-    "y": 1,
     "look_text": [
       "bookstore sign"
     ],
@@ -51,12 +59,14 @@
         3,
         0
       ]
-    }
+    },
+    "position": [
+      5,
+      1
+    ]
   },
   "medicine_sign": {
     "object_type": "mapobject",
-    "x": 9,
-    "y": 1,
     "look_text": [
       "medicine sign"
     ],
@@ -66,12 +76,14 @@
         3,
         1
       ]
-    }
+    },
+    "position": [
+      9,
+      1
+    ]
   },
   "armor_sign": {
     "object_type": "mapobject",
-    "x": 5,
-    "y": 9,
     "look_text": [
       "A heater shield with an emerald cross is painted above the smith's surname, 'Veltoph.' --n Armorers hanging this sort of sign out front typically deal in more expensive, but higher quality defensive-wear. Normally Nertus would look down upon such arrogance, but the cross doesn't mean high-quality necessarily?",
       "Eraton had tried explaining it to you once. He says the cross technically means the smith will paint or embed your family crest for an additional fee. 'Your crest here', basically. But in making such an offer, they imply the armor and shields they make are worth carrying your family's legacy.",
@@ -83,12 +95,14 @@
         3,
         2
       ]
-    }
+    },
+    "position": [
+      5,
+      9
+    ]
   },
   "weapons_sign": {
     "object_type": "mapobject",
-    "x": 9,
-    "y": 9,
     "look_text": [
       "weapons sign"
     ],
@@ -98,100 +112,126 @@
         3,
         3
       ]
-    }
+    },
+    "position": [
+      9,
+      9
+    ]
   },
   "medicine_merchant": {
     "object_type": "npc",
-    "x": 13,
-    "y": 2,
-    "args": {}
+    "args": {},
+    "position": [
+      13,
+      2
+    ]
   },
   "medicinestore_kesvelt": {
     "object_type": "npc",
-    "x": 12,
-    "y": 2,
-    "args": {}
+    "args": {},
+    "position": [
+      12,
+      2
+    ]
   },
   "armor_merchant": {
     "object_type": "npc",
-    "x": 1,
-    "y": 8,
-    "args": {}
+    "args": {},
+    "position": [
+      1,
+      8
+    ]
   },
   "armorstore_kesvelt": {
     "object_type": "npc",
-    "x": 2,
-    "y": 8,
-    "args": {}
+    "args": {},
+    "position": [
+      2,
+      8
+    ]
   },
   "weaponstore_kesvelt": {
     "object_type": "npc",
-    "x": 12,
-    "y": 8,
-    "args": {}
+    "args": {},
+    "position": [
+      12,
+      8
+    ]
   },
   "weapon_merchant": {
     "object_type": "npc",
-    "x": 13,
-    "y": 8,
-    "args": {}
+    "args": {},
+    "position": [
+      13,
+      8
+    ]
   },
   "food_merchant": {
     "object_type": "npc",
-    "x": 1,
-    "y": 14,
-    "args": {}
+    "args": {},
+    "position": [
+      1,
+      14
+    ]
   },
   "foodstore_kesvelt": {
     "object_type": "npc",
-    "x": 1,
-    "y": 13,
-    "args": {}
+    "args": {},
+    "position": [
+      1,
+      13
+    ]
   },
   "foodstore_sign": {
     "object_type": "mapobject",
-    "x": 5,
-    "y": 13,
     "look_text": [
       "This way leads to the Kesvelt marketplace. Foodstuffs and kitchenware aplenty are being sold.",
       "Much to see and taste there, but nothing you'll need for your quest. Besides, a lot of bad memories lie down those streets."
     ],
-    "args": {}
+    "args": {},
+    "position": [
+      5,
+      13
+    ]
   },
   "morguesign": {
     "object_type": "mapobject",
-    "x": 9,
-    "y": 13,
-    "args": {}
+    "args": {},
+    "position": [
+      9,
+      13
+    ]
   },
   "corpse": {
     "object_type": "mapobject",
-    "x": 12,
-    "y": 13,
     "args": {
       "spritesheet": [
         "Static Objects",
         3,
         4
       ]
-    }
+    },
+    "position": [
+      12,
+      13
+    ]
   },
   "corpse2": {
     "object_type": "mapobject",
-    "x": 11,
-    "y": 13,
     "args": {
       "spritesheet": [
         "Static Objects",
         3,
         4
       ]
-    }
+    },
+    "position": [
+      11,
+      13
+    ]
   },
   "trashbin": {
     "object_type": "chest",
-    "x": 13,
-    "y": 14,
     "args": {
       "no_open_sprite": true,
       "spritesheet": [
@@ -202,24 +242,28 @@
       "items": {
         "key_burnt_book": 1
       }
-    }
+    },
+    "position": [
+      13,
+      14
+    ]
   },
   "corpse3": {
     "object_type": "mapobject",
-    "x": 13,
-    "y": 13,
     "args": {
       "spritesheet": [
         "Static Objects",
         3,
         4
       ]
-    }
+    },
+    "position": [
+      13,
+      13
+    ]
   },
   "morgue_attendant": {
     "object_type": "npc",
-    "x": 13,
-    "y": 15,
     "args": {
       "name": "Mordenia",
       "dialog_key": "morgue_lady",
@@ -228,33 +272,41 @@
         3,
         6
       ]
-    }
+    },
+    "position": [
+      13,
+      15
+    ]
   },
   "mei_hua_confrontation_node": {
     "object_type": "node",
-    "x": 9,
-    "y": 14,
     "args": {
       "event_start": "confronted_by_mei_hua"
-    }
+    },
+    "position": [
+      9,
+      14
+    ]
   },
   "mei_hua_hiding_spot": {
     "object_type": "node",
-    "x": 11,
-    "y": 17,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      17
+    ]
   },
   "student_3": {
     "object_type": "npcstudent",
-    "x": -99,
-    "y": -97,
     "skin_color": 5,
-    "args": {}
+    "args": {},
+    "position": [
+      -99,
+      -97
+    ]
   },
   "bubba_renald": {
     "object_type": "npc",
-    "x": -99,
-    "y": -97,
     "skin_color": 1,
     "args": {
       "spritesheet": [
@@ -262,22 +314,30 @@
         0,
         6
       ]
-    }
+    },
+    "position": [
+      -99,
+      -97
+    ]
   },
   "meet_renald_event": {
     "object_type": "node",
-    "x": 4,
-    "y": 2,
     "args": {
       "event_start": "meet_renald_at_bookstore"
-    }
+    },
+    "position": [
+      4,
+      2
+    ]
   },
   "test_temple_cutscene": {
     "object_type": "node",
-    "x": 4,
-    "y": 8,
     "args": {
       "event_start": "confronting_renald"
-    }
+    },
+    "position": [
+      4,
+      8
+    ]
   }
 }

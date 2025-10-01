@@ -28,14 +28,17 @@ class CombatManager:
         self.walkers = []
         self.enemy_turn_in_progress = False
         self.enemy_move_duration = self.engine.FPS//6  # frames for enemy move animation
-        self.player_made_move: bool = False
+        self.player_moved: bool = False
+        self.player_actioned: bool = False
+        self.player_move_direction: Direction = None
         self.animation_queue = []
 
     def enter_combat_mode(self, allies_in_combat: list = []):
         self.active_combat = True
         self.current_unit_index = 0
         self.player_turn = True
-        self.player_made_move = False
+        self.player_moved = False
+        self.player_actioned = False
         self.engine.replace_state(GameState.COMBAT)
         can_spawn_monsters = len(allies_in_combat) > 0
         monster_node_index = -1
@@ -78,11 +81,17 @@ class CombatManager:
         ]
             
 
-    def perform_attack(self, attacker: CombatStatsMixin, target: CombatStatsMixin):
+    def perform_attack(self, attacker: 'Character', target: CombatStatsMixin):
+        accuracy_down = attacker.virtue_manager.overuse_accuracy_penalty(attacker)
+        if accuracy_down > 0:
+            self.append_to_combat_log(f"{attacker.name} is hallucinating!")
+            import random
+            if random.randint(1, 100) < accuracy_down:
+                self.append_to_combat_log(f"{attacker.name} strikes... the empty air near {target.name}.")
         damage = max(1, attacker.get_total_power() - target.get_total_guard())
         target.hp -= damage
         target.is_hostile = True
-        self.append_to_combat_log(f"{attacker.name} hits {target.name} for {damage} damage!")
+        self.append_to_combat_log(f"{attacker.name} strikes {target.name} for {damage} damage!")
         target.attacked(attacker, damage)
         if target.hp <= 0:
             self.append_to_combat_log(f"{target.name} was defeated!")
@@ -105,7 +114,9 @@ class CombatManager:
         return None
 
     def conclude_current_player_turn(self):
-        self.player_made_move = True
+        self.player_moved = True
+        self.player_actioned = True
+        self.player_move_direction = None
 
     def advance_turn(self):
         if all([obj.hp <= 0 or not obj.is_hostile for obj in self.engine.current_map.get_objects_subset(Monster)]):
@@ -114,14 +125,16 @@ class CombatManager:
             return_node = self.engine.current_map.get_object_by_name("return_node")
             self.engine.current_map.remove_object(return_node)
             self.engine.append_to_message_log(f"{self.engine.party.get_leader().name} won!")
-        if self.player_turn and self.player_made_move:
+        if self.player_turn and self.player_moved and self.player_actioned:
             print("Made a move")
             self.finish_current_player_turn()
         elif not self.player_turn and self.enemy_turn_in_progress:
             self.finish_current_enemy_turn()
 
     def finish_current_player_turn(self):
-        self.player_made_move = False
+        self.player_moved = False
+        self.player_actioned = False
+        self.player_move_direction = None
         member = self.engine.party.members[self.current_unit_index]
         messages = member.virtue_manager.process_turn_end(member)
         message = ""
@@ -233,9 +246,11 @@ class CombatManager:
                 if obj.can_be_pushed and not obj.flying:
                     obj.push(player, attack_direction, 2)#apply knockback, if possible (object is added to event_manager.walkers here)
                     break
-        if self.attack_frame > 21:# We've hit all eight adjacent squares
+        if self.attack_frame > 21:# We've hit all eight adjacent squares, end the special attack
             self.attack_frame = 0
             player.special = False
-            self.conclude_current_player_turn()
+            self.player_actioned = True
+            if self.player_moved or player.level < ACTION_AND_MOVEMENT_LEVEL:
+                self.conclude_current_player_turn()
         
     

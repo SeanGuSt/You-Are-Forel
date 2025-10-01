@@ -302,13 +302,6 @@ class Character(CombatStatsMixin, Node):
         spell = self.prepped_spell
         if not spell:
             return
-        print("Debug: Spell is prepped")
-        result = {
-            'success': False,
-            'message': '',
-            'overuse_triggered': False,
-            'penalty_applied': False
-        }
         
         virtue = spell.virtue
         # Check for spell failure penalty
@@ -316,11 +309,9 @@ class Character(CombatStatsMixin, Node):
         if failure_chance > 0:
             import random
             if random.randint(1, 100) <= failure_chance:
-                result['message'] = f"Spell failed due to {virtue.value} overuse!"
+                self.engine.combat_manager.append_to_combat_log(f"Though {party_member.name}'s lips move, {party_member.pronoun} make no sound!")
                 # Casting the spell at all still gives you overuse points, whether it works or not.
                 self.virtue_manager.add_overuse(virtue, spell.overuse_cost)
-                return result
-        
         
         if direction:
             self.mp -= spell.mp_cost
@@ -338,22 +329,19 @@ class Character(CombatStatsMixin, Node):
         # Cast spell successfully
         overuse_exceeded = self.virtue_manager.add_overuse(virtue, spell.overuse_cost)
         self.virtue_used_this_turn = virtue
-        
-        result['success'] = True
-        result['message'] = f"Cast {spell.name}!"
+        self.engine.combat_manager.append_to_combat_log(f"Cast {spell.name}!")
         
         if overuse_exceeded:
-            result['overuse_triggered'] = True
-            result['message'] += f" Overuse threshold exceeded for {virtue.value}!"
-        
-        self.engine.combat_manager.conclude_current_player_turn()
-        return result
+            self.engine.combat_manager.append_to_combat_log(f"Overuse threshold exceeded for {virtue.value}!")
+        self.engine.combat_manager.player_actioned = True
+        if self.engine.combat_manager.player_moved:
+            self.engine.combat_manager.conclude_current_player_turn()
         
     def attacked(self, attacker, damage):
         self.engine.combat_manager.append_to_combat_log(f"{attacker.name} hit {self.name} for {damage} damage!")
     
     def to_dict(self):
-        data = {"hp" : self.hp, "max_hp" : self.max_hp, "x" : self.x,  "y" : self.y, "position" : self.position, "old_position" : self.old_position, "fixed_spritesheet_row": self.fixed_spritesheet_row, "experience" : self.experience, "args" : copy.deepcopy(self.args)}
+        data = {"hp" : self.hp, "max_hp" : self.max_hp, "position" : self.position, "old_position" : self.old_position, "fixed_spritesheet_row": self.fixed_spritesheet_row, "experience" : self.experience, "args" : copy.deepcopy(self.args)}
         # Convert equipped items to dict format
         equipped_dict = {}
         for slot, equipment in self.equipped.items():
@@ -427,12 +415,15 @@ class Party:
         if not leader:
             raise Exception(f"Leader does not exist")
         new_pos = leader.add_tuples(leader.position, direc)
-        if game_map.is_passable(new_pos):
+        if game_map.is_passable(new_pos, leader.position):
             # Update party positions for following behavior
             leader.state = ObjectState.WALK
             self.last_move_direction = direc
             self.engine.step_tracker = 1 - self.engine.step_tracker
-            self.engine.event_manager.timer_manager.start_timer("player_move", 270)
+            if not self.engine.event_manager.timer_manager.is_active("player_move"):
+                self.engine.event_manager.timer_manager.start_timer("player_move", 270)
+            else:
+                self.engine.event_manager.timer_manager.timers["player_move"]["duration"] += 270
             tile_sound_name = game_map.get_tile_lower(new_pos).step_sound
             tile_sound = tile_sound_name + "_" + str(self.engine.step_tracker)
             if tile_sound in self.engine.sound_manager.sound:
@@ -515,20 +506,14 @@ class Party:
         """Get the position for a specific party member"""
         if member_index < len(self.members):
             party_member = self.members[member_index]
-            return party_member.x, party_member.y
+            return party_member.position
         return 0, 0
     
-    def set_party_member_position(self, member_index: int, x: int | tuple[int, int], y: int | None = None):
+    def set_party_member_position(self, member_index: int, pos: tuple[int, int]):
         """Get the position for a specific party member"""
         if member_index < len(self.members):
-            if not y:
-                self.members[member_index].old_position = self.members[member_index].position
-                self.members[member_index].position = x
-                return
-
-            self.members[member_index].x, self.members[member_index].y = x, y
             self.members[member_index].old_position = self.members[member_index].position
-            self.members[member_index].position = (x, y)
+            self.members[member_index].position = pos
             
         
     def add_item(self, item: Item):

@@ -6,18 +6,18 @@
             "view_steps": {
                 "name": "Steps Tab",
                 "description": "This is where you can write down the tasks needed to complete a quest! Generally, a quest is only considered 'completed' once all its steps have been finished. Here's the first step of this quest: Press 'Tab' again to go to the 'Notes' section.",
-                "started": true
+                "status": "a"
             },
             "talk_to_eraton": {
                 "name": "Talk to Eraton",
-                "description": "Speak to your Sydan once more and report that you've read the quest log.."
+                "description": "Speak to your Sydan once more and report that you've read the quest log."
             }
         },
         "hints": {
             "view_hints": {
                 "name": "Notes Tab",
                 "description": "Here you can write down everything you think might be relevant to your quest. It's good to have, but it's not perfect. Sometimes, it's only with hindsight that information's relevance becomes obvious. --n And that's your journal! Come talk to me when you've finished reading it. And, since I know you don't like me being too sappy in court, thank you for humoring my concerns. I want you to succeed on your quest and return home safely, my precious treasure. --n Yours as you are mine, --n Eraton",
-                "started": true
+                "status": "a"
             }
         },
         "reward": {
@@ -33,7 +33,7 @@
             "look_at_quest_log": {
                 "name": "Learn to Use This Journal",
                 "description": "Eraton gave you a journal to record your journey and your quests in.",
-                "started": true
+                "status": "a"
             },
             "get_dressed": {
                 "name": "Dress to Impress",

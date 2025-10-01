@@ -1,0 +1,65 @@
+{
+  "overworld_2_town": {
+    "object_type": "teleporter",
+    "args": {
+      "target_map": "town",
+      "position": {
+        "from_any": "town_south_node"
+      }
+    },
+    "position": [
+      14,
+      14
+    ],
+    "old_position": [
+      14,
+      14
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "empty_chest": {
+    "object_type": "chest",
+    "args": {
+      "contents": {}
+    },
+    "position": [
+      16,
+      16
+    ],
+    "old_position": [
+      16,
+      16
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      12,
+      12
+    ],
+    "old_position": [
+      12,
+      12
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  }
+}

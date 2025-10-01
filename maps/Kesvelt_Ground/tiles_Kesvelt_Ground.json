@@ -8,7 +8,7 @@
   "M": "mountain",
   "|": "rail",
   "~": "sky",
-  "z": "stairs",
+  "z": "stairsleveladjust",
   "#": "wall",
   "B": "wallbrick"
 }

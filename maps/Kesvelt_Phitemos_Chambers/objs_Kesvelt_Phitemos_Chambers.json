@@ -1,45 +1,51 @@
 {
   "forels_dresser": {
     "object_type": "haremwardrobe",
-    "x": 10,
-    "y": 6,
     "args": {
       "items": {
         "armor_leather": 1
       }
-    }
+    },
+    "position": [
+      10,
+      6
+    ]
   },
   "harem_lounge_to_harem_stairs_d": {
     "object_type": "teleporter",
-    "x": 2,
-    "y": 5,
     "args": {
       "target_map": "Kesvelt_Harem_Stairwell",
       "position": {
         "from_any": "harem_stairs_d_to_harem_lounge"
       }
-    }
+    },
+    "position": [
+      2,
+      5
+    ]
   },
   "meet_ginny_event": {
     "object_type": "node",
-    "x": 5,
-    "y": 6,
     "args": {
       "event_start": "meet_ginny"
-    }
+    },
+    "position": [
+      5,
+      6
+    ]
   },
   "maddy_warp_event": {
     "object_type": "node",
-    "x": -99,
-    "y": -99,
     "args": {
       "on_load_event": "activate_maddy"
-    }
+    },
+    "position": [
+      -99,
+      -99
+    ]
   },
   "maddy#phitemos": {
     "object_type": "maddy",
-    "x": -99,
-    "y": -97,
     "args": {
       "name": "Maddy",
       "dialog_key": "maddy#phitemos",
@@ -48,17 +54,21 @@
         0,
         0
       ]
-    }
+    },
+    "position": [
+      -99,
+      -97
+    ]
   },
   "maddy_room_node": {
     "object_type": "node",
-    "x": 9,
-    "y": 3
+    "position": [
+      9,
+      3
+    ]
   },
   "ginny#phitemos": {
     "object_type": "ginny",
-    "x": 5,
-    "y": -4,
     "args": {
       "name": "Ginny",
       "spritesheet": [
@@ -66,12 +76,14 @@
         0,
         0
       ]
-    }
+    },
+    "position": [
+      5,
+      -4
+    ]
   },
   "bahati#phitemos": {
     "object_type": "bahati",
-    "x": 5,
-    "y": -4,
     "args": {
       "name": "Bahati",
       "dialog_key": "bahati#phitemos",
@@ -80,66 +92,90 @@
         0,
         0
       ]
-    }
+    },
+    "position": [
+      5,
+      -4
+    ]
   },
   "new_game_spawner": {
     "object_type": "node",
-    "x": 1,
-    "y": 6,
-    "args": {}
+    "args": {},
+    "position": [
+      1,
+      6
+    ]
   },
   "ginny_bed": {
     "object_type": "bedbasic",
-    "x": 1,
-    "y": 1,
-    "args": {}
+    "args": {},
+    "position": [
+      1,
+      1
+    ]
   },
   "forel_bed": {
     "object_type": "bedbasic",
-    "x": 10,
-    "y": 5,
-    "args": {}
+    "args": {},
+    "position": [
+      10,
+      5
+    ]
   },
   "maddy_bed": {
     "object_type": "bedbasic",
-    "x": 10,
-    "y": 1,
-    "args": {}
+    "args": {},
+    "position": [
+      10,
+      1
+    ]
   },
   "maddy_wardrobe": {
     "object_type": "haremwardrobe",
-    "x": 10,
-    "y": 2,
-    "args": {}
+    "args": {},
+    "position": [
+      10,
+      2
+    ]
   },
   "ginny_wardrobe": {
     "object_type": "haremwardrobe",
-    "x": 1,
-    "y": 2,
-    "args": {}
+    "args": {},
+    "position": [
+      1,
+      2
+    ]
   },
   "ginny_patrol_1_0": {
     "object_type": "node",
-    "x": 2,
-    "y": 1,
-    "args": {}
+    "args": {},
+    "position": [
+      2,
+      1
+    ]
   },
   "ginny_patrol_1_1": {
     "object_type": "node",
-    "x": 3,
-    "y": 1,
-    "args": {}
+    "args": {},
+    "position": [
+      3,
+      1
+    ]
   },
   "ginny_patrol_1_2": {
     "object_type": "node",
-    "x": 2,
-    "y": 3,
-    "args": {}
+    "args": {},
+    "position": [
+      2,
+      3
+    ]
   },
   "ginny_patrol_1_3": {
     "object_type": "node",
-    "x": 3,
-    "y": 3,
-    "args": {}
+    "args": {},
+    "position": [
+      3,
+      3
+    ]
   }
 }

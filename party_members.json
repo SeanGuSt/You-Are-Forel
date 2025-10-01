@@ -1,8 +1,6 @@
 {
     "Forel" :
     {
-        "x" : 0,
-        "y" : 0,
         "strength" : 1,
         "dexterity" : 2,
         "faith" : 5,
@@ -17,14 +15,23 @@
     },
     "Maddy" :
     {
-        "x" : 0,
-        "y" : 0,
         "strength" : 1,
         "dexterity" : 2,
         "faith" : 1,
         "max_hp" : 10,
         "args" : {
             "spritesheet" : ["Maddy", 0, 0],
+            "gendered_words" : "feminine"
+        }
+    },
+    "Ginny" :
+    {
+        "strength" : 1,
+        "dexterity" : 2,
+        "faith" : 1,
+        "max_hp" : 10,
+        "args" : {
+            "spritesheet" : ["Ginny", 0, 0],
             "gendered_words" : "feminine"
         }
     }

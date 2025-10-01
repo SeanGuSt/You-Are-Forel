@@ -434,7 +434,7 @@ class GameEngine:
             old_map = self.current_map.name
             # Handle the teleportation to combat map
             self.handle_teleporter(obj)
-            edge_teleporter = self.map_obj_db.create_obj("map_edge_teleporter", "node", {"x" : -99, "y" : -98, "args" : {"target_map" : old_map, "position" : {"from_any" : obj.name}}})
+            edge_teleporter = self.map_obj_db.create_obj("map_edge_teleporter", "node", {"position" : (-99, -98), "args" : {"target_map" : old_map, "position" : {"from_any" : obj.name}}})
             self.current_map.add_object(edge_teleporter)
             return True
         return False
@@ -537,13 +537,16 @@ class GameEngine:
                                     self.cutscene_manager.end_scene()
                                     self.revert_state()
                     case GameState.COMBAT:
-                        if self.event_manager.walkers or not self.combat_manager.player_turn or self.combat_manager.attack_frame or self.combat_manager.player_made_move:
+                        if self.event_manager.walkers or not self.combat_manager.player_turn or self.combat_manager.attack_frame or (self.combat_manager.player_moved and self.combat_manager.player_actioned):
                             continue
                         if not self.check_control_restriction(event):
                             continue
                         combat_inputs(self, event)
                     case GameState.TOWN:
-                        if self.event_manager.timer_manager.is_active("player_move") or self.event_manager.timer_manager.is_active("player_bump"):
+                        if self.event_manager.timer_manager.is_active("player_bump"):
+                            continue
+                        if self.event_manager.timer_manager.is_active("player_move"):
+                            #if self.event_manager.timer_manager.get_progress("player_move", False) < 0.85 or event.key not in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
                             continue
                         input_results_for_updates = travel_inputs(self, event)
         return input_results_for_updates
@@ -607,6 +610,7 @@ class GameEngine:
                 filename = save_files[self.selected_save - 1]
                 self.save_manager.save_game(filename)
                 print(f"Game saved as {filename}!")
+                self.is_save_mode = False
                 self.revert_state()
         else:
             # Load mode

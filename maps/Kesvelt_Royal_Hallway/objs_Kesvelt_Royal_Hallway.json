@@ -1,62 +1,70 @@
 {
   "eraton_bed0": {
     "object_type": "bedroyal",
-    "x": 9,
-    "y": 28,
     "args": {
       "spritesheet": [
         "Static Objects",
         0,
         1
       ]
-    }
+    },
+    "position": [
+      9,
+      28
+    ]
   },
   "eraton_bed1": {
     "object_type": "bedroyal",
-    "x": 9,
-    "y": 29,
     "args": {
       "spritesheet": [
         "Static Objects",
         0,
         2
       ]
-    }
+    },
+    "position": [
+      9,
+      29
+    ]
   },
   "eraton_bed2": {
     "object_type": "bedroyal",
-    "x": 10,
-    "y": 29,
     "args": {
       "spritesheet": [
         "Static Objects",
         0,
         4
       ]
-    }
+    },
+    "position": [
+      10,
+      29
+    ]
   },
   "eraton_bed3": {
     "object_type": "bedroyal",
-    "x": 10,
-    "y": 28,
     "args": {
       "spritesheet": [
         "Static Objects",
         0,
         3
       ]
-    }
+    },
+    "position": [
+      10,
+      28
+    ]
   },
   "new_game_spawner": {
     "object_type": "node",
-    "x": 9,
-    "y": 27,
-    "args": {}
+    "args": {},
+    "position": [
+      9,
+      27
+    ]
   },
   "adjacent_maps": {
     "object_type": "node",
-    "x": 9,
-    "y": 31,
     "args": {
       "to_east": {
         "target_map": "elevator",
@@ -66,32 +74,42 @@
         "target_map": "harem",
         "new_direction": "south"
       }
-    }
+    },
+    "position": [
+      9,
+      31
+    ]
   },
   "royal_bedroom_to_harem_stairs_a": {
     "object_type": "teleporter",
-    "x": 9,
-    "y": 17,
     "args": {
       "target_map": "Kesvelt_Harem_Stairwell",
       "position": {
         "from_any": "harem_stairs_a_to_royal_bedroom"
       }
-    }
+    },
+    "position": [
+      9,
+      17
+    ]
   },
   "elevator_wizard": {
     "object_type": "elevatorhelper",
-    "x": 27,
-    "y": 9,
     "args": {
       "name": "Dmitri",
       "dialog_key": "dmitri_elevator"
-    }
+    },
+    "position": [
+      27,
+      9
+    ]
   },
   "dmitri_elevators": {
     "object_type": "elevatorteleporter",
-    "x": 27,
-    "y": 10,
-    "args": {}
+    "args": {},
+    "position": [
+      27,
+      10
+    ]
   }
 }

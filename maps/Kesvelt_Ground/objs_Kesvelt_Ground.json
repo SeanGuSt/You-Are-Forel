@@ -1,27 +1,31 @@
 {
   "maddy#phitemos": {
     "object_type": "node",
-    "x": -99,
-    "y": -97,
     "args": {
       "name": "Maddy",
       "dialog_key": "maddy#phitemos"
-    }
+    },
+    "position": [
+      -99,
+      -97
+    ]
   },
   "book_spawn_node_0": {
     "object_type": "node",
-    "x": 26,
-    "y": 30
+    "position": [
+      26,
+      30
+    ]
   },
   "book_spawn_node_1": {
     "object_type": "node",
-    "x": 30,
-    "y": 30
+    "position": [
+      30,
+      30
+    ]
   },
   "bubba_renald": {
     "object_type": "npc",
-    "x": 28,
-    "y": 29,
     "skin_color": 1,
     "args": {
       "spritesheet": [
@@ -29,33 +33,41 @@
         0,
         6
       ]
-    }
+    },
+    "position": [
+      28,
+      29
+    ]
   },
   "after_montage_node": {
     "object_type": "node",
-    "x": 16,
-    "y": 32
+    "position": [
+      16,
+      32
+    ]
   },
   "burn_jin_shi_event": {
     "object_type": "node",
-    "x": 16,
-    "y": 27,
     "args": {
       "event_start": "burning_student"
-    }
+    },
+    "position": [
+      16,
+      27
+    ]
   },
   "replace_jin_shi_event": {
     "object_type": "node",
-    "x": -99,
-    "y": -99,
     "args": {
       "on_load_event": "burning_student_replace"
-    }
+    },
+    "position": [
+      -99,
+      -99
+    ]
   },
   "map_edge_teleporter": {
     "object_type": "node",
-    "x": -99,
-    "y": -98,
     "args": {
       "adjacent_maps": {
         "S": {
@@ -67,178 +79,240 @@
           "offset": "(-12, 0)"
         }
       }
-    }
+    },
+    "position": [
+      -99,
+      -98
+    ]
   },
   "corner_guard": {
     "object_type": "npcsoldier",
-    "x": 20,
-    "y": 12
+    "position": [
+      20,
+      12
+    ]
   },
   "corner_guard_1": {
     "object_type": "npcsoldier",
-    "x": 18,
-    "y": 12
+    "position": [
+      18,
+      12
+    ]
   },
   "corner_guard_2": {
     "object_type": "npcsoldier",
-    "x": 17,
-    "y": 26
+    "position": [
+      17,
+      26
+    ]
   },
   "corner_guard_3": {
     "object_type": "npcsoldier",
-    "x": 15,
-    "y": 26
+    "position": [
+      15,
+      26
+    ]
   },
   "crossbower_0": {
     "object_type": "npccrossbower",
-    "x": 6,
-    "y": 9
+    "position": [
+      6,
+      9
+    ]
   },
   "crossbower_1": {
     "object_type": "npccrossbower",
-    "x": 6,
-    "y": 11
+    "position": [
+      6,
+      11
+    ]
   },
   "crossbower_2": {
     "object_type": "npccrossbower",
-    "x": 6,
-    "y": 13
+    "position": [
+      6,
+      13
+    ]
   },
   "cutscene_guard_a": {
     "object_type": "npcguard",
-    "x": 7,
-    "y": 18
+    "position": [
+      7,
+      18
+    ]
   },
   "cutscene_guard_b": {
     "object_type": "npcguard",
-    "x": 7,
-    "y": 20
+    "position": [
+      7,
+      20
+    ]
   },
   "dmitri_elevators": {
     "object_type": "elevatorteleporter",
-    "x": 27,
-    "y": 10
+    "position": [
+      27,
+      10
+    ]
   },
   "elevator_wizard": {
     "object_type": "elevatorhelper",
-    "x": 27,
-    "y": 9,
     "args": {
       "name": "Dmitri",
       "dialog_key": "dmitri_elevator"
-    }
+    },
+    "position": [
+      27,
+      9
+    ]
   },
   "event_melee_training": {
     "object_type": "node",
-    "x": 14,
-    "y": 4,
     "args": {
       "event_start": "melee_training"
-    }
+    },
+    "position": [
+      14,
+      4
+    ]
   },
   "event_no_early_leave_node": {
     "object_type": "node",
-    "x": 19,
-    "y": 12,
     "args": {
       "event_start": "generic_block_enterance_0"
-    }
+    },
+    "position": [
+      19,
+      12
+    ]
   },
   "event_no_early_leave_node_1": {
     "object_type": "node",
-    "x": 16,
-    "y": 26,
     "args": {
       "event_start": "generic_block_enterance_1"
-    }
+    },
+    "position": [
+      16,
+      26
+    ]
   },
   "event_tester_node": {
     "object_type": "node",
-    "x": 6,
-    "y": 19,
     "args": {
       "event_start": "first_meet_eraton"
-    }
+    },
+    "position": [
+      6,
+      19
+    ]
   },
   "guard_jogger": {
     "object_type": "npcsoldier",
-    "x": 1,
-    "y": 5
+    "position": [
+      1,
+      5
+    ]
   },
   "guard_sergeant": {
     "object_type": "npc",
-    "x": 10,
-    "y": 1
+    "position": [
+      10,
+      1
+    ]
   },
   "jogger_patrol_0_1": {
     "object_type": "node",
-    "x": 1,
-    "y": 14
+    "position": [
+      1,
+      14
+    ]
   },
   "jogger_patrol_0_10": {
     "object_type": "node",
-    "x": 1,
-    "y": 1
+    "position": [
+      1,
+      1
+    ]
   },
   "jogger_patrol_0_2": {
     "object_type": "node",
-    "x": 4,
-    "y": 14
+    "position": [
+      4,
+      14
+    ]
   },
   "jogger_patrol_0_3": {
     "object_type": "node",
-    "x": 4,
-    "y": 7
+    "position": [
+      4,
+      7
+    ]
   },
   "jogger_patrol_0_4": {
     "object_type": "node",
-    "x": 13,
-    "y": 7
+    "position": [
+      13,
+      7
+    ]
   },
   "jogger_patrol_0_5": {
     "object_type": "node",
-    "x": 13,
-    "y": 1
+    "position": [
+      13,
+      1
+    ]
   },
   "jogger_patrol_0_6": {
     "object_type": "node",
-    "x": 11,
-    "y": 1
+    "position": [
+      11,
+      1
+    ]
   },
   "jogger_patrol_0_7": {
     "object_type": "node",
-    "x": 11,
-    "y": 2
+    "position": [
+      11,
+      2
+    ]
   },
   "jogger_patrol_0_8": {
     "object_type": "node",
-    "x": 9,
-    "y": 2
+    "position": [
+      9,
+      2
+    ]
   },
   "jogger_patrol_0_9": {
     "object_type": "node",
-    "x": 9,
-    "y": 1
+    "position": [
+      9,
+      1
+    ]
   },
   "leave_node_0": {
     "object_type": "node",
-    "x": 16,
-    "y": 36
+    "position": [
+      16,
+      36
+    ]
   },
   "leave_node_1": {
     "object_type": "node",
-    "x": 15,
-    "y": 36
+    "position": [
+      15,
+      36
+    ]
   },
   "new_game_spawner": {
     "object_type": "node",
-    "x": 16,
-    "y": 34
+    "position": [
+      16,
+      34
+    ]
   },
   "bob": {
     "object_type": "npc",
-    "x": -99,
-    "y": 34,
     "move_interval": 999,
     "args": {
       "name": "Bob",
@@ -248,129 +322,171 @@
         "monsterkesveltalleythief",
         "monsterkesveltalleythief"
       ]
-    }
+    },
+    "position": [
+      -99,
+      34
+    ]
   },
   "pillar0": {
     "object_type": "pillar",
-    "x": 6,
-    "y": 17
+    "position": [
+      6,
+      17
+    ]
   },
   "pillar1": {
     "object_type": "pillar",
-    "x": 6,
-    "y": 21
+    "position": [
+      6,
+      21
+    ]
   },
   "pillar2": {
     "object_type": "pillar",
-    "x": 10,
-    "y": 17
+    "position": [
+      10,
+      17
+    ]
   },
   "pillar3": {
     "object_type": "pillar",
-    "x": 10,
-    "y": 21
+    "position": [
+      10,
+      21
+    ]
   },
   "pillar4": {
     "object_type": "pillar",
-    "x": 14,
-    "y": 17
+    "position": [
+      14,
+      17
+    ]
   },
   "pillar5": {
     "object_type": "pillar",
-    "x": 14,
-    "y": 21
+    "position": [
+      14,
+      21
+    ]
   },
   "pillar6": {
     "object_type": "pillar",
-    "x": 18,
-    "y": 17
+    "position": [
+      18,
+      17
+    ]
   },
   "pillar7": {
     "object_type": "pillar",
-    "x": 18,
-    "y": 21
+    "position": [
+      18,
+      21
+    ]
   },
   "shooting_range_0": {
     "object_type": "node",
-    "x": 6,
-    "y": 9
+    "position": [
+      6,
+      9
+    ]
   },
   "shooting_range_1": {
     "object_type": "node",
-    "x": 6,
-    "y": 11
+    "position": [
+      6,
+      11
+    ]
   },
   "shooting_range_2": {
     "object_type": "node",
-    "x": 6,
-    "y": 13
+    "position": [
+      6,
+      13
+    ]
   },
   "student_0": {
     "object_type": "npcstudent",
-    "x": 26,
-    "y": 31,
     "move_interval": 0.5,
     "args": {
       "name": "Disciple",
       "dialog_key": "student_0"
-    }
+    },
+    "position": [
+      26,
+      31
+    ]
   },
   "student_1": {
     "object_type": "npcstudent",
-    "x": 27,
-    "y": 31,
     "move_interval": 1,
     "args": {
       "name": "Disciple",
       "dialog_key": "student_1"
-    }
+    },
+    "position": [
+      27,
+      31
+    ]
   },
   "student_2": {
     "object_type": "npcstudent",
     "skin_color": 8,
-    "x": 28,
-    "y": 31
+    "position": [
+      28,
+      31
+    ]
   },
   "student_3": {
     "object_type": "npcstudent",
-    "x": 29,
-    "y": 31,
     "skin_color": 0,
     "args": {
       "name": "Mei-Hua",
       "dialog_key": "student_3"
-    }
+    },
+    "position": [
+      29,
+      31
+    ]
   },
   "student_shi": {
     "object_type": "npcstudent",
     "skin_color": 1,
-    "x": 30,
-    "y": 31
+    "position": [
+      30,
+      31
+    ]
   },
   "student_shi_space": {
     "object_type": "node",
-    "x": 30,
-    "y": 31
+    "position": [
+      30,
+      31
+    ]
   },
   "target0": {
     "object_type": "archerytarget",
-    "x": 12,
-    "y": 9
+    "position": [
+      12,
+      9
+    ]
   },
   "target1": {
     "object_type": "archerytarget",
-    "x": 10,
-    "y": 11
+    "position": [
+      10,
+      11
+    ]
   },
   "target2": {
     "object_type": "archerytarget",
-    "x": 8,
-    "y": 13
+    "position": [
+      8,
+      13
+    ]
   },
   "throne_eraton": {
     "object_type": "npc",
-    "x": 4,
-    "y": 19,
     "args": {
       "name": "Eraton Sydan",
       "dialog_key": "eraton_throne",
@@ -379,58 +495,78 @@
         0,
         0
       ]
-    }
+    },
+    "position": [
+      4,
+      19
+    ]
   },
   "training_guard_0": {
     "object_type": "npcsoldier",
-    "x": 8,
-    "y": 4
+    "position": [
+      8,
+      4
+    ]
   },
   "training_guard_1": {
     "object_type": "npcsoldier",
-    "x": 7,
-    "y": 4
+    "position": [
+      7,
+      4
+    ]
   },
   "training_guard_2": {
     "object_type": "npcsoldier",
-    "x": 12,
-    "y": 6,
     "args": {
       "name": "Eieun",
       "dialog_key": "training_guard_2"
-    }
+    },
+    "position": [
+      12,
+      6
+    ]
   },
   "training_guard_3": {
     "object_type": "npcsoldier",
-    "x": 11,
-    "y": 6
+    "position": [
+      11,
+      6
+    ]
   },
   "event_waiting_node": {
     "object_type": "node",
-    "x": 31,
-    "y": 0,
-    "args": {}
+    "args": {},
+    "position": [
+      31,
+      0
+    ]
   },
   "throne_node": {
     "object_type": "node",
-    "x": 4,
-    "y": 19,
-    "args": {}
+    "args": {},
+    "position": [
+      4,
+      19
+    ]
   },
   "respawn_mei_hua_node": {
     "object_type": "node",
-    "x": 11,
-    "y": 29,
     "args": {
       "on_load_event": "respawn_mei_hua"
-    }
+    },
+    "position": [
+      11,
+      29
+    ]
   },
   "despawn_mei_hua_node": {
     "object_type": "node",
-    "x": 2,
-    "y": 1,
     "args": {
       "on_load_event": "despawn_mei_hua"
-    }
+    },
+    "position": [
+      2,
+      1
+    ]
   }
 }

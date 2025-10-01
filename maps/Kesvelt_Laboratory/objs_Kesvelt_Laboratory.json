@@ -1,29 +1,33 @@
 {
   "elevator_wizard": {
     "object_type": "elevatorhelper",
-    "x": 27,
-    "y": 9,
     "args": {
       "name": "Dmitri",
       "dialog_key": "dmitri_elevator"
-    }
+    },
+    "position": [
+      27,
+      9
+    ]
   },
   "dmitri_elevators": {
     "object_type": "elevatorteleporter",
-    "x": 27,
-    "y": 10,
-    "args": {}
+    "args": {},
+    "position": [
+      27,
+      10
+    ]
   },
   "new_game_spawner": {
     "object_type": "node",
-    "x": 19,
-    "y": 18,
-    "args": {}
+    "args": {},
+    "position": [
+      19,
+      18
+    ]
   },
   "imedes_head": {
     "object_type": "mapobject",
-    "x": 11,
-    "y": 16,
     "layer": 2,
     "group_name": "imedes_laboratory",
     "is_passable": true,
@@ -33,12 +37,14 @@
         0,
         0
       ]
-    }
+    },
+    "position": [
+      11,
+      16
+    ]
   },
   "imedes_torso": {
     "object_type": "npc",
-    "x": 11,
-    "y": 17,
     "move_interval": 6,
     "group_name": "imedes_laboratory",
     "args": {
@@ -49,12 +55,14 @@
         1,
         0
       ]
-    }
+    },
+    "position": [
+      11,
+      17
+    ]
   },
   "imedes_bed0": {
     "object_type": "imedesinbed",
-    "x": 10,
-    "y": 16,
     "layer": 2,
     "group_name": "imedes_bed",
     "is_passable": false,
@@ -67,12 +75,14 @@
         0,
         0
       ]
-    }
+    },
+    "position": [
+      10,
+      16
+    ]
   },
   "imedes_bed1": {
     "object_type": "imedesinbed",
-    "x": 10,
-    "y": 17,
     "group_name": "imedes_bed",
     "state": "sleep",
     "args": {
@@ -83,126 +93,150 @@
         1,
         0
       ]
-    }
+    },
+    "position": [
+      10,
+      17
+    ]
   },
   "imedes_patrol_1_0": {
     "object_type": "node",
-    "x": 15,
-    "y": 17,
-    "args": {}
+    "args": {},
+    "position": [
+      15,
+      17
+    ]
   },
   "imedes_patrol_1_1": {
     "object_type": "node",
-    "x": 19,
-    "y": 17,
-    "args": {}
+    "args": {},
+    "position": [
+      19,
+      17
+    ]
   },
   "imedes_patrol_1_2": {
     "object_type": "node",
-    "x": 19,
-    "y": 21,
-    "args": {}
+    "args": {},
+    "position": [
+      19,
+      21
+    ]
   },
   "book_lab_fire": {
     "object_type": "bookpillar",
-    "x": 14,
-    "y": 18,
     "args": {
       "spritesheet": [
         "Static Objects",
         2,
         0
       ]
-    }
+    },
+    "position": [
+      14,
+      18
+    ]
   },
   "book_lab_water": {
     "object_type": "bookpillar",
-    "x": 15,
-    "y": 16,
     "args": {
       "spritesheet": [
         "Static Objects",
         2,
         1
       ]
-    }
+    },
+    "position": [
+      15,
+      16
+    ]
   },
   "book_lab_wind": {
     "object_type": "bookpillar",
-    "x": 19,
-    "y": 16,
     "args": {
       "spritesheet": [
         "Static Objects",
         2,
         3
       ]
-    }
+    },
+    "position": [
+      19,
+      16
+    ]
   },
   "book_lab_earth": {
     "object_type": "bookpillar",
-    "x": 20,
-    "y": 18,
     "args": {
       "spritesheet": [
         "Static Objects",
         2,
         2
       ]
-    }
+    },
+    "position": [
+      20,
+      18
+    ]
   },
   "book_lab_nature": {
     "object_type": "bookpillar",
-    "x": 20,
-    "y": 20,
     "args": {
       "spritesheet": [
         "Static Objects",
         2,
         5
       ]
-    }
+    },
+    "position": [
+      20,
+      20
+    ]
   },
   "book_lab_lava": {
     "object_type": "bookpillar",
-    "x": 14,
-    "y": 20,
     "args": {
       "spritesheet": [
         "Static Objects",
         2,
         4
       ]
-    }
+    },
+    "position": [
+      14,
+      20
+    ]
   },
   "book_lab_ice": {
     "object_type": "bookpillar",
-    "x": 15,
-    "y": 22,
     "args": {
       "spritesheet": [
         "Static Objects",
         2,
         6
       ]
-    }
+    },
+    "position": [
+      15,
+      22
+    ]
   },
   "book_lab_lightning": {
     "object_type": "bookpillar",
-    "x": 19,
-    "y": 22,
     "args": {
       "spritesheet": [
         "Static Objects",
         2,
         7
       ]
-    }
+    },
+    "position": [
+      19,
+      22
+    ]
   },
   "skeleton": {
     "object_type": "mapobject",
-    "x": 12,
-    "y": 18,
     "look_text": [
       "(...Why is this here?)"
     ],
@@ -212,14 +246,20 @@
         0,
         0
       ]
-    }
+    },
+    "position": [
+      12,
+      18
+    ]
   },
   "despawn_imedes_node": {
     "object_type": "node",
-    "x": -1,
-    "y": -1,
     "args": {
       "on_load_event": "bed_ridden_imedes"
-    }
+    },
+    "position": [
+      -1,
+      -1
+    ]
   }
 }

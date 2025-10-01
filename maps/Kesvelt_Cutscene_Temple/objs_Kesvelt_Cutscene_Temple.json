@@ -1,37 +1,49 @@
 {
   "new_game_spawner": {
     "object_type": "node",
-    "x": 8,
-    "y": 9
+    "position": [
+      8,
+      9
+    ]
   },
   "cutscene_imedes_renald": {
     "object_type": "imedes_renald",
-    "x": 6,
-    "y": 1,
     "args": {
       "spritesheet": [
         "Imedes Renald Chokehold",
         0,
         0
       ]
-    }
+    },
+    "position": [
+      6,
+      1
+    ]
   },
   "head_wizard": {
     "object_type": "npc",
-    "x": 8,
-    "y": 4,
-    "args" : {
-      "spritesheet" : ["Generic People", 0, 6]
-    }
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        6
+      ]
+    },
+    "position": [
+      8,
+      4
+    ]
   },
   "student_3": {
     "object_type": "npcstudent",
-    "x": 7,
-    "y": 9,
-    "skin_color" : 5,
+    "skin_color": 5,
     "args": {
       "name": "Mei-Hua",
       "dialog_key": "student_3#after_fight"
-    }
+    },
+    "position": [
+      7,
+      9
+    ]
   }
 }

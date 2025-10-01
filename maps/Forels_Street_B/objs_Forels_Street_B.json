@@ -1,13 +1,13 @@
 {
   "new_game_spawner": {
     "object_type": "node",
-    "x": 5,
-    "y": 8
+    "position": [
+      5,
+      8
+    ]
   },
   "map_edge_teleporter": {
     "object_type": "node",
-    "x": -99,
-    "y": -98,
     "args": {
       "adjacent_maps": {
         "N": {
@@ -19,30 +19,42 @@
           "offset": "(0, -2)"
         }
       }
-    }
+    },
+    "position": [
+      -99,
+      -98
+    ]
   },
   "thief_encounter_1": {
     "object_type": "npc",
-    "x": 13,
-    "y": 10,
-    "args": {}
+    "args": {},
+    "position": [
+      13,
+      10
+    ]
   },
   "thief_encounter_0": {
     "object_type": "npc",
-    "x": 11,
-    "y": 13,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      13
+    ]
   },
   "thief_encounter_2": {
     "object_type": "npc",
-    "x": 11,
-    "y": 1,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      1
+    ]
   },
   "thief_encounter_3": {
     "object_type": "npc",
-    "x": 1,
-    "y": 4,
-    "args": {}
+    "args": {},
+    "position": [
+      1,
+      4
+    ]
   }
 }

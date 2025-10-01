@@ -1,0 +1,1539 @@
+{
+  "maddy#phitemos": {
+    "object_type": "node",
+    "args": {
+      "name": "Maddy",
+      "dialog_key": "maddy#phitemos"
+    },
+    "position": [
+      -99,
+      -97
+    ],
+    "old_position": [
+      -99,
+      -97
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "book_spawn_node_0": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      26,
+      30
+    ],
+    "old_position": [
+      26,
+      30
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "book_spawn_node_1": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      30,
+      30
+    ],
+    "old_position": [
+      30,
+      30
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "bubba_renald": {
+    "object_type": "npc",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        6
+      ]
+    },
+    "position": [
+      28,
+      29
+    ],
+    "old_position": [
+      28,
+      29
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "after_montage_node": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      16,
+      32
+    ],
+    "old_position": [
+      16,
+      32
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "burn_jin_shi_event": {
+    "object_type": "node",
+    "args": {
+      "event_start": "burning_student"
+    },
+    "position": [
+      16,
+      27
+    ],
+    "old_position": [
+      16,
+      27
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "replace_jin_shi_event": {
+    "object_type": "node",
+    "args": {
+      "on_load_event": "burning_student_replace"
+    },
+    "position": [
+      -99,
+      -99
+    ],
+    "old_position": [
+      -99,
+      -99
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "map_edge_teleporter": {
+    "object_type": "node",
+    "args": {
+      "adjacent_maps": {
+        "S": {
+          "map": "Kesvelt_Morgue",
+          "offset": "(-9, 0)"
+        },
+        "N": {
+          "map": "Kesvelt_L_Fork",
+          "offset": "(-12, 0)"
+        }
+      }
+    },
+    "position": [
+      -99,
+      -98
+    ],
+    "old_position": [
+      -99,
+      -98
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "corner_guard": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      20,
+      12
+    ],
+    "old_position": [
+      20,
+      12
+    ],
+    "skin_color": [
+      92,
+      51,
+      23
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "corner_guard_1": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      18,
+      12
+    ],
+    "old_position": [
+      18,
+      12
+    ],
+    "skin_color": [
+      66,
+      37,
+      16
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "corner_guard_2": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      17,
+      26
+    ],
+    "old_position": [
+      17,
+      26
+    ],
+    "skin_color": [
+      105,
+      63,
+      35
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "corner_guard_3": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      15,
+      26
+    ],
+    "old_position": [
+      15,
+      26
+    ],
+    "skin_color": [
+      66,
+      37,
+      16
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "crossbower_0": {
+    "object_type": "npccrossbower",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        2
+      ]
+    },
+    "position": [
+      6,
+      9
+    ],
+    "old_position": [
+      6,
+      9
+    ],
+    "skin_color": [
+      105,
+      63,
+      35
+    ],
+    "group_name": "",
+    "move_interval": 1.0,
+    "state": "stand"
+  },
+  "crossbower_1": {
+    "object_type": "npccrossbower",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        2
+      ]
+    },
+    "position": [
+      6,
+      11
+    ],
+    "old_position": [
+      6,
+      11
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "group_name": "",
+    "move_interval": 1.0,
+    "state": "stand"
+  },
+  "crossbower_2": {
+    "object_type": "npccrossbower",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        2
+      ]
+    },
+    "position": [
+      6,
+      13
+    ],
+    "old_position": [
+      6,
+      13
+    ],
+    "skin_color": [
+      92,
+      51,
+      23
+    ],
+    "group_name": "",
+    "move_interval": 1.0,
+    "state": "stand"
+  },
+  "cutscene_guard_a": {
+    "object_type": "npcguard",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      7,
+      18
+    ],
+    "old_position": [
+      7,
+      18
+    ],
+    "skin_color": [
+      198,
+      134,
+      66
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "cutscene_guard_b": {
+    "object_type": "npcguard",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        3
+      ]
+    },
+    "position": [
+      7,
+      20
+    ],
+    "old_position": [
+      7,
+      20
+    ],
+    "skin_color": [
+      224,
+      172,
+      105
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "dmitri_elevators": {
+    "object_type": "elevatorteleporter",
+    "args": {},
+    "position": [
+      27,
+      10
+    ],
+    "old_position": [
+      27,
+      10
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "elevator_wizard": {
+    "object_type": "elevatorhelper",
+    "args": {
+      "name": "Dmitri",
+      "dialog_key": "dmitri_elevator"
+    },
+    "position": [
+      27,
+      9
+    ],
+    "old_position": [
+      27,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "event_melee_training": {
+    "object_type": "node",
+    "args": {
+      "event_start": "melee_training"
+    },
+    "position": [
+      14,
+      4
+    ],
+    "old_position": [
+      14,
+      4
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "event_no_early_leave_node": {
+    "object_type": "node",
+    "args": {
+      "event_start": "generic_block_enterance_0"
+    },
+    "position": [
+      19,
+      12
+    ],
+    "old_position": [
+      19,
+      12
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "event_no_early_leave_node_1": {
+    "object_type": "node",
+    "args": {
+      "event_start": "generic_block_enterance_1"
+    },
+    "position": [
+      16,
+      26
+    ],
+    "old_position": [
+      16,
+      26
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "event_tester_node": {
+    "object_type": "node",
+    "args": {
+      "event_start": "first_meet_eraton"
+    },
+    "position": [
+      6,
+      19
+    ],
+    "old_position": [
+      6,
+      19
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "guard_jogger": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      1,
+      5
+    ],
+    "old_position": [
+      1,
+      5
+    ],
+    "skin_color": [
+      141,
+      85,
+      36
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "guard_sergeant": {
+    "object_type": "npc",
+    "args": {},
+    "position": [
+      10,
+      1
+    ],
+    "old_position": [
+      10,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "jogger_patrol_0_1": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      1,
+      14
+    ],
+    "old_position": [
+      1,
+      14
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_10": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      1,
+      1
+    ],
+    "old_position": [
+      1,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_2": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      4,
+      14
+    ],
+    "old_position": [
+      4,
+      14
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_3": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      4,
+      7
+    ],
+    "old_position": [
+      4,
+      7
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_4": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      13,
+      7
+    ],
+    "old_position": [
+      13,
+      7
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_5": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      13,
+      1
+    ],
+    "old_position": [
+      13,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_6": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      11,
+      1
+    ],
+    "old_position": [
+      11,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_7": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      11,
+      2
+    ],
+    "old_position": [
+      11,
+      2
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_8": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      9,
+      2
+    ],
+    "old_position": [
+      9,
+      2
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "jogger_patrol_0_9": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      9,
+      1
+    ],
+    "old_position": [
+      9,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "leave_node_0": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      16,
+      36
+    ],
+    "old_position": [
+      16,
+      36
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "leave_node_1": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      15,
+      36
+    ],
+    "old_position": [
+      15,
+      36
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "new_game_spawner": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      16,
+      34
+    ],
+    "old_position": [
+      16,
+      34
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "bob": {
+    "object_type": "npc",
+    "args": {
+      "name": "Bob",
+      "dialog_key": "bob",
+      "allies_in_combat": [
+        "monsterkesveltalleythief",
+        "monsterkesveltalleythief",
+        "monsterkesveltalleythief"
+      ]
+    },
+    "position": [
+      -99,
+      34
+    ],
+    "old_position": [
+      -99,
+      34
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 999,
+    "state": "stand"
+  },
+  "pillar0": {
+    "object_type": "pillar",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      6,
+      17
+    ],
+    "old_position": [
+      6,
+      17
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar1": {
+    "object_type": "pillar",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      6,
+      21
+    ],
+    "old_position": [
+      6,
+      21
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar2": {
+    "object_type": "pillar",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      10,
+      17
+    ],
+    "old_position": [
+      10,
+      17
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar3": {
+    "object_type": "pillar",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      10,
+      21
+    ],
+    "old_position": [
+      10,
+      21
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar4": {
+    "object_type": "pillar",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      14,
+      17
+    ],
+    "old_position": [
+      14,
+      17
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar5": {
+    "object_type": "pillar",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      14,
+      21
+    ],
+    "old_position": [
+      14,
+      21
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar6": {
+    "object_type": "pillar",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      18,
+      17
+    ],
+    "old_position": [
+      18,
+      17
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "pillar7": {
+    "object_type": "pillar",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        0,
+        0
+      ]
+    },
+    "position": [
+      18,
+      21
+    ],
+    "old_position": [
+      18,
+      21
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "shooting_range_0": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      6,
+      9
+    ],
+    "old_position": [
+      6,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "shooting_range_1": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      6,
+      11
+    ],
+    "old_position": [
+      6,
+      11
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "shooting_range_2": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      6,
+      13
+    ],
+    "old_position": [
+      6,
+      13
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "student_0": {
+    "object_type": "npcstudent",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ],
+      "name": "Disciple",
+      "dialog_key": "student_0"
+    },
+    "position": [
+      26,
+      31
+    ],
+    "old_position": [
+      26,
+      31
+    ],
+    "skin_color": [
+      66,
+      37,
+      16
+    ],
+    "group_name": "",
+    "move_interval": 0.5,
+    "state": "stand"
+  },
+  "student_1": {
+    "object_type": "npcstudent",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ],
+      "name": "Disciple",
+      "dialog_key": "student_1"
+    },
+    "position": [
+      27,
+      31
+    ],
+    "old_position": [
+      27,
+      31
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "group_name": "",
+    "move_interval": 1,
+    "state": "stand"
+  },
+  "student_2": {
+    "object_type": "npcstudent",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ]
+    },
+    "position": [
+      28,
+      31
+    ],
+    "old_position": [
+      28,
+      31
+    ],
+    "skin_color": [
+      79,
+      48,
+      20
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "student_3": {
+    "object_type": "npcstudent",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ],
+      "name": "Mei-Hua",
+      "dialog_key": "student_3"
+    },
+    "position": [
+      29,
+      31
+    ],
+    "old_position": [
+      29,
+      31
+    ],
+    "skin_color": [
+      255,
+      224,
+      189
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "student_shi": {
+    "object_type": "npcstudent",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        1
+      ]
+    },
+    "position": [
+      30,
+      31
+    ],
+    "old_position": [
+      30,
+      31
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "student_shi_space": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      30,
+      31
+    ],
+    "old_position": [
+      30,
+      31
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "target0": {
+    "object_type": "archerytarget",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        1,
+        2
+      ]
+    },
+    "position": [
+      12,
+      9
+    ],
+    "old_position": [
+      12,
+      9
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "target1": {
+    "object_type": "archerytarget",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        1,
+        2
+      ]
+    },
+    "position": [
+      10,
+      11
+    ],
+    "old_position": [
+      10,
+      11
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "target2": {
+    "object_type": "archerytarget",
+    "args": {
+      "spritesheet": [
+        "Static Objects",
+        1,
+        2
+      ]
+    },
+    "position": [
+      8,
+      13
+    ],
+    "old_position": [
+      8,
+      13
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "throne_eraton": {
+    "object_type": "npc",
+    "args": {
+      "name": "Eraton Sydan",
+      "dialog_key": "eraton_throne",
+      "spritesheet": [
+        "Eraton",
+        0,
+        0
+      ]
+    },
+    "position": [
+      4,
+      19
+    ],
+    "old_position": [
+      4,
+      19
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "training_guard_0": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      8,
+      4
+    ],
+    "old_position": [
+      8,
+      4
+    ],
+    "skin_color": [
+      255,
+      224,
+      189
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "training_guard_1": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      7,
+      4
+    ],
+    "old_position": [
+      7,
+      4
+    ],
+    "skin_color": [
+      241,
+      194,
+      125
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "training_guard_2": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ],
+      "name": "Eieun",
+      "dialog_key": "training_guard_2"
+    },
+    "position": [
+      12,
+      6
+    ],
+    "old_position": [
+      12,
+      6
+    ],
+    "skin_color": [
+      92,
+      51,
+      23
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "training_guard_3": {
+    "object_type": "npcsoldier",
+    "args": {
+      "spritesheet": [
+        "Generic People",
+        0,
+        4
+      ]
+    },
+    "position": [
+      11,
+      6
+    ],
+    "old_position": [
+      11,
+      6
+    ],
+    "skin_color": [
+      92,
+      51,
+      23
+    ],
+    "group_name": "",
+    "move_interval": 0.0,
+    "state": "stand"
+  },
+  "event_waiting_node": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      31,
+      0
+    ],
+    "old_position": [
+      31,
+      0
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "throne_node": {
+    "object_type": "node",
+    "args": {},
+    "position": [
+      4,
+      19
+    ],
+    "old_position": [
+      4,
+      19
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "respawn_mei_hua_node": {
+    "object_type": "node",
+    "args": {
+      "on_load_event": "respawn_mei_hua"
+    },
+    "position": [
+      11,
+      29
+    ],
+    "old_position": [
+      11,
+      29
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  },
+  "despawn_mei_hua_node": {
+    "object_type": "node",
+    "args": {
+      "on_load_event": "despawn_mei_hua"
+    },
+    "position": [
+      2,
+      1
+    ],
+    "old_position": [
+      2,
+      1
+    ],
+    "skin_color": [
+      0,
+      0,
+      0
+    ],
+    "group_name": ""
+  }
+}

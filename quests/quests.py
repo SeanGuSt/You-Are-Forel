@@ -3,7 +3,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 from dataclasses import dataclass, field
-from constants import QUEST_DIR
+from constants import QUEST_DIR, QuestStatus
 if TYPE_CHECKING:
     from ultimalike import GameEngine
 
@@ -14,22 +14,21 @@ class QuestStep:
     description_vague: str = ""
     description_failed: str = ""
     description_completed: str = ""
-    started: bool = False
-    failed: bool = False
-    completed: bool = False
+    status: QuestStatus = QuestStatus.INACTIVE
     def update_completion_from_save(self, save_dict):
-        if "started" not in save_dict:
+        if "status" not in save_dict:
             return
-        self.started = save_dict["started"]
-        self.failed = save_dict["failed"]
-        self.completed = save_dict["completed"]
+        self.status = QuestStatus(save_dict["status"])
     def to_dict(self):
-        if any([self.started, self.failed, self.completed]):
-            return {"started" : self.started, "failed" : self.failed, "completed" : self.completed}
+        if not self.status == QuestStatus.INACTIVE:
+            return {"status" : self.status.value}
         return {}
     @classmethod
     def from_dict(cls, data):
-        return cls(**data)
+        quest_part = cls(**data)
+        if quest_part.status:
+            quest_part.status = QuestStatus(quest_part.status)
+        return quest_part
 
 @dataclass
 class Quest(QuestStep):
@@ -75,8 +74,8 @@ class QuestLog:
     
     def start_quest(self, quest: str):
         if quest in self.quests:
-            self.quests[quest].started = True
-            if self.quests["learn_quest_log"].completed:
+            self.quests[quest].status = QuestStatus.ACTIVE
+            if self.quests["learn_quest_log"].status == QuestStatus.COMPLETED:
                 self.engine.append_to_message_log(f"Forel wrote down {self.quests[quest].name} in his journal.")
         return quest
 
@@ -84,25 +83,22 @@ class QuestLog:
         if quest_name in self.quests:
             quest = self.quests[quest_name]
             if did_succeed:
-                if self.quests["learn_quest_log"].completed:
+                if self.quests["learn_quest_log"].status == QuestStatus.COMPLETED:
                     self.engine.append_to_message_log(f"{quest.name} completed!")
-                quest.started = True #This way players can finish a quest without even having it yet.
-                quest.completed = True
-
+                quest.status = QuestStatus.COMPLETED
             else:
-                quest.failed = True #But if they fail a quest before starting it, they don't get to know :P
+                quest.status = QuestStatus.FAILED
             return quest
 
     def reveal_quest_step(self, quest_step: str):
         if "__" in quest_step:
             quest_name, step_name = quest_step.split("__")
-            print(quest_name, step_name)
             if quest_name in self.quests:
                 quest = self.quests[quest_name]
                 if step_name in quest.steps:
                     step = quest.steps[step_name]
-                    step.started = True #Since quest steps won't show up until the quest itself is started, it's fine to show this.
-                    if quest.started:
+                    step.status = QuestStatus.ACTIVE #Since quest steps won't show up until the quest itself is started, it's fine to show this.
+                    if quest.status == QuestStatus.ACTIVE:
                         self.engine.append_to_message_log(f"Forel wrote down {step.name} in his journal.")
 
 
@@ -114,11 +110,12 @@ class QuestLog:
                 if step_name in quest.steps:
                     print(f"{step_name} completed")
                     step = quest.steps[step_name]
-                    step.started = True #Since quest steps won't show up until the quest itself is started, it's fine to show this.
+                    step.status = QuestStatus.ACTIVE #Since quest steps won't show up until the quest itself is started, it's fine to show this.
                     if did_succeed:
-                        step.completed = True
+                        self.engine.append_to_message_log(f"{step.name} completed!")
+                        step.status = QuestStatus.COMPLETED 
                     else:
-                        step.failed = True
+                        QuestStatus.FAILED
 
     def reveal_quest_hint(self, quest_hint: str):#Quest hints will also be QuestStep objects. We just choose to ignore the completed/failed attributes
         if "__" in quest_hint:
@@ -127,9 +124,9 @@ class QuestLog:
                 quest = self.quests[quest_name]
                 if hint_name in quest.hints:
                     hint = quest.hints[hint_name]
-                    hint.started = True
-                    if self.quests["learn_quest_log"].completed:
-                        self.engine.append_to_message_log(f"Forel wrote down {hint.name} in his notes for {quest.name}.")
+                    hint.status = QuestStatus.ACTIVE
+                    if self.quests["learn_quest_log"].status == QuestStatus.COMPLETED:
+                        self.engine.append_to_message_log(f"Forel wrote down {hint.name} in his notes.")
     
     def save_quests(self):
         q_dict = {}

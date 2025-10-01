@@ -17,6 +17,7 @@ DEFAULT_PLAYER_MOVE_FRAMES = 16
 DEFAULT_MOVEMENT_PENALTY = 1
 DEFAULT_WAIT_PENALTY = 2
 DEFAULT_OVERWORLD_MOVEMENT_PENALTY = 5
+ACTION_AND_MOVEMENT_LEVEL = 0
 # Directories
 MAPS_DIR = "maps"
 SAVES_DIR = "saves"
@@ -282,6 +283,12 @@ class InternalBodyStatus(Enum):
 
 class MindStatus(Enum):
     HALLUCINATE = "hallucinate"
+
+class QuestStatus(Enum):
+    INACTIVE = "i"
+    ACTIVE = "a"
+    COMPLETED = "c"
+    FAILED = "f"
     
 
 def time_function(label=None):

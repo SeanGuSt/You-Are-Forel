@@ -3,6 +3,7 @@ import json
 from typing import TYPE_CHECKING
 from objects.characters import Party
 from objects.map_objects import MapObject
+from objects.nodegroup import NodeGroup
 from objects.object_basics import ElevatorHelper, Merchant
 from dialog.dialog_helpers import *
 from constants import TALK_DIR, GameState, ObjectState
@@ -72,8 +73,11 @@ class DialogManager:
     def start_dialog(self, npc: MapObject):
         """Start a dialog with a map object"""
         # Get the NPC name from object args
+
         if npc.state == ObjectState.SLEEP:
             return False
+        if npc.group and npc.group.speaker_node and "dialog_key" not in npc.args:
+            npc = npc.group.speaker_node#This way, only one node out of a group needs the dialog key.
         npc_name = npc.args.get("name", "").lower()
         dialog_key = npc.args.get("dialog_key", npc_name)
         dialog_data = self.get_dialog_data(dialog_key)
@@ -141,6 +145,8 @@ class DialogManager:
             is_event = "=" in current_line
             if is_event:
                 self._do_event(current_line)
+                if self.engine.event_manager.force_end and self.current_line_index >= len(self.current_lines)-1:#In case jump occurred
+                    self.end_dialog()
             else:
                 self.current_line = current_line
                 self.waiting_for_input = True

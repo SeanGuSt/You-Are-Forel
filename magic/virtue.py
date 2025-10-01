@@ -125,6 +125,10 @@ class VirtueManager:
     def is_overuse_blocking_movement(self, character: "Character") -> bool:
         """Check if the character's Earth virtue is over its threshold."""
         earth = self.virtues.get(VirtueType.EARTH)
-        if not earth:
-            return False
-        return earth["overuse"] > self.get_threshold(VirtueType.EARTH)
+        return earth and earth["overuse"] > self.get_threshold(VirtueType.EARTH)
+    
+    def overuse_accuracy_penalty(self, character: "Character"):
+        water = self.virtues.get(VirtueType.WATER)
+        if not water:
+            return 0
+        return max(0, water["overuse"] - self.get_threshold(VirtueType.EARTH))

@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 import json
 import os
-
+completion_options = ["i", "a", "c", "f"]
 
 class QuestEditor:
     def __init__(self, root):
@@ -168,8 +168,11 @@ class QuestEditor:
         self.step_vague_desc_text = scrolledtext.ScrolledText(step_details_frame, height=2, width=40)
         self.step_vague_desc_text.grid(row=3, column=1, sticky=(tk.W, tk.E), pady=(0, 5))
         
-        self.step_started_var = tk.BooleanVar()
-        ttk.Checkbutton(step_details_frame, text="Started", variable=self.step_started_var).grid(row=4, column=1, sticky=tk.W, pady=(5, 0))
+        self.step_status_var = tk.StringVar(value="i")  
+        # Dropdown menu  
+        label = ttk.Label(step_details_frame, text="Initial Step Status:")
+        label.grid(row=4, column=0, pady=(0, 5), sticky=(tk.W, tk.N))
+        ttk.OptionMenu(step_details_frame, self.step_status_var, *completion_options).grid(row=4, column=1, sticky=(tk.W, tk.N), pady=(0, 5))
         
         ttk.Button(step_details_frame, text="Save Step", command=self.save_step).grid(row=5, column=1, sticky=tk.E, pady=(10, 0))
         
@@ -213,8 +216,11 @@ class QuestEditor:
         self.hint_desc_text = scrolledtext.ScrolledText(hint_details_frame, height=4, width=40)
         self.hint_desc_text.grid(row=2, column=1, sticky=(tk.W, tk.E), pady=(0, 5))
         
-        self.hint_started_var = tk.BooleanVar()
-        ttk.Checkbutton(hint_details_frame, text="Started", variable=self.hint_started_var).grid(row=3, column=1, sticky=tk.W, pady=(5, 0))
+        self.hint_status_var = tk.StringVar(value="i")  
+        # Dropdown menu
+        label = ttk.Label(hint_details_frame, text="Initial Hint Status:")
+        label.grid(row=4, column=0, pady=(0, 5), sticky=(tk.W, tk.N))  
+        ttk.OptionMenu(hint_details_frame, self.hint_status_var, *completion_options).grid(row=4, column=1, sticky=(tk.W, tk.N), pady=(0, 5))
         
         ttk.Button(hint_details_frame, text="Save Hint", command=self.save_hint).grid(row=4, column=1, sticky=tk.E, pady=(10, 0))
         
@@ -433,7 +439,7 @@ Use one item per line. __ separates item name and quantity.
         self.step_vague_desc_text.delete('1.0', tk.END)
         self.step_vague_desc_text.insert('1.0', step.get('description_vague', ''))
         
-        self.step_started_var.set(step.get('started', False))
+        self.step_status_var.set(step.get('status', "i"))
         
     def load_hint_details(self, hint_id):
         quest_id = self.quest_id_var.get()
@@ -451,7 +457,7 @@ Use one item per line. __ separates item name and quantity.
         self.hint_desc_text.delete('1.0', tk.END)
         self.hint_desc_text.insert('1.0', hint.get('description', ''))
         
-        self.hint_started_var.set(hint.get('started', False))
+        self.hint_status_var.set(hint.get('status', "i"))
         
     def add_step(self):
         step_id = tk.simpledialog.askstring("Add Step", "Enter Step ID:")
@@ -526,9 +532,9 @@ Use one item per line. __ separates item name and quantity.
             vague_desc = self.step_vague_desc_text.get('1.0', tk.END).strip()
             if vague_desc:
                 step_data["description_vague"] = vague_desc
-                
-            if self.step_started_var.get():
-                step_data["started"] = True
+            step_status = self.step_status_var.get()    
+            if step_status:
+                step_data["status"] = step_status
                 
             self.quest_data[quest_id]['steps'][step_id] = step_data
             self.refresh_steps_list(self.quest_data[quest_id]['steps'])
@@ -544,8 +550,9 @@ Use one item per line. __ separates item name and quantity.
                 "description": self.hint_desc_text.get('1.0', tk.END).strip()
             }
             
-            if self.hint_started_var.get():
-                hint_data["started"] = True
+            hint_status = self.hint_status_var.get()
+            if hint_status:
+                hint_data["status"] = hint_status
                 
             self.quest_data[quest_id]['hints'][hint_id] = hint_data
             self.refresh_hints_list(self.quest_data[quest_id]['hints'])
@@ -639,14 +646,14 @@ Use one item per line. __ separates item name and quantity.
         self.step_name_var.set("")
         self.step_desc_text.delete('1.0', tk.END)
         self.step_vague_desc_text.delete('1.0', tk.END)
-        self.step_started_var.set(False)
+        self.step_status_var.set("i")
         
     def clear_hint_details(self):
         """Clear hint detail fields"""
         self.hint_id_var.set("")
         self.hint_name_var.set("")
         self.hint_desc_text.delete('1.0', tk.END)
-        self.hint_started_var.set(False)
+        self.hint_status_var.set("i")
 
 
 def main():

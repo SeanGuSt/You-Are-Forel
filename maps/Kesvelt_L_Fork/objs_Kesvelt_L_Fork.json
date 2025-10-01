@@ -1,13 +1,13 @@
 {
   "new_game_spawner": {
     "object_type": "node",
-    "x": 5,
-    "y": 5
+    "position": [
+      5,
+      5
+    ]
   },
   "map_edge_teleporter": {
     "object_type": "node",
-    "x": -99,
-    "y": -98,
     "args": {
       "adjacent_maps": {
         "E": {
@@ -19,6 +19,10 @@
           "offset": "(12, 0)"
         }
       }
-    }
+    },
+    "position": [
+      -99,
+      -98
+    ]
   }
 }

@@ -1,14 +1,14 @@
 {
   "jfskjlhdf": {
     "object_type": "node",
-    "x": 7,
-    "y": 10,
-    "args": {}
+    "args": {},
+    "position": [
+      7,
+      10
+    ]
   },
   "map_edge_teleporter": {
     "object_type": "node",
-    "x": -99,
-    "y": -98,
     "args": {
       "adjacent_maps": {
         "S": {
@@ -16,30 +16,42 @@
           "offset": "(7, 0)"
         }
       }
-    }
+    },
+    "position": [
+      -99,
+      -98
+    ]
   },
   "fdjlsh": {
     "object_type": "node",
-    "x": 15,
-    "y": 6,
-    "args": {}
+    "args": {},
+    "position": [
+      15,
+      6
+    ]
   },
   "dj": {
     "object_type": "node",
-    "x": 15,
-    "y": 4,
-    "args": {}
+    "args": {},
+    "position": [
+      15,
+      4
+    ]
   },
   "fjd4": {
     "object_type": "node",
-    "x": 15,
-    "y": 3,
-    "args": {}
+    "args": {},
+    "position": [
+      15,
+      3
+    ]
   },
   "new_game_spawner": {
     "object_type": "node",
-    "x": 2,
-    "y": 15,
-    "args": {}
+    "args": {},
+    "position": [
+      2,
+      15
+    ]
   }
 }

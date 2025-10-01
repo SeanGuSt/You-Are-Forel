@@ -21,8 +21,6 @@ def register_node_type(name: str):
 @dataclass
 class Node:
     name: str
-    x: int
-    y: int
     args: dict[str, Any] = field(default_factory=lambda: {})
     layer: int = 1
     width_in_tiles = 1
@@ -58,7 +56,7 @@ class Node:
     def __is__(self, cls):
         return isinstance(self, cls)
     def to_dict(self):
-        return {"object_type" : self.object_type, "x" : self.position[0], "y" : self.position[1], "args" : self.args, "position" : self.position, "old_position" : self.old_position, "skin_color" : self.skin_color, "group_name" : self.group_name}
+        return {"object_type" : self.object_type, "args" : self.args, "position" : self.position, "old_position" : self.old_position, "skin_color" : self.skin_color, "group_name" : self.group_name}
     @staticmethod
     def from_dict(data: dict, engine: 'GameEngine') -> 'Node':
         node_type = data.get("object_type")
@@ -88,9 +86,10 @@ class Node:
             new_node.pronoun = gendered_words[0]
             new_node.prepositional = gendered_words[1]
             new_node.possessive = gendered_words[2]
-        new_node.init_position = (new_node.x, new_node.y)
-        new_node.old_position = (new_node.x, new_node.y)
-        new_node.position = (new_node.x, new_node.y)
+        new_node.position = tuple(new_node.position)
+        new_node.init_position = new_node.position
+        new_node.old_position = new_node.position
+        
         return new_node
     
     def interact(self) -> bool:
@@ -271,7 +270,7 @@ class MapObject(Node):
             if self.group:
                 if not self.group.checked_movement: #No point going through this for every node
                     can_move = True
-                    for obj in self.group._nodes:
+                    for obj in self.group.nodes:
                         if obj.is_passable: #Don't bother with calculations if this can pass through anything.
                             continue
                         new_position = self.add_tuples(obj.position, self.last_move_direction.value)
@@ -279,7 +278,7 @@ class MapObject(Node):
                             can_move = False#Even one failure means no moving
                             break
                     if can_move:
-                        for obj in self.group._nodes:
+                        for obj in self.group.nodes:
                             obj.old_position = obj.position
                             obj.last_move_direction = self.last_move_direction
                             obj.position = self.add_tuples(obj.position, self.last_move_direction.value)
@@ -626,7 +625,7 @@ class Spawner:
             obj_name = self.name + "_" + obj_type + "_" + str(0 if not self.children else len(self.children))
         if not position:
             position = self.position
-        obj = self.engine.map_obj_db.create_obj(obj_name, obj_type, {"x" : position[0], "y" : position[1]})
+        obj = self.engine.map_obj_db.create_obj(obj_name, obj_type, {"position" : position})
         if obj:
             obj.parent = self
             self.children.append(obj)

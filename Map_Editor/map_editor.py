@@ -10,14 +10,14 @@ from ultimalike import GameEngine
 from Map_Editor.me_renderer import Renderer
 
 from Map_Editor.inputs.new_things_inputs import non_text_mode_inputs
-from Map_Editor.inputs.other_inputs import record_additions
+from Map_Editor.inputs.other_inputs import record_additions, increase_level, decrease_level
 from Map_Editor.inputs.text_inputs import input_new_tile_inputs, input_new_objects_inputs
 from Map_Editor.inputs.mouse_inputs import place_or_move_object, place_tile, move_ghost, drag_paint_tiles
 
 pygame.init()
-map_name = "Kesvelt_Phitemos_Chambers"
+map_name = "Kesvelt_Ground"
 FONT = pygame.font.SysFont(None, 18)
-pygame.key.set_repeat(600, 300)
+pygame.key.set_repeat(600, 200)
 
 class MapEditor:
     def __init__(self, map_name: str):
@@ -101,6 +101,7 @@ class MapEditor:
         self.ascii_path = os.path.join(map_folder, f"map_{map_name}.txt")
         self.tiles_path = os.path.join(map_folder, f"tiles_{map_name}.json")
         self.objects_path = os.path.join(map_folder, f"objs_{map_name}.json")
+        self.levels_path = os.path.join(map_folder, f"levels_{map_name}.txt")
         
         self.map_folder = map_folder
         self.create_map_if_new()
@@ -117,6 +118,12 @@ class MapEditor:
         with open(self.objects_path) as f:
             self.objects_data = json.load(f)
 
+        try:
+            with open(self.levels_path) as f:
+                self.levels_map = [[int(i) for i in line.strip()] for line in f.readlines()]
+        except Exception as e:
+            self.levels_map = [[5 for _ in range(len(self.ascii_map[0]))] for _ in range(len(self.ascii_map))]
+
     def create_map_if_new(self):
         # Create files if not found
         def ensure_file_exists(path, default):
@@ -132,9 +139,9 @@ class MapEditor:
 
         ascii_default = "#" * VIEW_WIDTH + "\n" + ("#" + "_" * (VIEW_WIDTH - 2) + "#\n") * (VIEW_HEIGHT - 2) + "#" * VIEW_WIDTH + "\n"
         ensure_file_exists(self.ascii_path, ascii_default)
-        tile_default = {"#" : "wall", "_" : "floor", "." : "grass", "~" : "sky"}
+        tile_default = {"#" : "wall", "_" : "floor", "." : "grass"}
         ensure_file_exists(self.tiles_path, tile_default)
-        obj_default = {"new_game_spawner" : {"object_type" : "node", "x" : 5, "y" : 5}}
+        obj_default = {"new_game_spawner" : {"object_type" : "node", "position" : (5, 5)}}
         ensure_file_exists(self.objects_path, obj_default)
     
     def change_state(self, state: EditState):
@@ -145,6 +152,7 @@ class MapEditor:
         self.change_state(self.previous_state)
     
     def render(self):
+        self.screen.fill(BLACK)
         self.renderer.draw_sidebar()
         self.renderer.render_map()
         self.renderer.render_objects()
@@ -178,9 +186,10 @@ class MapEditor:
         new_row = [fill_char] * len(self.ascii_map[0])
         index = y if above else y + 1
         self.ascii_map.insert(index, new_row)
+        self.levels_map.insert(index, [1] * len(self.ascii_map[0]))
         for obj in self.objects_data.values():
-            if obj['y'] >= index:
-                obj['y'] += 1
+            if obj["position"][1] >= index:
+                obj["position"][1] += 1
         record_additions(self)
     
     def remove_row(self):
@@ -189,12 +198,13 @@ class MapEditor:
             return
         if 0 <= y < len(self.ascii_map):
             self.ascii_map.pop(y)
-            to_delete = [k for k, v in self.objects_data.items() if v['y'] == y]
+            self.levels_map.pop(y)
+            to_delete = [k for k, v in self.objects_data.items() if v["position"][1] == y]
             for k in to_delete:
                 del self.objects_data[k]
             for obj in self.objects_data.values():
-                if obj['y'] > y:
-                    obj['y'] -= 1
+                if obj["position"][1] > y:
+                    obj["position"][1] -= 1
             record_additions(self)
 
     def insert_column(self, before=True):
@@ -205,9 +215,12 @@ class MapEditor:
         for row in self.ascii_map:
             index = x if before else x + 1
             row.insert(index, fill_char)
+        for row in self.levels_map:
+            index = x if before else x + 1
+            row.insert(index, 1)
         for obj in self.objects_data.values():
-            if obj['x'] >= index:
-                obj['x'] += 1
+            if obj["position"][0] >= index:
+                obj["position"][0] += 1
         record_additions(self)
 
     def remove_column(self):
@@ -217,12 +230,14 @@ class MapEditor:
         if 0 <= x < len(self.ascii_map[0]):
             for row in self.ascii_map:
                 row.pop(x)
-            to_delete = [k for k, v in self.objects_data.items() if v['x'] == x]
+            for row in self.levels_map:
+                row.pop(x)
+            to_delete = [k for k, v in self.objects_data.items() if v["position"][0]== x]
             for k in to_delete:
                 del self.objects_data[k]
             for obj in self.objects_data.values():
-                if obj['x'] > x:
-                    obj['x'] -= 1
+                if obj["position"][0] > x:
+                    obj["position"][0] -= 1
             record_additions(self)
     
     def handle_input(self):
@@ -245,27 +260,31 @@ class MapEditor:
                 case pygame.MOUSEBUTTONDOWN:
                     tx, ty = self.pointer_is_on_map()
                     mods = pygame.key.get_mods()
-                    keys_at_tile = [k for k,v in self.objects_data.items() if v["x"] == tx and v["y"] == ty]
+                    keys_at_tile = [k for k,v in self.objects_data.items() if v["position"] == [tx, ty]]
                     match event.button:
                         case 1:
-                            if self.placing_mode == "tile":
+                            if mods & pygame.KMOD_ALT:
+                                increase_level(self, tx, ty, mods)
+                            elif self.placing_mode == "tile":
                                 place_tile(self, event, tx, ty, keys_at_tile, mods)
                             else:
                                 place_or_move_object(self, event, tx, ty, keys_at_tile, mods)
                             record_additions(self)
                         case 3:
-                            for k in keys_at_tile:
-                                del self.objects_data[k]
+                            if mods & pygame.KMOD_ALT:
+                                decrease_level(self, tx, ty, mods)
+                            else:
+                                for k in keys_at_tile:
+                                    del self.objects_data[k]
                 case pygame.MOUSEMOTION:
                     tx, ty = self.pointer_is_on_map()
-                    keys_at_tile = [k for k,v in self.objects_data.items() if v["x"] == tx and v["y"] == ty and not self.odb.obj_templates[v["object_type"]].is_passable]
+                    keys_at_tile = [k for k,v in self.objects_data.items() if v["position"] == [tx, ty] and not self.odb.obj_templates[v["object_type"]].is_passable]
                     drag_paint_tiles(self, tx, ty, keys_at_tile)
                     move_ghost(self, tx, ty, keys_at_tile)
                 case pygame.MOUSEBUTTONUP:
                     if event.button == 1:
                         if self.dragged_object_key and self.ghost_object:
-                            self.objects_data[self.dragged_object_key]["x"] = self.ghost_object["x"]
-                            self.objects_data[self.dragged_object_key]["y"] = self.ghost_object["y"]
+                            self.objects_data[self.dragged_object_key]["position"] = self.ghost_object["position"]
                         self.dragged_object_key = None
                         self.ghost_object = None
                         self.mouse_dragging = False
@@ -294,5 +313,8 @@ with open(map_editor.objects_path, "w") as f:
     json.dump(map_editor.objects_data, f, indent=2)
 with open(map_editor.tiles_path, "w") as f:
     json.dump(map_editor.tile_map, f, indent=2)
+with open(map_editor.levels_path, "w") as f:
+    for row in map_editor.levels_map:
+        f.write("".join([str(i) for i in row]) + "\n")
 
 pygame.quit()

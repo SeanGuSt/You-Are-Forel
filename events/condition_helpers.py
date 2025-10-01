@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 from objects.characters import Party, Character
 from objects.object_templates import Node
-from quests.quests import Quest, QuestLog, QuestStep
-from constants import Direction
+from quests.quests import Quest, QuestLog
+from constants import Direction, QuestStatus
 condition_funcs = {}
 
 def condition(key):
@@ -32,71 +32,73 @@ def have_item(party: Party, line: str, true_if: bool):
 
 @condition("have_quest")
 def have_quest(quest: Quest, true_if: bool):
-    return (quest and quest.started) == true_if
+    if quest:
+        return (quest.status != QuestStatus.INACTIVE) == true_if
+    return False
 
 @condition("mid_quest")
 def mid_quest(quest: Quest, true_if: bool):
     if quest:
-        return quest.started == true_if and (quest.completed | quest.failed) != true_if
-    return not true_if
+        return (quest.status == QuestStatus.ACTIVE) == true_if
+    return False
 
 @condition("finished_quest")
 def finished_quest(quest: Quest, true_if: bool):
     if quest:
-        return (quest.completed | quest.failed) == true_if
-    return not true_if
+        return (quest.status in [QuestStatus.COMPLETED, QuestStatus.FAILED]) == true_if
+    return False
 
 @condition("completed_quest")
 def completed_quest(quest: Quest, true_if: bool):
     if quest:
-        return quest.completed == true_if
-    return not true_if
+        return (quest.status == QuestStatus.COMPLETED) == true_if
+    return False
 
 @condition("failed_quest")
 def failed_quest(quest: Quest, true_if: bool):
     if quest:
-        return quest.failed == true_if
-    return not true_if
+        return (quest.status == QuestStatus.FAILED) == true_if
+    return False
 
 @condition("have_quest_step")
 def have_quest_step(quest: Quest, step_name: str, true_if: bool):
     if quest:
         quest_step = quest.steps.get(step_name, None)
         if quest_step:
-            return quest_step.started == true_if
-    return not true_if
+            return (quest_step.status != QuestStatus.INACTIVE) == true_if
+    return False
 
 @condition("mid_quest_step")
 def mid_quest_step(quest: Quest, step_name: str, true_if: bool):
     if quest:
         quest_step = quest.steps.get(step_name, None)
         if quest_step:
-            return quest_step.started == true_if and (quest_step.completed | quest_step.failed) != true_if
-    return not true_if
+            return (quest_step.status == QuestStatus.ACTIVE) == true_if
+    return False
 
 @condition("finished_quest_step")
 def finished_quest_step(quest: Quest, step_name: str, true_if: bool):
     if quest:
         quest_step = quest.steps.get(step_name, None)
         if quest_step:
-            return (quest_step.completed | quest_step.failed) == true_if
-    return not true_if
+            return (quest_step.status in [QuestStatus.COMPLETED, QuestStatus.FAILED]) == true_if
+    return False
 
 @condition("completed_quest_step")
 def completed_quest_step(quest: Quest, step_name: str, true_if: bool):
     if quest:
         quest_step = quest.steps.get(step_name, None)
         if quest_step:
-            return quest_step.completed == true_if
-    return not true_if
+            return (quest_step.status == QuestStatus.COMPLETED) == true_if
+    return False
 
 @condition("failed_quest_step")
 def failed_quest_step(quest: Quest, step_name: str, true_if: bool):
     if quest:
         quest_step = quest.steps.get(step_name, None)
         if quest_step:
-            return quest_step.failed == true_if
-    return not true_if
+            return (quest_step.status == QuestStatus.FAILED) == true_if
+    return False
 
 @condition("leader_wear")
 def leader_wear(leader: Character, line: str, true_if: bool):

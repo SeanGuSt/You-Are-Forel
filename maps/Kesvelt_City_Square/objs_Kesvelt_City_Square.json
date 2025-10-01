@@ -1,0 +1,177 @@
+{
+  "new_game_spawner": {
+    "object_type": "node",
+    "position": [
+      4,
+      4
+    ]
+  },
+  "old_lady": {
+    "object_type": "npc",
+    "position": [
+      33,
+      9
+    ],
+    "args": {}
+  },
+  "family_0_dad": {
+    "object_type": "npc",
+    "position": [
+      22,
+      8
+    ],
+    "args": {}
+  },
+  "family_0_mom": {
+    "object_type": "npc",
+    "position": [
+      22,
+      9
+    ],
+    "args": {}
+  },
+  "family_0_son": {
+    "object_type": "npc",
+    "position": [
+      23,
+      9
+    ],
+    "args": {}
+  },
+  "family_0_basket": {
+    "object_type": "mapobject",
+    "position": [
+      23,
+      8
+    ],
+    "args": {}
+  },
+  "family_1_dad0": {
+    "object_type": "npc",
+    "position": [
+      27,
+      10
+    ],
+    "args": {}
+  },
+  "family_1_dad1": {
+    "object_type": "npc",
+    "position": [
+      27,
+      11
+    ],
+    "args": {}
+  },
+  "family_1_son": {
+    "object_type": "npc",
+    "position": [
+      26,
+      11
+    ],
+    "args": {}
+  },
+  "family_1_daughter": {
+    "object_type": "npc",
+    "position": [
+      26,
+      10
+    ],
+    "args": {}
+  },
+  "couple_0_man": {
+    "object_type": "npc",
+    "position": [
+      21,
+      11
+    ],
+    "args": {}
+  },
+  "couple_0_woman": {
+    "object_type": "npc",
+    "position": [
+      20,
+      12
+    ],
+    "args": {}
+  },
+  "couple_1_woman": {
+    "object_type": "npc",
+    "position": [
+      3,
+      10
+    ],
+    "args": {}
+  },
+  "couple_1_woman2": {
+    "object_type": "npc",
+    "position": [
+      2,
+      9
+    ],
+    "args": {}
+  },
+  "friends_guy": {
+    "object_type": "npc",
+    "position": [
+      10,
+      9
+    ],
+    "args": {}
+  },
+  "friends_dude": {
+    "object_type": "npc",
+    "position": [
+      11,
+      9
+    ],
+    "args": {}
+  },
+  "friends_chick": {
+    "object_type": "npc",
+    "position": [
+      11,
+      10
+    ],
+    "args": {}
+  },
+  "family_2_son": {
+    "object_type": "npc",
+    "position": [
+      6,
+      11
+    ],
+    "args": {}
+  },
+  "family_2_mom": {
+    "object_type": "npc",
+    "position": [
+      6,
+      12
+    ],
+    "args": {}
+  },
+  "fetch_quest_guy": {
+    "object_type": "npc",
+    "position": [
+      4,
+      19
+    ],
+    "args": {}
+  },
+  "creeper_victim": {
+    "object_type": "npc",
+    "position": [
+      34,
+      18
+    ],
+    "args": {}
+  },
+  "creeper_lady": {
+    "object_type": "npc",
+    "position": [
+      33,
+      18
+    ],
+    "args": {}
+  }
+}

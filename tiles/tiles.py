@@ -43,10 +43,11 @@ class Tile:
             return True
         # Same level movement is always allowed if passable
         if self.level == from_tile.level:
+            print(self.level, from_tile.level)
             return True
 
         # Special stairs case
-        if isinstance(self, StairsLevelAdjust) and abs(self.level - from_tile.level) == 1:
+        if (isinstance(self, StairsLevelAdjust) or isinstance(from_tile, StairsLevelAdjust)) and abs(self.level - from_tile.level) == 1:
             return True
 
         return False

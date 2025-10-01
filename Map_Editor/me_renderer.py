@@ -11,10 +11,10 @@ class Renderer:
     def draw_tooltips(self, tx, ty, camera_x, camera_y, objects_data):
         offset = 0
         for name, obj in objects_data.items():
-            if obj["x"] == tx and obj["y"] == ty:
+            if obj["position"] == [tx, ty]:
                 obj_type = obj.get("object_type", "unknown")
-                screen_x = obj["x"] * VIEW_WIDTH
-                screen_y = obj["y"] * VIEW_HEIGHT + offset
+                screen_x = obj["position"][0] * TILE_WIDTH
+                screen_y = obj["position"][1] * TILE_HEIGHT + offset
                 offset += self.draw_tooltip(name, obj_type, screen_x, screen_y)
         return offset
     def draw_tooltip(self, name, obj_type, screen_x, screen_y):
@@ -58,7 +58,10 @@ class Renderer:
             "[Right Click] Delete Nodes at Tile",
             "[Ctrl+z] Undo",
             "[Ctrl+y] Redo",
-            "[Ctrl+a] Toggle Full Map",
+            "[Alt+Click] Elevation +1 of tile at Cursor",
+            "[Ctrl+Alt+Click] All Like Tile Elevations +1",
+            "[Alt+Right Click] Elevation -1 of tile at Cursor",
+            "[Ctrl+Alt+Right Click] All Like Tile Elevations -1",
             "[ESC] Exit"
         ]
         for i, line in enumerate(controls):
@@ -90,19 +93,21 @@ class Renderer:
                 pygame.draw.line(screen, (0, 255, 0), (cursor_at, 170), (cursor_at, 188), 2)
 
     def draw_ghost_object(self, ghost_object, camera_x, camera_y):
-        gx, gy = ghost_object["x"] - camera_x, ghost_object["y"] - camera_y
+        gx, gy = ghost_object["position"][0] - camera_x, ghost_object["position"][1] - camera_y
         pygame.draw.circle(self.engine.screen, (0, 255, 0), (gx * TILE_WIDTH + TILE_WIDTH // 2, gy * TILE_HEIGHT + TILE_HEIGHT // 2), 6)
 
     def render_map(self):
         screen = self.engine.screen
         tdb = self.engine.tdb
         ascii_map = self.engine.ascii_map
+        level_map = self.engine.levels_map
         tile_map = self.engine.tile_map
         for y in range(VIEW_HEIGHT):
             for x in range(VIEW_WIDTH):
                 map_x, map_y = self.engine.camera_x + x, self.engine.camera_y + y
                 if 0 <= map_y < len(ascii_map) and 0 <= map_x < len(ascii_map[0]):
                     char = ascii_map[map_y][map_x]
+                    level = level_map[map_y][map_x]
                     tile = tdb.tiles[tile_map[char]]
                     rect = pygame.Rect(x*TILE_WIDTH, y*TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
                     if tile.image:
@@ -111,7 +116,7 @@ class Renderer:
                         color = tdb.tiles[tile_map[char]].color
                     pygame.draw.rect(screen, color, rect)
                     pygame.draw.rect(screen, (0, 0, 0), rect, 1)
-                    label = self.FONT.render(char, True, (0, 0, 0))
+                    label = self.FONT.render(char + str(level), True, (0, 0, 0))
                     screen.blit(label, (x*TILE_WIDTH + ascii_offset_x, y*TILE_HEIGHT + ascii_offset_y))
     
     def render_objects(self):
@@ -120,14 +125,14 @@ class Renderer:
         camera_x = self.engine.camera_x
         camera_y = self.engine.camera_y
         for name, obj in self.engine.objects_data.items():
-            ox, oy = obj["x"], obj["y"]
+            ox, oy = obj["position"]
             map_x, map_y = ox - camera_x, oy - camera_y
             if 0 <= map_x < VIEW_WIDTH and 0 <= map_y < VIEW_HEIGHT:
                 obj_type = obj.get("object_type")
                 col = self.engine.odb.obj_templates[obj_type].color
                 pygame.draw.circle(screen, col, (map_x*TILE_WIDTH + TILE_WIDTH//2, map_y*TILE_HEIGHT + TILE_HEIGHT//2), 6)
         if ghost_object:
-            gx, gy = ghost_object["x"] - camera_x, ghost_object["y"] - camera_y
+            gx, gy = ghost_object["position"][0] - camera_x, ghost_object["position"][1] - camera_y
             if 0 <= gx < VIEW_WIDTH and 0 <= gy < VIEW_HEIGHT:
                 screen_x = gx * TILE_WIDTH
                 screen_y = gy * TILE_HEIGHT

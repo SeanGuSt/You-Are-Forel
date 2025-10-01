@@ -99,18 +99,6 @@ class EventManager:
         self.delayed_events = {}
         self.timer_manager = TimerManager()
         self.event_duration = 150
-        self.timers = {
-            "player_move" : 0,
-            "event_wait" : 0,
-            "teleporter_delay" : 0,
-            "event_pause" : 0,
-            "player_bump" : 0
-        }
-        self.timer_limits = {
-            "player_move" : 0,
-            "event_wait" : 0,
-            "player_bump" : 0
-        }
         self.waiting_for_input = False
         self.yesno_question = 0
         self.waiting_for_walk = False
@@ -361,6 +349,7 @@ class EventManager:
         elif self.engine.state == GameState.DIALOG:
             self.engine.dialog_manager.current_line_index += num
 
+    @evention("unjump")
     def unjump(self, num: int):
         if self.engine.state == GameState.EVENT:
             self.current_index -= num
@@ -556,7 +545,7 @@ class EventManager:
                 obj = self.engine.current_map.get_object_by_name(line_bits[1])
             if obj:
                 pos = obj.position
-                new_obj = self.engine.map_obj_db.create_obj(name + "0", line_bits[0], {"x" : pos[0], "y" : pos[1]})
+                new_obj = self.engine.map_obj_db.create_obj(name + "0", line_bits[0], {"position" : pos})
                 print(new_obj)
                 self.engine.current_map.add_object(new_obj)
                 if len(line_bits) >= 4:
@@ -564,7 +553,7 @@ class EventManager:
                     repeat_count = int(line_bits[3])
                     for i in range(repeat_count):
                         new_pos = obj.add_tuples(new_obj.position, direction.value)
-                        new_obj = self.engine.map_obj_db.create_obj(f"{name}{i+1}", line_bits[0], {"x" : new_pos[0], "y" : new_pos[1]})
+                        new_obj = self.engine.map_obj_db.create_obj(f"{name}{i+1}", line_bits[0], {"position" : new_pos})
                         self.engine.current_map.add_object(new_obj)
 
     @evention("start_dialog")
@@ -605,7 +594,7 @@ class EventManager:
             return
         leader = self.engine.party.get_leader()
         if self.make_leader_invisible:
-            fake_leader = self.engine.map_obj_db.create_obj("fake_leader", "mapobject", {"x" : leader.position[0], "y" : leader.position[1]})
+            fake_leader = self.engine.map_obj_db.create_obj("fake_leader", "mapobject", {"position" : leader.position})
             self.engine.current_map.add_object(fake_leader)
             fake_leader.image = leader.image
             leader.children.append(fake_leader)
@@ -618,7 +607,7 @@ class EventManager:
     def teleport(self, line: str):
         map, node = line.split("__")
 
-        temp_tele = Teleporter.from_dict({"name" : "", "x" : -1, "y" : -1, "args" : {"target_map" : map, "position" : {"from_any" : node}}}, self.engine)
+        temp_tele = Teleporter.from_dict({"name" : "", "position" : (-1, -1), "args" : {"target_map" : map, "position" : {"from_any" : node}}}, self.engine)
         self.engine.handle_teleporter(temp_tele, True)
         self.engine.combat_manager.round_counter = 1
 

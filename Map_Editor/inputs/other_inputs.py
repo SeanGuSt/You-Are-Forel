@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 import copy
+import pygame
 if TYPE_CHECKING:
     from Map_Editor.map_editor import MapEditor
 
@@ -24,3 +25,24 @@ def redo(self: 'MapEditor'):
 def record_additions(self: 'MapEditor'):
     self.undo_stack.append(snapshot(self))
     self.redo_stack.clear()
+
+def increase_level(self: 'MapEditor', tx: int, ty:int, mods):
+    self.levels_map[ty][tx] += 1
+    if self.levels_map[ty][tx] > 9:
+        self.levels_map[ty][tx] = 1
+    if mods & pygame.KMOD_CTRL:
+        for y in range(len(self.ascii_map)):
+            for x in range(len(self.ascii_map[0])):
+                if self.ascii_map[y][x] == self.ascii_map[ty][tx]:
+                    self.levels_map[y][x] = self.levels_map[ty][tx]
+
+
+def decrease_level(self: 'MapEditor', tx: int, ty:int, mods):
+    self.levels_map[ty][tx] -= 1
+    if self.levels_map[ty][tx] < 1:
+        self.levels_map[ty][tx] = 9
+    if mods & pygame.KMOD_CTRL:
+        for y in range(len(self.ascii_map)):
+            for x in range(len(self.ascii_map[0])):
+                if self.ascii_map[y][x] == self.ascii_map[ty][tx]:
+                    self.levels_map[y][x] = self.levels_map[ty][tx]

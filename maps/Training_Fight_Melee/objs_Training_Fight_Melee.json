@@ -1,81 +1,109 @@
 {
   "new_game_spawner": {
     "object_type": "node",
-    "x": 10,
-    "y": 10
+    "position": [
+      10,
+      10
+    ]
   },
   "training_guard_0": {
     "object_type": "monsterguardrookie",
-    "x": 4,
-    "y": 7,
-    "args": {}
+    "args": {},
+    "position": [
+      4,
+      7
+    ]
   },
   "training_guard_1": {
     "object_type": "monsterguardrookie",
-    "x": 4,
-    "y": 9,
-    "args": {"pause_round" : 3}
+    "args": {
+      "pause_round": 3
+    },
+    "position": [
+      4,
+      9
+    ]
   },
   "guard_sergeant": {
     "object_type": "monstereventtrigger",
-    "x": 12,
-    "y": 2,
-    "args": {}
+    "args": {},
+    "position": [
+      12,
+      2
+    ]
   },
   "special_0": {
     "object_type": "node",
-    "x": 10,
-    "y": 8,
-    "args": {}
+    "args": {},
+    "position": [
+      10,
+      8
+    ]
   },
   "special_1": {
     "object_type": "node",
-    "x": 10,
-    "y": 7,
-    "args": {}
+    "args": {},
+    "position": [
+      10,
+      7
+    ]
   },
   "special_2": {
     "object_type": "node",
-    "x": 10,
-    "y": 9,
-    "args": {}
+    "args": {},
+    "position": [
+      10,
+      9
+    ]
   },
   "special_3": {
     "object_type": "node",
-    "x": 11,
-    "y": 7,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      7
+    ]
   },
   "special_4": {
     "object_type": "node",
-    "x": 11,
-    "y": 8,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      8
+    ]
   },
   "special_5": {
     "object_type": "node",
-    "x": 11,
-    "y": 9,
-    "args": {}
+    "args": {},
+    "position": [
+      11,
+      9
+    ]
   },
   "special_6": {
     "object_type": "node",
-    "x": 12,
-    "y": 7,
-    "args": {}
+    "args": {},
+    "position": [
+      12,
+      7
+    ]
   },
   "special_7": {
     "object_type": "node",
-    "x": 12,
-    "y": 9,
-    "args": {}
+    "args": {},
+    "position": [
+      12,
+      9
+    ]
   },
   "event_at_combat_start": {
     "object_type": "monstereventtrigger",
-    "x": 0,
-    "y": 2,
     "args": {
-      "round_timer" : 2
-    }
+      "round_timer": 2
+    },
+    "position": [
+      0,
+      2
+    ]
   }
 }

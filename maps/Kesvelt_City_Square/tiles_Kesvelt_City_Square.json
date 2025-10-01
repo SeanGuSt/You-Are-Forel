@@ -1,0 +1,8 @@
+{
+  "_": "floor",
+  "r": "floorcarpetred",
+  ".": "grass",
+  "w": "rail",
+  "#": "wall",
+  "~": "water"
+}
